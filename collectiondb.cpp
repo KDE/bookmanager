@@ -56,6 +56,12 @@ CollectionDB::CollectionDB()
   m_model->select();
 }
 
+CollectionDB::~CollectionDB()
+{
+  //may want to verify that all changes have been written if close doesn't do that already?
+  m_db->close();
+}
+
 //only give a const copy of the model as we only want modifications made by add/remBook
 //any views using this should set setEditTriggers(QAbstractItemView::NoEditTriggers)
 const QSqlTableModel CollectionDB::getModel()
