@@ -84,6 +84,11 @@ void CollectionDB::addBook(QString title, QString summary,
      query.exec();
 }
 
+void CollectionDB::remBook(int row){
+  m_model->removeRow(row);
+}
+
+//PRIVATE
 bool CollectionDB::initDB()
 {
     // Create collection table
