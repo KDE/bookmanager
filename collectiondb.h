@@ -44,8 +44,10 @@ class CollectionDB : public QObject
     void remBook(int row);
     
   private:
-    QSqlDatabase *db;
-    QSqlTableModel *model;
+    void initDB();
+    
+    QSqlDatabase *m_db;
+    QSqlTableModel *m_model;
     
 };
 

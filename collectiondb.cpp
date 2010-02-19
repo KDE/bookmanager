@@ -16,6 +16,42 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 */
+//KDE includes
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
+
+//QT includes
+#include <QSqlQuery>
+#include <QString>
+#include <QFile>
 
 #include "collectiondb.h"
 
+CollectionDB::CollectionDB()
+{
+  //if we can't find a database in the standard data directory just create a new one for now,
+  //eventually it might be possible to import databases but not now.
+  QString dbPath = KStandardDirs::locateLocal("data", "bookmanager/collection.db");
+  bool createCollection = !QFile(dbPath).exists();
+  
+  m_db = new QSqlDatabase("QSQLITE");
+  m_db->setDatabaseName(dbPath);
+  bool ok =  m_db->open();
+  if(!ok){
+    KMessageBox::error(this, "Unable to open or create a collection", 
+		       QSqlDatabase::lastError().text());
+    return; //if we don't have a database connection we can't do anything useful so... bye :)
+  }
+  //create the initial database structure if it not done already...
+  if(createCollection == true){
+    initDB();
+  }
+  
+  //initialize the model and signal
+  const int titleColumn = 2;
+  m_model = new QSqlTableModel();
+  m_model->setTable("library");
+  m_model->setSort(titleColumn, Qt::DescendingOrder);
+  m_model->select();
+  modelUpdate(m_model);
+}
