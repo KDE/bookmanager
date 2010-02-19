@@ -1,0 +1,5 @@
+<ghnsproviders><!-- database of free programming books -->
+<provider downloadurl="http://bookmanagertestsite.nfshost.com/provider-devbooks.xml" icon="bookmark">
+  <title>Programming Books</title>
+</provider>
+</ghnsproviders>

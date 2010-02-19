@@ -1,0 +1,28 @@
+<ghnsdownload>
+  <stuff category="okular/book">
+    <name>TEST BOOK</name>
+      <version/>
+      <release>1</release>
+      <releasedate>2/18/2010</releasedate>
+      <author>Brian Korbein</author>
+      <summary lang="en">This is a test</summary>
+      <payload lang="en">http://bookmanagertestsite.nfshost.com/test.pdf</payload>
+      <preview lang="en">http://www.trolltech.com//images/logos/qt.png</preview>
+      <licence>Unknown but free</licence>
+      <rating>0</rating>
+      <downloads>0</downloads>
+  </stuff>
+  <stuff category="okular/book">
+    <name>Programming with Qt3</name>
+      <version/>
+      <release>1</release>
+      <releasedate>2005-04-15</releasedate>
+      <author>Jasmin Blanchette, Mark Summerfield</author>
+      <summary lang="en">Why Qt? Why do programmers like us choose Qt? Sure, there are the obvious answers: Qt's single-source compatibility, its feature richness, its C++ performance, the availability of the source code, its documentation, the high-quality technical support[...] This is all very well, but it misses the most important point: Qt is successful because programmers like it.</summary>
+      <payload lang="en">http://phptr.com/content/images/0131240722/downloads/blanchette_book.pdf</payload>
+      <preview lang="en">http://www.trolltech.com//images/logos/qt.png</preview>
+      <licence>Unknown but free</licence>
+      <rating>84</rating>
+      <downloads>0</downloads>
+  </stuff>
+</ghnsdownload>
