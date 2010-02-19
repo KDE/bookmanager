@@ -37,11 +37,11 @@ class CollectionDB : public QObject
     const QSqlTableModel getModel();
   public slots:
     void addBook(QString title, QString summary, QString author, QString release,
-	       QString releaseDate, KUrl *url);
+	       QString releaseDate, QString genre, KUrl *url);
     void remBook(int row);
     
   private:
-    void initDB();
+    bool initDB();
     
     QSqlDatabase *m_db;
     QSqlTableModel *m_model;

@@ -27,6 +27,7 @@
 
 #include "collectiondb.h"
 
+//PUBLIC
 CollectionDB::CollectionDB()
 {
   //if we can't find a database in the standard data directory just create a new one for now,
@@ -61,4 +62,45 @@ const QSqlTableModel CollectionDB::getModel()
 {
   const QSqlTableModel usrModel = *m_model;
   return usrModel;
+}
+
+//PUBLIC SLOTS
+void CollectionDB::addBook(QString title, QString summary, 
+			   QString author, QString release, 
+			   QString releaseDate, QString genre,
+			   KUrl* url)
+{
+  QSqlQuery query;
+  //set id to NULL for sqlite to autoincrement the id, we don't care about the id's so...
+  query.prepare("INSERT INTO collection (id, title, summary, author, release, releaseDate, genre, url) "
+                   "VALUES (NULL, :title, :summary, :author, :release, :releaseDate, :genre, :url)");
+     query.bindValue(1, title);
+     query.bindValue(2, summary);
+     query.bindValue(3, author);
+     query.bindValue(4, release);
+     query.bindValue(5, releaseDate);
+     query.bindValue(6, genre);
+     query.bindValue(7, url->url());
+     query.exec();
+}
+
+bool CollectionDB::initDB()
+{
+    // Create collection table
+    bool ret = false;
+    if (m_db->isOpen())
+    {
+        QSqlQuery query;
+        ret = query.exec("create table collection "
+                         "(id integer primary key, "
+                         "title text, "
+                         "summary text, "
+                         "author text, "
+                         "release text, "
+                         "releaseDate text, "
+                         "genre text, "
+                         "url text)");
+
+    }
+    return ret;
 }
