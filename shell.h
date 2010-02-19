@@ -22,12 +22,24 @@
 #define SHELL_H
 
 #include <kparts/mainwindow.h>
-
+#include "collection.h"
 
 //eventually we want to be able to embed kparts to read the files managed here so we are going to derive from KParts::MainWindow rather than KMainWindow
 class Shell : public KParts::MainWindow
 
 {
+  Q_OBJECT
+  public:
+    //default Constructor
+    Shell(QWidget *parent=0 );
+    //default Destructor
+    virtual ~Shell();
+    
+  private slots:
+    void slotGetNewStuff();
+   
+  private:
+    void setupActions();
+    Collection *m_collect;
 };
-
 #endif // SHELL_H
