@@ -53,5 +53,12 @@ CollectionDB::CollectionDB()
   m_model->setTable("library");
   m_model->setSort(titleColumn, Qt::DescendingOrder);
   m_model->select();
-  modelUpdate(m_model);
+}
+
+//only give a const copy of the model as we only want modifications made by add/remBook
+//any views using this should set setEditTriggers(QAbstractItemView::NoEditTriggers)
+const QSqlTableModel CollectionDB::getModel()
+{
+  const QSqlTableModel usrModel = *m_model;
+  return usrModel;
 }

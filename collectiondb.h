@@ -34,10 +34,7 @@ class CollectionDB : public QObject
   public:
     CollectionDB();
     ~CollectionDB();
-  
-  public signals:
-    void modelUpdate(QSqlTableModel *model);
-    
+    const QSqlTableModel getModel();
   public slots:
     void addBook(QString title, QString summary, QString author, QString release,
 	       QString releaseDate, KUrl *url);
