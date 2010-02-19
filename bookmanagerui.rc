@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="bookmanager" version="1">
+<MenuBar>
+  <Menu name="file"><text>&amp;File</text>
+    <Action name="ghns"/>
+    <Action name="file_quit" />
+    <Separator/>
+</kpartgui>
