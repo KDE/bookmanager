@@ -27,14 +27,15 @@
 #include <QSqlDatabase>
 #include <QSqlTableModel>
 #include <QString>
+#include <QWidget>
 
-class CollectionDB : public QObject
+class CollectionDB : public QWidget
 {
   Q_OBJECT
   public:
     CollectionDB();
     ~CollectionDB();
-    const QSqlTableModel getModel();
+    QSqlTableModel *getModel();
   public slots:
     void addBook(QString title, QString summary, QString author, QString release,
 	       QString releaseDate, QString genre, KUrl *url);
@@ -43,7 +44,7 @@ class CollectionDB : public QObject
   private:
     bool initDB();
     
-    QSqlDatabase *m_db;
+    QSqlDatabase m_db;
     QSqlTableModel *m_model;
     
 };

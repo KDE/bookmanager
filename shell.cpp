@@ -30,8 +30,8 @@
 
 #include "shell.h"
 //PUBLIC
-Shell::Shell(QWidget* parent)
-  : MainWindow(parent)
+Shell::Shell(QWidget *parent)
+  : KParts::MainWindow(parent, Qt::Window)
 {
   m_collect = new Collection(this);
   setCentralWidget(m_collect);

@@ -24,6 +24,7 @@
 #include <QSqlQuery>
 #include <QString>
 #include <QFile>
+#include <QSqlError>
 
 #include "collectiondb.h"
 
@@ -34,13 +35,14 @@ CollectionDB::CollectionDB()
   //eventually it might be possible to import databases but not now.
   QString dbPath = KStandardDirs::locateLocal("data", "bookmanager/collection.db");
   bool createCollection = !QFile(dbPath).exists();
+  const QString type = "QSQLITE";
   
-  m_db = new QSqlDatabase("QSQLITE");
-  m_db->setDatabaseName(dbPath);
-  bool ok =  m_db->open();
+  m_db = QSqlDatabase::addDatabase(type);
+  m_db.setDatabaseName(dbPath);
+  bool ok =  m_db.open();
   if(!ok){
     KMessageBox::error(this, "Unable to open or create a collection", 
-		       QSqlDatabase::lastError().text());
+		       m_db.lastError().text());
     return; //if we don't have a database connection we can't do anything useful so... bye :)
   }
   //create the initial database structure if it not done already...
@@ -59,15 +61,14 @@ CollectionDB::CollectionDB()
 CollectionDB::~CollectionDB()
 {
   //may want to verify that all changes have been written if close doesn't do that already?
-  m_db->close();
+  m_db.close();
 }
 
 //only give a const copy of the model as we only want modifications made by add/remBook
 //any views using this should set setEditTriggers(QAbstractItemView::NoEditTriggers)
-const QSqlTableModel CollectionDB::getModel()
+QSqlTableModel *CollectionDB::getModel()
 {
-  const QSqlTableModel usrModel = *m_model;
-  return usrModel;
+  return m_model;
 }
 
 //PUBLIC SLOTS
@@ -99,7 +100,7 @@ bool CollectionDB::initDB()
 {
     // Create collection table
     bool ret = false;
-    if (m_db->isOpen())
+    if (m_db.isOpen())
     {
         QSqlQuery query;
         ret = query.exec("create table collection "
