@@ -20,6 +20,8 @@
 #define IMPORTDIALOG_H
 
 #include <KDialog>
+#include <QString>
+#include <KUrl>
 
 //don't forget to include the ui-file
 #include "ui_importdialog.h"
@@ -29,16 +31,16 @@ class ImportDialog :KDialog
   Q_OBJECT
   ImportDialog(QWidget *parent = 0);
   
-  //I'm creating a second constructor that will autofill some
+  //second constructor that will autofill some
   //of the fields for kns3 and a possible future directory scanner to use
   ImportDialog(QWidget* parent = 0,QString title = "", QString summary = "", 
 				   QString author= "", QString release= "",
 				   QString releaseDate= "", QString genre= "", 
 				    KUrl *url = 0);
-  ~ImportDialog();
   
   private slots:
     void slotImportClicked();
+    void slotEnableImport();
     
   private:
     Ui::importDialog *ui;
