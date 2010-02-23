@@ -27,12 +27,12 @@
 ImportDialog::ImportDialog(QWidget* parent)
   : KDialog(parent)
 {
-  //should really be setting these in the ui file...
-  ui->cancelButton->icon(KIcon("dialog-close"));
-  ui->ImportButton->icon(KIcon("dialog-ok-apply"));
+   //should really be setting these in the ui file...
+  ui->cancelButton->setIcon(KIcon("dialog-close"));
+  ui->ImportButton->setIcon(KIcon("dialog-ok-apply"));
   
   //resume the regularly scheduled setting up the dialog
-  ui->setupUi();
+  ui->setupUi(this);
   connect(ui->ImportButton, SIGNAL(clicked()),
 	  this, SLOT(slotImportClicked()));
 	  
@@ -41,10 +41,8 @@ ImportDialog::ImportDialog(QWidget* parent)
 	  this, SLOT(slotEnableImport()));
 }
 
-ImportDialog::ImportDialog(QWidget* parent, QString title, QString summary, QString author, QString release, QString releaseDate, QString genre, KUrl* url): KDialog(parent, title, summary, author, release, releaseDate, genre, url)
+void ImportDialog::init(QString title, QString summary, QString author, QString release, QString releaseDate, QString genre, KUrl* url)
 {
-  //hopefully this is a good idea...
-  ImportDialog(parent);
   //we set these to an empty string so setting them without testing to verify
   //real values should be ok? exept for the url, which can't be zero so... ima check that
   ui->titleEdit->setText(title);
@@ -53,8 +51,8 @@ ImportDialog::ImportDialog(QWidget* parent, QString title, QString summary, QStr
   ui->relNumEdit->setText(release);
   ui->relDateEdit->setText(releaseDate);
   ui->genreEdit->setText(genre);
-  if(url != "0"){
-    ui->locationUrlRequestor->setUrl(url);
+  if(url->url() != "0"){
+    ui->locationUrlRequestor->setUrl(*url);
   }
   
 }
@@ -70,3 +68,9 @@ void ImportDialog::slotImportClicked()
  KUrl url = ui->locationUrlRequestor->url();
  emit signalNewBook(title, summary,author,release,releaseDate,genre,&url);
 }
+
+void ImportDialog::slotEnableImport()
+{
+  ui->ImportButton->setEnabled(true);
+}
+

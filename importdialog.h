@@ -26,28 +26,28 @@
 //don't forget to include the ui-file
 #include "ui_importdialog.h"
 
-class ImportDialog :KDialog
+class ImportDialog :public KDialog
 {
   Q_OBJECT
+  public:
   ImportDialog(QWidget *parent = 0);
   
-  //second constructor that will autofill some
-  //of the fields for kns3 and a possible future directory scanner to use
-  ImportDialog(QWidget* parent = 0,QString title = "", QString summary = "", 
+  //autofill some of the fields for kns3 and a possible future directory scanner to use
+   void init(QString title = "", QString summary = "", 
 				   QString author= "", QString release= "",
 				   QString releaseDate= "", QString genre= "", 
 				    KUrl *url = 0);
-  
   private slots:
     void slotImportClicked();
     void slotEnableImport();
     
-  private signals:
+  signals:
     //connect this to the collection to add books
     void signalNewBook(QString title, QString summary, QString author, QString release,
 		       QString releaseDate, QString genre, KUrl *url);
   private:
     Ui::importDialog *ui;
+    void basicInit();
 };
 
 #endif // IMPORTDIALOG_H
