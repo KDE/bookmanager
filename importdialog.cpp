@@ -24,12 +24,12 @@
 #include <QString>
 #include <KUrl>
 
-ImportDialog::ImportDialog(QWidget* parent)
+ImportDialog::ImportDialog(QWidget *parent)
   : KDialog(parent)
 {
    //should really be setting these in the ui file...
-  ui->cancelButton->setIcon(KIcon("dialog-close"));
-  ui->ImportButton->setIcon(KIcon("dialog-ok-apply"));
+  //ui->cancelButton->setIcon(KIcon("dialog-close"));
+  //ui->ImportButton->setIcon(KIcon("dialog-ok-apply"));
   
   //resume the regularly scheduled setting up the dialog
   ui->setupUi(this);

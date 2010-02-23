@@ -13,8 +13,8 @@
   <property name="windowTitle">
    <string>Import New Books</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
@@ -35,7 +35,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="label_2">
@@ -52,7 +52,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -90,7 +90,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="3" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_6">
      <item>
       <widget class="QLabel" name="label_5">
@@ -120,7 +120,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="4" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QLabel" name="label_6">
@@ -147,7 +147,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="5" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
       <spacer name="horizontalSpacer">
@@ -207,7 +207,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>titleEdit</tabstop>
-  <tabstop>authorEdit</tabstop>
   <tabstop>relNumEdit</tabstop>
   <tabstop>relDateEdit</tabstop>
   <tabstop>genreEdit</tabstop>
