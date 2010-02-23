@@ -26,7 +26,7 @@
 //don't forget to include the ui-file
 #include "ui_importdialog.h"
 
-class ImportDialog :public KDialog
+class ImportDialog :public KDialog, public Ui_importDialog
 {
   Q_OBJECT
   public:
@@ -46,7 +46,6 @@ class ImportDialog :public KDialog
     void signalNewBook(QString title, QString summary, QString author, QString release,
 		       QString releaseDate, QString genre, KUrl *url);
   private:
-    Ui::importDialog *ui;
     void basicInit();
 };
 

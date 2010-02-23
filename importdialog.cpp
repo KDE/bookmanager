@@ -28,16 +28,16 @@ ImportDialog::ImportDialog(QWidget *parent)
   : KDialog(parent)
 {
    //should really be setting these in the ui file...
-  //ui->cancelButton->setIcon(KIcon("dialog-close"));
-  //ui->ImportButton->setIcon(KIcon("dialog-ok-apply"));
+  //cancelButton->setIcon(KIcon("dialog-close"));
+  //ImportButton->setIcon(KIcon("dialog-ok-apply"));
   
   //resume the regularly scheduled setting up the dialog
-  ui->setupUi(this);
-  connect(ui->ImportButton, SIGNAL(clicked()),
+  setupUi(this);
+  connect(ImportButton, SIGNAL(clicked()),
 	  this, SLOT(slotImportClicked()));
 	  
   //this really isn't a good test to see if we're ready to import...
-  connect(ui->locationUrlRequestor, SIGNAL(textChanged()),
+  connect(locationUrlRequestor, SIGNAL(textChanged(QString)),
 	  this, SLOT(slotEnableImport()));
 }
 
@@ -45,32 +45,33 @@ void ImportDialog::init(QString title, QString summary, QString author, QString 
 {
   //we set these to an empty string so setting them without testing to verify
   //real values should be ok? exept for the url, which can't be zero so... ima check that
-  ui->titleEdit->setText(title);
-  ui->descEdit->setText(summary);
-  ui->authorEdit->setText(author);
-  ui->relNumEdit->setText(release);
-  ui->relDateEdit->setText(releaseDate);
-  ui->genreEdit->setText(genre);
+  titleEdit->setText(title);
+  descEdit->setText(summary);
+  authorEdit->setText(author);
+  relNumEdit->setText(release);
+  relDateEdit->setText(releaseDate);
+  genreEdit->setText(genre);
   if(url->url() != "0"){
-    ui->locationUrlRequestor->setUrl(*url);
+    locationUrlRequestor->setUrl(*url);
   }
   
 }
 
 void ImportDialog::slotImportClicked()
 {
- QString title = ui->titleEdit->text();
- QString summary = ui->descEdit->toPlainText();
- QString author = ui->authorEdit->text();
- QString release = ui->relNumEdit->text();
- QString releaseDate = ui->relDateEdit->text();
- QString genre = ui->genreEdit->text();
- KUrl url = ui->locationUrlRequestor->url();
+ QString title = titleEdit->text();
+ QString summary = descEdit->toPlainText();
+ QString author = authorEdit->text();
+ QString release = relNumEdit->text();
+ QString releaseDate = relDateEdit->text();
+ QString genre = genreEdit->text();
+ KUrl url = locationUrlRequestor->url();
  emit signalNewBook(title, summary,author,release,releaseDate,genre,&url);
+ close();
 }
 
 void ImportDialog::slotEnableImport()
 {
-  ui->ImportButton->setEnabled(true);
+  ImportButton->setEnabled(true);
 }
 
