@@ -42,6 +42,10 @@ class ImportDialog :KDialog
     void slotImportClicked();
     void slotEnableImport();
     
+  private signals:
+    //connect this to the collection to add books
+    void signalNewBook(QString title, QString summary, QString author, QString release,
+		       QString releaseDate, QString genre, KUrl *url);
   private:
     Ui::importDialog *ui;
 };
