@@ -16,15 +16,26 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 */
-
+#include <QSqlTableModel>
 
 #include "collection.h"
+#include <kdebug.h>
+#include <QSqlError>
 
 Collection::Collection(QWidget* parent)
   : QTableView(parent)
 {
   m_db = new CollectionDB();
-  setModel(m_db->getModel());
+  
+    //initialize the model and signal
+  const int titleColumn = 2;
+  m_model = new QSqlTableModel();
+  m_model->setTable("collection");
+  m_model->setSort(titleColumn, Qt::DescendingOrder);
+  m_model->select();
+  kDebug()<< m_model->lastError().text();
+  
+  setModel(m_model);
   setEditTriggers(QAbstractItemView::NoEditTriggers);
   show();
   

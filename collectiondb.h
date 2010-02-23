@@ -35,17 +35,15 @@ class CollectionDB : public QWidget
   public:
     CollectionDB();
     ~CollectionDB();
-    QSqlTableModel *getModel();
+
   public slots:
     void addBook(QString title, QString summary, QString author, QString release,
 	       QString releaseDate, QString genre, KUrl *url);
-    void remBook(int row);
     
   private:
     bool initDB();
     
     QSqlDatabase m_db;
-    QSqlTableModel *m_model;
     
 };
 

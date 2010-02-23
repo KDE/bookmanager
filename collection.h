@@ -41,6 +41,8 @@ class Collection : public QTableView
 	       QString releaseDate, QString genre, KUrl *url);
   private:
     CollectionDB *m_db;
+    QSqlTableModel *m_model;
+
 
 };
 

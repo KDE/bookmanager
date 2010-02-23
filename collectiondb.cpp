@@ -50,26 +50,12 @@ CollectionDB::CollectionDB()
   if(createCollection == true){
     initDB();
   }
-  
-  //initialize the model and signal
-  const int titleColumn = 2;
-  m_model = new QSqlTableModel();
-  m_model->setTable("library");
-  m_model->setSort(titleColumn, Qt::DescendingOrder);
-  m_model->select();
 }
 
 CollectionDB::~CollectionDB()
 {
   //may want to verify that all changes have been written if close doesn't do that already?
   m_db.close();
-}
-
-//only give a const copy of the model as we only want modifications made by add/remBook
-//any views using this should set setEditTriggers(QAbstractItemView::NoEditTriggers)
-QSqlTableModel *CollectionDB::getModel()
-{
-  return m_model;
 }
 
 //PUBLIC SLOTS
@@ -91,9 +77,6 @@ void CollectionDB::addBook(QString title, QString summary,
      query.bindValue(6, url->url());
 }
 
-void CollectionDB::remBook(int row){
-  m_model->removeRow(row);
-}
 
 //PRIVATE
 bool CollectionDB::initDB()
