@@ -62,7 +62,7 @@ void Shell::slotImport()
 {
   ImportDialog *dialog = new ImportDialog(this);
   connect(dialog, SIGNAL(signalNewBook(QString,QString,QString,QString,QString,QString,KUrl*)),
-	    m_collect, SLOT(newBook(QString,QString,QString,QString,QString,QString,KUrl*)));
+	    m_collect, SLOT(createBook(QString,QString,QString,QString,QString,QString,KUrl*)));
   dialog->show();
 }
 

@@ -29,7 +29,9 @@ class Collection : public QTableView
   Q_OBJECT
   public:
     Collection(QWidget* parent = 0);
+  
     
+  public slots:
     void createBook(QString title, QString summary, QString author, QString release,
 	       QString releaseDate, QString genre, KUrl *url);
     
