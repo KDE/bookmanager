@@ -37,7 +37,8 @@ class Shell : public KParts::MainWindow
     
   private slots:
     void slotGetNewStuff();
-   
+    void slotImport();
+    
   private:
     void setupActions();
     Collection *m_collect;

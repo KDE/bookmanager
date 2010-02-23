@@ -34,7 +34,7 @@ class Collection : public QTableView
 	       QString releaseDate, QString genre, KUrl *url);
     
 	       
-  private signals:
+  signals:
     void newBook(QString title, QString summary, QString author, QString release,
 	       QString releaseDate, QString genre, KUrl *url);
   private:

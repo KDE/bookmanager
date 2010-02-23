@@ -27,7 +27,7 @@
 #include <KNS3/Entry>
 
 
-
+#include "importdialog.h"
 #include "shell.h"
 //PUBLIC
 Shell::Shell(QWidget *parent)
@@ -37,6 +37,8 @@ Shell::Shell(QWidget *parent)
   setCentralWidget(m_collect);
   
   setupActions();
+  
+  
 }
 Shell::~Shell()
 {
@@ -56,6 +58,13 @@ void Shell::slotGetNewStuff()
     }
 }
 
+void Shell::slotImport()
+{
+  ImportDialog *dialog = new ImportDialog(this);
+  connect(dialog, SIGNAL(signalNewBook(QString,QString,QString,QString,QString,QString,KUrl*)),
+	  m_collect, SLOT(newBook(QString,QString,QString,QString,QString,QString,KUrl*)));
+}
+
 //PRIVATE
 
 void Shell::setupActions()
@@ -67,6 +76,13 @@ void Shell::setupActions()
     actionCollection()->addAction("ghns", ghns);
     connect( ghns, SIGNAL (triggered(bool)),
              this, SLOT(slotGetNewStuff()));
+	     
+    KAction *import = new KAction(this);
+    import->setText(i18n("&Import a new Book"));
+    import->setShortcut(Qt::Key_I);
+    actionCollection()->addAction("import", import);
+    connect(import, SIGNAL(triggered()),
+	    this, SLOT(slotImport()));
 	     
     KStandardAction::quit ( kapp, SLOT ( quit() ),
                             actionCollection() );

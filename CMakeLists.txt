@@ -10,8 +10,11 @@ set(bookmanager_SRCS
     main.cpp
     shell.cpp
     collectiondb.cpp
-    collection.cpp
+    collection.cpp 
+    importdialog.cpp
  )
+
+kde4_add_ui_files(bookmanager_SRCS importdialog.ui)
 
 kde4_add_executable(bookmanager ${bookmanager_SRCS})
 

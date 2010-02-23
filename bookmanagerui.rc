@@ -1,8 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="bookmanager" version="1">
+<kpartgui name="bookmanager" version="2">
 <MenuBar>
   <Menu name="file">
     <Action name="ghns" />
+    <Action name="import" />
     <Action name="file_quit" />
     <Separator/>
   </Menu>
