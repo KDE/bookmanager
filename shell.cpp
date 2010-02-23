@@ -52,9 +52,21 @@ void Shell::slotGetNewStuff()
 
     KNS3::DownloadDialog downDialog(widget());
     downDialog.exec();
-    // show the modal dialog over pageview and execute it
+    //this will pop up an import dialog for each changed entry that is installed
+    //may need to filter for updated entries but I don't think books get updated often
+    //without changing the release date and number, which would warrant a new entry anyway maybe?
+    //do books have minor version updates?
     foreach(KNS3::Entry  entries, downDialog.changedEntries() ){
-        kDebug() << "Changed Entry: " << entries.name();
+        if(entries.status() == KNS3::Entry::Installed){
+	  QString nil = '';//placeholder for empty info
+	  ImportDialog *impDialog = new ImportDialog(widget());
+	  connect(impDialog, SIGNAL(signalNewBook(QString,QString,QString,QString,QString,QString,KUrl*)),
+	    m_collect, SLOT(createBook(QString,QString,QString,QString,QString,QString,KUrl*)));
+	  impDialog->init(entries.name(), entries.summary(),nil, 
+			  entries.version(),nil, nil, KUrl(entries.installedFiles().first()) );
+	  impDialog->show();
+	}
+	  
     }
 }
 
