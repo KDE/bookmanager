@@ -30,6 +30,13 @@ class Collection : public QTableView
   public:
     Collection(QWidget* parent = 0);
     
+    void createBook(QString title, QString summary, QString author, QString release,
+	       QString releaseDate, QString genre, KUrl *url);
+    
+	       
+  private signals:
+    void newBook(QString title, QString summary, QString author, QString release,
+	       QString releaseDate, QString genre, KUrl *url);
   private:
     CollectionDB *m_db;
 

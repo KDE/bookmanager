@@ -27,4 +27,13 @@ Collection::Collection(QWidget* parent)
   setModel(m_db->getModel());
   setEditTriggers(QAbstractItemView::NoEditTriggers);
   show();
+  
+  //lots of qstrings... should probably be a qstringlist?
+  connect(this, SIGNAL(newBook(QString,QString,QString,QString,QString,QString,KUrl*)),
+	  m_db, SLOT(addBook(QString,QString,QString,QString,QString,QString,KUrl*)));
+}
+
+void Collection::createBook(QString title, QString summary, QString author, QString release, QString releaseDate, QString genre, KUrl* url)
+{
+  emit newBook(title, summary, author, release, releaseDate, genre, url);
 }
