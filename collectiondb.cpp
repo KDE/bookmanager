@@ -19,6 +19,7 @@
 //KDE includes
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 //QT includes
 #include <QSqlQuery>
@@ -79,16 +80,15 @@ void CollectionDB::addBook(QString title, QString summary,
 {
   QSqlQuery query;
   //set id to NULL for sqlite to autoincrement the id, we don't care about the id's so...
-  query.prepare("INSERT INTO collection (id, title, summary, author, release, releaseDate, genre, url) "
-                   "VALUES (NULL, :title, :summary, :author, :release, :releaseDate, :genre, :url)");
-     query.bindValue(1, title);
-     query.bindValue(2, summary);
-     query.bindValue(3, author);
-     query.bindValue(4, release);
-     query.bindValue(5, releaseDate);
-     query.bindValue(6, genre);
-     query.bindValue(7, url->url());
-     query.exec();
+  query.prepare("INSERT INTO collection (title, summary, author, release, releaseDate, genre, url) "
+                   "VALUES (:title, :summary, :author, :release, :releaseDate, :genre, :url)");
+     query.bindValue(0, title);
+     query.bindValue(1, summary);
+     query.bindValue(2, author);
+     query.bindValue(3, release);
+     query.bindValue(4, releaseDate);
+     query.bindValue(5, genre);
+     query.bindValue(6, url->url());
 }
 
 void CollectionDB::remBook(int row){
