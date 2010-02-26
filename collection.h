@@ -44,7 +44,9 @@ class Collection : public QTableView
   private:
     CollectionDB *m_db;
     QSqlTableModel *m_model;
+    enum columnLayout {ID, Title,Summary,Author, Release, ReleaseDate, Genre, Location};
 
+    
 
 };
 

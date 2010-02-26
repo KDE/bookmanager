@@ -33,10 +33,12 @@ Collection::Collection(QWidget* parent)
   m_model->setTable("collection");
   m_model->setSort(titleColumn, Qt::DescendingOrder);
   m_model->select();
-  kDebug()<< m_model->lastError().text();
   
+  //set up the view
   setModel(m_model);
-  setEditTriggers(QAbstractItemView::NoEditTriggers);
+  setEditTriggers(QAbstractItemView::NoEditTriggers); //TODO make the table editable??
+  hideColumn(ID);
+  hideColumn(Location);
   show();
   
   //lots of qstrings... should probably be a qstringlist?
