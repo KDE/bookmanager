@@ -75,6 +75,7 @@ void CollectionDB::addBook(QString title, QString summary,
      query.bindValue(4, releaseDate);
      query.bindValue(5, genre);
      query.bindValue(6, url->url());
+     query.exec();
 }
 
 
