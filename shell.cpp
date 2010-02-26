@@ -58,12 +58,13 @@ void Shell::slotGetNewStuff()
     //do books have minor version updates?
     foreach(KNS3::Entry  entries, downDialog.changedEntries() ){
         if(entries.status() == KNS3::Entry::Installed){
-	  QString nil = '';//placeholder for empty info
+	  QString nil = "";//placeholder for empty info
 	  ImportDialog *impDialog = new ImportDialog(widget());
 	  connect(impDialog, SIGNAL(signalNewBook(QString,QString,QString,QString,QString,QString,KUrl*)),
 	    m_collect, SLOT(createBook(QString,QString,QString,QString,QString,QString,KUrl*)));
+	  KUrl *location = new KUrl(KUrl(entries.installedFiles().first()));
 	  impDialog->init(entries.name(), entries.summary(),nil, 
-			  entries.version(),nil, nil, KUrl(entries.installedFiles().first()) );
+			  entries.version(),nil, nil, location);
 	  impDialog->show();
 	}
 	  
