@@ -42,9 +42,19 @@ Collection::Collection(QWidget* parent)
   //lots of qstrings... should probably be a qstringlist?
   connect(this, SIGNAL(newBook(QString,QString,QString,QString,QString,QString,KUrl*)),
 	  m_db, SLOT(addBook(QString,QString,QString,QString,QString,QString,KUrl*)));
+	  
+  //don't forget to update the model if the db gets dirty
+  connect(m_db, SIGNAL(isDirty()),
+	  this, SLOT(updateModel()));
 }
 
 void Collection::createBook(QString title, QString summary, QString author, QString release, QString releaseDate, QString genre, KUrl* url)
 {
   emit newBook(title, summary, author, release, releaseDate, genre, url);
 }
+
+void Collection::updateModel()
+{
+  m_model->select();
+}
+

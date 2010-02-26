@@ -34,6 +34,8 @@ class Collection : public QTableView
   public slots:
     void createBook(QString title, QString summary, QString author, QString release,
 	       QString releaseDate, QString genre, KUrl *url);
+	       
+    void updateModel();
     
 	       
   signals:

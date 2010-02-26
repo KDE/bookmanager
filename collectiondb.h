@@ -39,6 +39,8 @@ class CollectionDB : public QWidget
   public slots:
     void addBook(QString title, QString summary, QString author, QString release,
 	       QString releaseDate, QString genre, KUrl *url);
+  signals:
+    void isDirty();
     
   private:
     bool initDB();
