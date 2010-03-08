@@ -21,6 +21,7 @@
 #include "collection.h"
 #include <kdebug.h>
 #include <QSqlError>
+#include <qheaderview.h>
 
 Collection::Collection(QWidget* parent)
   : QTableView(parent)
@@ -37,6 +38,12 @@ Collection::Collection(QWidget* parent)
   //set up the view
   setModel(m_model);
   setEditTriggers(QAbstractItemView::NoEditTriggers); //TODO make the table editable??
+  
+  //create a prettier header for the view
+  QHeaderView *head = horizontalHeader();
+  head->setResizeMode(QHeaderView::Stretch);
+  head->setMovable(true);
+  
   hideColumn(ID);
   hideColumn(Location);
   show();
