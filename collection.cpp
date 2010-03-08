@@ -22,6 +22,8 @@
 #include <kdebug.h>
 #include <QSqlError>
 #include <qheaderview.h>
+#include <klocale.h>
+#include <QStringList>
 
 Collection::Collection(QWidget* parent)
   : QTableView(parent)
@@ -33,6 +35,18 @@ Collection::Collection(QWidget* parent)
   m_model = new QSqlTableModel();
   m_model->setTable("collection");
   m_model->setSort(titleColumn, Qt::DescendingOrder);
+  //probably an easier way to do this but... fix the header and make them translatable? maybe?
+  QStringList headerNames;
+  headerNames << ki18n("ID").toString() << ki18n("Title").toString() 
+	      << ki18n("Summary").toString() << ki18n("Author").toString() 
+	      << ki18n("Edition").toString() << ki18n("Release Date").toString()
+	      << ki18n("Genre").toString() << ki18n("Disk Location").toString();
+  
+  const int colCount = m_model->columnCount();
+  for(int i = 0; i < colCount; i++){
+    m_model->setHeaderData(i, Qt::Horizontal, headerNames.at(i));
+  }
+  
   m_model->select();
   
   //set up the view
