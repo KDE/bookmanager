@@ -25,17 +25,21 @@
 #include <KDebug>
 #include <KNS3/DownloadDialog>
 #include <KNS3/Entry>
-
+#include <KTabWidget>
+#include <QVBoxLayout>
 
 #include "importdialog.h"
 #include "shell.h"
 //PUBLIC
 Shell::Shell(QWidget *parent)
   : KParts::MainWindow(parent, Qt::Window)
-{
-  m_collect = new Collection(this);
-  setCentralWidget(m_collect);
+{  
+  //need set up the initial tab before the main window
+  KTabWidget *mainView = new KTabWidget(this);
+  m_collect = new Collection(mainView);
+  mainView->addTab(m_collect, i18n("Collection")); 
   
+  setCentralWidget(mainView);
   setupActions();
   
   
