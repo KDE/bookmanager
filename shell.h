@@ -24,7 +24,10 @@
 #include <kparts/mainwindow.h>
 #include "collection.h"
 
-//eventually we want to be able to embed kparts to read the files managed here so we are going to derive from KParts::MainWindow rather than KMainWindow
+	 
+class Kurl;
+class KTabWidget;
+//we want to be able to embed kparts to read the files managed here so we are going to derive from KParts::MainWindow rather than KMainWindow
 class Shell : public KParts::MainWindow
 
 {
@@ -38,9 +41,14 @@ class Shell : public KParts::MainWindow
   private slots:
     void slotGetNewStuff();
     void slotImport();
+    void slotReaderTab(Kurl *url);
     
   private:
     void setupActions();
+    void okularTab(Kurl *url);
+    
+    KTabWidget *mainView;
     Collection *m_collect;
+    KParts::ReadOnlyPart* m_part;
 };
 #endif // SHELL_H

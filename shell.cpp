@@ -27,6 +27,9 @@
 #include <KNS3/Entry>
 #include <KTabWidget>
 #include <QVBoxLayout>
+#include <KLibLoader>
+#include <KUrl>
+
 
 #include "importdialog.h"
 #include "shell.h"
@@ -35,7 +38,7 @@ Shell::Shell(QWidget *parent)
   : KParts::MainWindow(parent, Qt::Window)
 {  
   //need set up the initial tab before the main window
-  KTabWidget *mainView = new KTabWidget(this);
+  mainView = new KTabWidget(this);
   m_collect = new Collection(mainView);
   mainView->addTab(m_collect, i18n("Collection")); 
   
@@ -83,6 +86,14 @@ void Shell::slotImport()
   dialog->show();
 }
 
+//creates a new tab... initially will create an okularpart to load the doc, will eventually check the mimetype and try to pick the correct part
+void Shell::slotReaderTab(Kurl* url)
+{
+  //FIXME should create a tab with the correct reader for the mimetype.
+  okularTab(url);
+}
+
+
 //PRIVATE
 
 void Shell::setupActions()
@@ -106,3 +117,19 @@ void Shell::setupActions()
                             actionCollection() );
     setupGUI();
 }
+
+void Shell::okularTab(Kurl* url)
+{
+  //create the kpart before the tab to verify that we can create the part
+  KLibLoader *factory = KLibLoader::self()->factory("okularpart");
+  if(!factory){
+    KMessageBox::error(this, i18n("Unable to find the Okular Part, please check your installation."));
+    m_part = 0;
+    return;
+  }
+  //if we're still here we can create the tab and try to load the file.
+  m_part = factory->create<KParts::ReadOnlyPart>(this);
+  mainView->addTab(m_part,i18n("Okular Reader") );
+  m_part->openUrl(url);
+}
+
