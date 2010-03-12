@@ -121,14 +121,13 @@ void Shell::setupActions()
 void Shell::okularTab(Kurl* url)
 {
   //create the kpart before the tab to verify that we can create the part
-  KLibFactory *factory = KLibLoader::self()->factory("okularpart");
+  KLibLoader *factory = KLibLoader::self()->factory("okularpart");
   if(!factory){
     KMessageBox::error(this, i18n("Unable to find the Okular Part, please check your installation."));
     m_part = 0;
     return;
   }
   //if we're still here we can create the tab and try to load the file.
-  m_part = factory->c
   m_part = factory->create<KParts::ReadOnlyPart>(this);
   mainView->addTab(m_part,i18n("Okular Reader") );
   m_part->openUrl(url);
