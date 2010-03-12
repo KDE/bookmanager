@@ -44,7 +44,8 @@ Shell::Shell(QWidget *parent)
   
   setCentralWidget(mainView);
   setupActions();
-  
+  const KUrl url;
+  okularTab(&url);
   
 }
 Shell::~Shell()
@@ -87,7 +88,7 @@ void Shell::slotImport()
 }
 
 //creates a new tab... initially will create an okularpart to load the doc, will eventually check the mimetype and try to pick the correct part
-void Shell::slotReaderTab(Kurl* url)
+void Shell::slotReaderTab(KUrl* url)
 {
   //FIXME should create a tab with the correct reader for the mimetype.
   okularTab(url);
@@ -118,18 +119,19 @@ void Shell::setupActions()
     setupGUI();
 }
 
-void Shell::okularTab(Kurl* url)
+void Shell::okularTab(const KUrl* url)
 {
   //create the kpart before the tab to verify that we can create the part
-  KLibLoader *factory = KLibLoader::self()->factory("okularpart");
+  KLibFactory *factory = KLibLoader::self()->factory("okularpart");
   if(!factory){
     KMessageBox::error(this, i18n("Unable to find the Okular Part, please check your installation."));
     m_part = 0;
     return;
   }
   //if we're still here we can create the tab and try to load the file.
-  m_part = factory->create<KParts::ReadOnlyPart>(this);
-  mainView->addTab(m_part,i18n("Okular Reader") );
-  m_part->openUrl(url);
+  QWidget *page = new QWidget(this); //FIXME compiles but doesn't actually work...
+  m_part = factory->create<KParts::ReadOnlyPart>(page);
+  mainView->addTab(page,i18n("Okular Reader") );
+  //m_part->openUrl(*url);
 }
 
