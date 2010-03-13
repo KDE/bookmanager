@@ -52,7 +52,7 @@ Collection::Collection(QWidget* parent)
   //set up the view
   setModel(m_model);
   setEditTriggers(QAbstractItemView::NoEditTriggers); //TODO make the table editable??
-  
+  setSelectionBehavior(QAbstractItemView::SelectRows);
   //create a prettier header for the view
   QHeaderView *head = horizontalHeader();
   head->setResizeMode(QHeaderView::Stretch);
@@ -69,6 +69,7 @@ Collection::Collection(QWidget* parent)
   //don't forget to update the model if the db gets dirty
   connect(m_db, SIGNAL(isDirty()),
 	  this, SLOT(updateModel()));
+  
 }
 
 void Collection::createBook(QString title, QString summary, QString author, QString release, QString releaseDate, QString genre, KUrl* url)
@@ -81,3 +82,8 @@ void Collection::updateModel()
   m_model->select();
 }
 
+void Collection::openBook(QModelIndex *index)
+{
+  //QVariant modelData = m_model->data();
+  
+}

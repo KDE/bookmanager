@@ -132,6 +132,6 @@ void Shell::okularTab(const KUrl* url)
   QWidget *page = new QWidget(this); //FIXME compiles but doesn't actually work...
   m_part = factory->create<KParts::ReadOnlyPart>(page);
   mainView->addTab(page,i18n("Okular Reader") );
-  //m_part->openUrl(*url);
+  m_part->openUrl(*url);
 }
 
