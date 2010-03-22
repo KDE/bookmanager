@@ -29,12 +29,16 @@
 #include <QString>
 #include <QWidget>
 
+class KUrl;
+
 class CollectionDB : public QWidget
 {
   Q_OBJECT
   public:
     CollectionDB();
     ~CollectionDB();
+    
+    KUrl getUrl(int row);
 
   public slots:
     void addBook(QString title, QString summary, QString author, QString release,

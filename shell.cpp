@@ -44,9 +44,9 @@ Shell::Shell(QWidget *parent)
   
   setCentralWidget(mainView);
   setupActions();
-  const KUrl url;
-  okularTab(&url);
   
+  connect(m_collect, SIGNAL(loadBook(KUrl*)),
+	  this, SLOT(slotReaderTab(KUrl*)));
 }
 Shell::~Shell()
 {

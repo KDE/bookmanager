@@ -37,12 +37,12 @@ class Collection : public QTableView
 	       
     void updateModel();
   private slots:  
-    void openBook(QModelIndex *index);
+    void openBook(QModelIndex index);
 	       
   signals:
     void newBook(QString title, QString summary, QString author, QString release,
 	       QString releaseDate, QString genre, KUrl *url);
-    void loadbook(KUrl *url);
+    void loadBook(KUrl *url);
   private:
     CollectionDB *m_db;
     QSqlTableModel *m_model;

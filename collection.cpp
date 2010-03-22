@@ -70,6 +70,10 @@ Collection::Collection(QWidget* parent)
   connect(m_db, SIGNAL(isDirty()),
 	  this, SLOT(updateModel()));
   
+    //load the book on doubleclick anywhere in that row?
+  connect(this, SIGNAL(doubleClicked(QModelIndex)),
+	  this, SLOT(openBook(QModelIndex)));
+  
 }
 
 void Collection::createBook(QString title, QString summary, QString author, QString release, QString releaseDate, QString genre, KUrl* url)
@@ -82,8 +86,9 @@ void Collection::updateModel()
   m_model->select();
 }
 
-void Collection::openBook(QModelIndex *index)
+void Collection::openBook(QModelIndex index)
 {
-  //QVariant modelData = m_model->data();
-  
+  //don't forget to add 1 to the row# as the database starts at 1 while the view starts at 0
+  KUrl bookUrl =  m_db->getUrl( (index.row() + 1) );
+  emit loadBook(&bookUrl);
 }
