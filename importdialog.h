@@ -40,11 +40,13 @@ class ImportDialog :public KDialog, public Ui_importDialog
   private slots:
     void slotImportClicked();
     void slotEnableImport();
-    
+    void checkUrl(QString);
   signals:
     //connect this to the collection to add books
     void signalNewBook(QString title, QString summary, QString author, QString release,
 		       QString releaseDate, QString genre, KUrl *url);
+    void urlIsGood();
+  
   private:
     void basicInit();
 };

@@ -23,6 +23,7 @@
 #include <kicon.h>
 #include <QString>
 #include <KUrl>
+#include <KIO/NetAccess>
 
 ImportDialog::ImportDialog(QWidget *parent)
   : KDialog(parent)
@@ -36,8 +37,11 @@ ImportDialog::ImportDialog(QWidget *parent)
   connect(ImportButton, SIGNAL(clicked()),
 	  this, SLOT(slotImportClicked()));
 	  
-  //this really isn't a good test to see if we're ready to import...
+  //test to see if the file actually exists before adding it
   connect(locationUrlRequestor, SIGNAL(textChanged(QString)),
+	  this, SLOT(checkUrl(QString)));
+  
+  connect(this, SIGNAL(urlIsGood()),
 	  this, SLOT(slotEnableImport()));
 }
 
@@ -75,3 +79,12 @@ void ImportDialog::slotEnableImport()
   ImportButton->setEnabled(true);
 }
 
+
+void ImportDialog::checkUrl(QString url)
+{
+  KUrl file = KUrl(url);
+  bool read = true;
+  if(KIO::NetAccess::exists(file, read, NULL)){
+    emit urlIsGood();
+  }
+}
