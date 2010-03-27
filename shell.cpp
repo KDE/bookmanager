@@ -28,7 +28,9 @@
 #include <KTabWidget>
 #include <QVBoxLayout>
 #include <KUrl>
-
+#include <KParts/ComponentFactory>
+#include <kvbox.h>
+#include <kmimetype.h>
 
 #include "importdialog.h"
 #include "shell.h"
@@ -90,7 +92,7 @@ void Shell::slotImport()
 }
 
 //creates a new tab... initially will create an okularpart to load the doc, will eventually check the mimetype and try to pick the correct part
-void Shell::slotReaderTab(KUrl* url)
+void Shell::slotReaderTab(KUrl *url)
 {
   //FIXME should create a tab with the correct reader for the mimetype.
   okularTab(url);
@@ -128,10 +130,17 @@ void Shell::setupActions()
 }
 
 
-void Shell::okularTab(const KUrl* url)
+void Shell::okularTab(const KUrl *url)
 {
-  //create the kpart before the tab to verify that we can create the part
-  m_part = new OkPart(url, this);
-  mainView->addTab(m_part,i18n("Okular Reader") );
+  //reading the docs makes things much easier :)
+  KVBox *mainBox = new KVBox;
+  QString mimeType = KMimeType::findByUrl( *url )->name();
+  m_part = KParts::ComponentFactory::createPartInstanceFromQuery<KParts::ReadOnlyPart>( mimeType, QString(), parentWidget(), parent() );
+    if(m_part) {
+      m_part->openUrl(*url);
+    }
+  
+  mainView->addTab(m_part->widget(),i18n("Okular Reader") );
+  
 }
 

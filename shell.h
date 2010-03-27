@@ -23,7 +23,6 @@
 
 #include <kparts/mainwindow.h>
 #include "collection.h"
-#include "okpart.h"
 
 	 
 class KUrl;
@@ -50,7 +49,7 @@ class Shell : public KParts::MainWindow
     
     KTabWidget *mainView;
     Collection *m_collect;
-    OkPart *m_part;
+    KParts::ReadOnlyPart *m_part;
     
     //need to declare actions here so they can be shared between the context and
     //top menu. I think?

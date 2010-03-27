@@ -12,7 +12,7 @@ set(bookmanager_SRCS
     collectiondb.cpp
     collection.cpp 
     importdialog.cpp
-    okpart.cpp
+   
  )
 
 kde4_add_ui_files(bookmanager_SRCS importdialog.ui)
