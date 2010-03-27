@@ -27,12 +27,12 @@
 #include <KNS3/Entry>
 #include <KTabWidget>
 #include <QVBoxLayout>
-#include <KLibLoader>
 #include <KUrl>
 
 
 #include "importdialog.h"
 #include "shell.h"
+	 
 //PUBLIC
 Shell::Shell(QWidget *parent)
   : KParts::MainWindow(parent, Qt::Window)
@@ -131,16 +131,7 @@ void Shell::setupActions()
 void Shell::okularTab(const KUrl* url)
 {
   //create the kpart before the tab to verify that we can create the part
-  KLibFactory *factory = KLibLoader::self()->factory("okularpart");
-  if(!factory){
-    KMessageBox::error(this, i18n("Unable to find the Okular Part, please check your installation."));
-    m_part = 0;
-    return;
-  }
-  //if we're still here we can create the tab and try to load the file.
-  QWidget *page = new QWidget(this); //FIXME compiles but doesn't actually work...
-  m_part = factory->create<KParts::ReadOnlyPart>(page);
-  mainView->addTab(page,i18n("Okular Reader") );
-  m_part->openUrl(*url);
+  m_part = new OkPart(url, this);
+  mainView->addTab(m_part,i18n("Okular Reader") );
 }
 

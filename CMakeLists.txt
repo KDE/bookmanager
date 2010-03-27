@@ -6,12 +6,13 @@ include (KDE4Defaults)
 include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} )
 
 
-set(bookmanager_SRCS  
+set(bookmanager_SRCS   
     main.cpp
     shell.cpp
     collectiondb.cpp
     collection.cpp 
     importdialog.cpp
+    okpart.cpp
  )
 
 kde4_add_ui_files(bookmanager_SRCS importdialog.ui)
