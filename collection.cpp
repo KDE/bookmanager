@@ -81,6 +81,12 @@ void Collection::createBook(QString title, QString summary, QString author, QStr
   emit newBook(title, summary, author, release, releaseDate, genre, url);
 }
 
+void Collection::remBook(int row)
+{
+  m_model->removeRow(row);
+}
+
+
 void Collection::updateModel()
 {
   m_model->select();
