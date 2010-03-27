@@ -81,9 +81,24 @@ void Collection::createBook(QString title, QString summary, QString author, QStr
   emit newBook(title, summary, author, release, releaseDate, genre, url);
 }
 
-void Collection::remBook(int row)
+void Collection::remBook()
 {
-  m_model->removeRow(row);
+  QModelIndex removeMe;
+
+  QModelIndexList removeUs = selectedIndexes();
+  
+  //the foreach loops over every column in each row so im using a counter to exit the loop when
+  //it starts on the second column. 
+  int index = removeUs.at(0).row();
+  
+  foreach(removeMe, removeUs) {
+    int row = removeMe.row();
+    if(row < index) {
+      return;
+    }
+    m_model->removeRow(row);
+    index += 1;
+  }
 }
 
 
