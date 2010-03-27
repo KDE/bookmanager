@@ -39,6 +39,8 @@ Shell::Shell(QWidget *parent)
 {  
   //need set up the initial tab before the main window
   mainView = new KTabWidget(this);
+  mainView->setTabsClosable(true);
+  
   m_collect = new Collection(mainView);
   mainView->addTab(m_collect, i18n("Collection")); 
   
