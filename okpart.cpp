@@ -24,11 +24,13 @@
 #include <KDebug>
 #include <KLibLoader>
 #include <KMessageBox>
+#include <QVBoxLayout>
 
 
 OkPart::OkPart(const KUrl* url, QWidget* parent)
   : QWidget(parent)
 {
+  QVBoxLayout *mainLayout = new QVBoxLayout;
    //create the kpart before the tab to verify that we can create the part
   KLibFactory *factory = KLibLoader::self()->factory("okularpart");
   if(!factory){
@@ -39,4 +41,6 @@ OkPart::OkPart(const KUrl* url, QWidget* parent)
   //if we're still here we can create the tab and try to load the file.
   m_part = factory->create<KParts::ReadOnlyPart>(this);
   m_part->openUrl(*url);
+  mainLayout->addWidget(m_part->widget());
+  setLayout(mainLayout);
 }
