@@ -101,7 +101,7 @@ void Shell::slotReaderTab(KUrl* url)
 
 void Shell::setupActions()
 {
-    KAction *ghns = new KAction(this);
+    ghns = new KAction(this);
     ghns->setText(i18n("&Get Books From Internet..."));
     ghns->setIcon(KIcon("get-hot-new-stuff"));
     ghns->setShortcut(Qt::Key_G);
@@ -109,17 +109,24 @@ void Shell::setupActions()
     connect( ghns, SIGNAL (triggered(bool)),
              this, SLOT(slotGetNewStuff()));
 	     
-    KAction *import = new KAction(this);
+    import = new KAction(this);
     import->setText(i18n("&Import a new Book"));
     import->setShortcut(Qt::Key_I);
     actionCollection()->addAction("import", import);
     connect(import, SIGNAL(triggered()),
 	    this, SLOT(slotImport()));
+    
+    remove = new KAction(this);
+    remove->setText(i18n("&Remove a book"));
+    actionCollection()->addAction("remove", remove);
+    connect(remove, SIGNAL(triggered()),
+	    m_collect, SLOT(remBook()));
 	     
     KStandardAction::quit ( kapp, SLOT ( quit() ),
                             actionCollection() );
     setupGUI();
 }
+
 
 void Shell::okularTab(const KUrl* url)
 {

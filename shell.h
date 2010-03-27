@@ -50,5 +50,11 @@ class Shell : public KParts::MainWindow
     KTabWidget *mainView;
     Collection *m_collect;
     KParts::ReadOnlyPart* m_part;
+    
+    //need to declare actions here so they can be shared between the context and
+    //top menu. I think?
+    KAction *import;
+    KAction *ghns;
+    KAction *remove;
 };
 #endif // SHELL_H
