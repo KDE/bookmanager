@@ -28,7 +28,7 @@
 #include <KTabWidget>
 #include <QVBoxLayout>
 #include <KUrl>
-#include <KParts/ComponentFactory>
+#include <KMimeTypeTrader>
 #include <kvbox.h>
 #include <kmimetype.h>
 
@@ -135,12 +135,13 @@ void Shell::okularTab(const KUrl *url)
   //reading the docs makes things much easier :)
   KVBox *mainBox = new KVBox;
   QString mimeType = KMimeType::findByUrl( *url )->name();
-  m_part = KParts::ComponentFactory::createPartInstanceFromQuery<KParts::ReadOnlyPart>( mimeType, QString(), parentWidget(), parent() );
-    if(m_part) {
+  m_part = KMimeTypeTrader::createPartInstanceFromQuery<KParts::ReadOnlyPart>( mimeType, mainBox, parent() ); 
+  if(m_part) {
       m_part->openUrl(*url);
+      mainView->addTab(m_part->widget(),i18n("Okular Reader") );
     }
   
-  mainView->addTab(m_part->widget(),i18n("Okular Reader") );
+  
   
 }
 
