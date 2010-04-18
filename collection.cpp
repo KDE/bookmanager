@@ -109,7 +109,11 @@ void Collection::updateModel()
 
 void Collection::openBook(QModelIndex index)
 {
-  //don't forget to add 1 to the row# as the database starts at 1 while the view starts at 0
-  KUrl bookUrl =  m_db->getUrl( (index.row() + 1) );
+  //use the layout enum to recreate the index with the books url selected
+  //so that the model doesn't need to match the DB ordering...
+  QModelIndex urlIndex = m_model->index(index.row(), Location);
+  //this bit has caused a lot of issues so i'm leaving a debug in...
+  kDebug() << m_model->data(urlIndex).toString();
+  KUrl bookUrl =KUrl(m_model->data(urlIndex).toString());
   emit loadBook(&bookUrl);
 }
