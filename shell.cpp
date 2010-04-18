@@ -91,11 +91,11 @@ void Shell::slotImport()
   dialog->show();
 }
 
-//creates a new tab... initially will create an okularpart to load the doc, will eventually check the mimetype and try to pick the correct part
+//creates a new tab
 void Shell::slotReaderTab(KUrl *url)
 {
   //FIXME should create a tab with the correct reader for the mimetype.
-  okularTab(url);
+  readerTab(url);
 }
 
 
@@ -130,7 +130,7 @@ void Shell::setupActions()
 }
 
 
-void Shell::okularTab(const KUrl *url)
+void Shell::readerTab(const KUrl *url)
 {
   //reading the docs makes things much easier :)
   KVBox *mainBox = new KVBox;

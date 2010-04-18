@@ -45,7 +45,7 @@ class Shell : public KParts::MainWindow
     
   private:
     void setupActions();
-    void okularTab(const KUrl* url);
+    void readerTab(const KUrl* url);
     
     KTabWidget *mainView;
     Collection *m_collect;
