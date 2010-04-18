@@ -77,6 +77,7 @@ void CollectionDB::addBook(QString title, QString summary,
      query.bindValue(5, genre);
      query.bindValue(6, url->url());
      query.exec();
+     query.finish();
      emit isDirty();
 }
 
@@ -98,6 +99,7 @@ bool CollectionDB::initDB()
                          "releaseDate text, "
                          "genre text, "
                          "url text)");
+	query.finish();
 
     }
     return ret;
@@ -113,6 +115,7 @@ KUrl CollectionDB::getUrl(int row)
   query.bindValue(":row", row);
   query.exec();
   query.first();
+  query.finish();
   
   //we should never have more than one result so we're going to just always pull the first
   QString urlString = query.value(0).toString();

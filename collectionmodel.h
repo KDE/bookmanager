@@ -17,40 +17,20 @@
 
 */
 
-
-#ifndef COLLECTION_H
-#define COLLECTION_H
-
-#include <QTableView>
+#ifndef COLLECTIONMODEL_H
+#define COLLECTIONMODEL_H
+#include <qsqltablemodel.h>
 #include "collectiondb.h"
 
-class CollectionModel;
-class Collection : public QTableView
+class CollectionModel : public QSqlTableModel
 {
   Q_OBJECT
-  public:
-    Collection(QWidget* parent = 0);
-    
-  public slots:
-    void createBook(QString title, QString summary, QString author, QString release,
-	       QString releaseDate, QString genre, KUrl *url);
-    void remBook();       
-    void updateModel();
-    
-  private slots:  
-    void openBook(QModelIndex index);
-	       
-  signals:
-    void newBook(QString title, QString summary, QString author, QString release,
-	       QString releaseDate, QString genre, KUrl *url);
-    void loadBook(KUrl *url);
-  private:
-    CollectionDB *m_db;
-    CollectionModel *m_model;
-    enum columnLayout {ID, Title,Summary,Author, Release, ReleaseDate, Genre, Location};
-
-    
-
+public:
+  CollectionModel();
+  ~CollectionModel();
+  
+private:
+  enum columnLayout {ID, Title,Summary,Author, Release, ReleaseDate, Genre, Location};
 };
 
-#endif // COLLECTION_H
+#endif // COLLECTIONMODEL_H

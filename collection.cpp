@@ -24,31 +24,13 @@
 #include <qheaderview.h>
 #include <klocale.h>
 #include <QStringList>
+#include "collectionmodel.h"
 
 Collection::Collection(QWidget* parent)
   : QTableView(parent)
 {
   m_db = new CollectionDB();
-  
-    //initialize the model and signal
-  const int titleColumn = 2;
-  m_model = new QSqlTableModel();
-  m_model->setTable("collection");
-  m_model->setSort(titleColumn, Qt::DescendingOrder);
-  //probably an easier way to do this but... fix the header and make them translatable? maybe?
-  QStringList headerNames;
-  headerNames << ki18n("ID").toString() << ki18n("Title").toString() 
-	      << ki18n("Summary").toString() << ki18n("Author").toString() 
-	      << ki18n("Edition").toString() << ki18n("Release Date").toString()
-	      << ki18n("Genre").toString() << ki18n("Disk Location").toString();
-  
-  const int colCount = m_model->columnCount();
-  for(int i = 0; i < colCount; i++){
-    m_model->setHeaderData(i, Qt::Horizontal, headerNames.at(i));
-  }
-  
-  m_model->select();
-  
+  m_model = new CollectionModel();  
   //set up the view
   setModel(m_model);
   setEditTriggers(QAbstractItemView::NoEditTriggers); //TODO make the table editable??
