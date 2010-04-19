@@ -37,8 +37,6 @@ class CollectionDB : public QWidget
   public:
     CollectionDB();
     ~CollectionDB();
-    
-    KUrl getUrl(int row);
 
   public slots:
     void addBook(QString title, QString summary, QString author, QString release,

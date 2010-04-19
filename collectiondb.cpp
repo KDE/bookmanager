@@ -105,20 +105,4 @@ bool CollectionDB::initDB()
     return ret;
 }
 
-//I can't figure out how to get the url out of the model so im just going to do it with sql
-//here instead of in collection like it should be :(
-
-KUrl CollectionDB::getUrl(int row)
-{
-  QSqlQuery query;
-  query.prepare("SELECT url FROM collection WHERE id = :row");
-  query.bindValue(":row", row);
-  query.exec();
-  query.first();
-  query.finish();
-  
-  //we should never have more than one result so we're going to just always pull the first
-  QString urlString = query.value(0).toString();
-  return KUrl(urlString);
-}
 
