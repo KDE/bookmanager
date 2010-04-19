@@ -45,11 +45,11 @@ class Shell : public KParts::MainWindow
     
   private:
     void setupActions();
-    void okularTab(const KUrl* url);
+    void readerTab(const KUrl* url);
     
     KTabWidget *mainView;
     Collection *m_collect;
-    KParts::ReadOnlyPart* m_part;
+    KParts::ReadOnlyPart *m_part;
     
     //need to declare actions here so they can be shared between the context and
     //top menu. I think?
