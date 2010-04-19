@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="bookmanager" version="4">
+<kpartgui name="bookmanager" version="5">
 <MenuBar>
   <Menu name="file">
     <Action name="ghns" />
@@ -11,5 +11,6 @@
     <Action name="file_quit" />
     <Separator/>
   </Menu>
+  <Merge />
 </MenuBar>
 </kpartgui>
