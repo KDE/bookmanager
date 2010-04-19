@@ -99,7 +99,7 @@ void Shell::slotImport()
 //creates a new tab
 void Shell::slotReaderTab(KUrl *url)
 {
-  //FIXME should create a tab with the correct reader for the mimetype.
+  //create a tab with the correct reader for the mimetype.
   readerTab(url);
 }
 
@@ -143,7 +143,12 @@ void Shell::readerTab(const KUrl *url)
   m_part = KMimeTypeTrader::createPartInstanceFromQuery<KParts::ReadOnlyPart>( mimeType, mainBox, parent() ); 
   if(m_part) {
       m_part->openUrl(*url);
+      //FIXME should show the parts name not Okular Reader as the title
       mainView->addTab(m_part->widget(),i18n("Okular Reader") );
+      
+      //re-setup the gui to integrate the parts actions into the existing menus
+      setupGUI(Keys | ToolBar | Save);
+      createGUI(m_part);
     }
   
   
