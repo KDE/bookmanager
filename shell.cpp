@@ -48,6 +48,12 @@ Shell::Shell(QWidget *parent)
   
   setCentralWidget(mainView);
   setupActions();
+   
+  //parent should be mainview as that is that is where the tabs are stored, rather than "this",
+  //which is the actual parent as the tab switching is where the actually part changing is going
+  //to come from...
+  m_manager = new KParts::PartManager(mainView);
+  
   
   connect(m_collect, SIGNAL(loadBook(KUrl*)),
 	  this, SLOT(slotReaderTab(KUrl*)));
@@ -56,6 +62,12 @@ Shell::Shell(QWidget *parent)
   mainView->setTabsClosable(true);
   connect(mainView, SIGNAL(tabCloseRequested(int)),
 	  mainView, SLOT(removeTab(int)));
+  
+  //make the menu's change when the part does
+  
+  connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
+	  this, SLOT(createGUI(KParts::Part*)));
+
 }
 Shell::~Shell()
 {
@@ -138,10 +150,18 @@ void Shell::setupActions()
 void Shell::readerTab(const KUrl *url)
 {
   //reading the docs makes things much easier :)
-  KVBox *mainBox = new KVBox;
   QString mimeType = KMimeType::findByUrl( *url )->name();
-  m_part = KMimeTypeTrader::createPartInstanceFromQuery<KParts::ReadOnlyPart>( mimeType, mainBox, parent() ); 
+
+  //parent should be mainview as that is that is where the tabs are stored, rather than "this",
+  //which is the actual parent as the tab switching is where the actually part changing is going
+  //to come from...
+  m_manager = new KParts::PartManager(mainView);
+  bool active = true;
+  
+  m_part = KMimeTypeTrader::createPartInstanceFromQuery<KParts::ReadOnlyPart>( mimeType, mainView, parent() ); 
   if(m_part) {
+      m_part->widget()->setFocusPolicy(Qt::StrongFocus);
+      m_manager->addPart(m_part, active);
       m_part->openUrl(*url);
       //FIXME should show the parts name not Okular Reader as the title
       mainView->addTab(m_part->widget(),i18n("Okular Reader") );
@@ -150,8 +170,6 @@ void Shell::readerTab(const KUrl *url)
       setupGUI(Keys | ToolBar | Save);
       createGUI(m_part);
     }
-  
-  
   
 }
 
