@@ -24,6 +24,7 @@
 #include <kparts/partmanager.h>
 #include <kparts/mainwindow.h>
 #include "collection.h"
+#include "readerpage.h"
 
 	 
 class KUrl;
@@ -43,6 +44,7 @@ class Shell : public KParts::MainWindow
     void slotGetNewStuff();
     void slotImport();
     void slotReaderTab(KUrl *url);
+    void slotUpdateMenu(int index);
     
   private:
     void setupActions();
@@ -50,7 +52,6 @@ class Shell : public KParts::MainWindow
     
     KTabWidget *mainView;
     Collection *m_collect;
-    QList<QWidget *> tabPages;
     KParts::PartManager *m_manager;
     
     //need to declare actions here so they can be shared between the context and

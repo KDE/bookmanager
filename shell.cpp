@@ -62,7 +62,11 @@ Shell::Shell(QWidget *parent)
     connect(mainView, SIGNAL(tabCloseRequested(int)),
             mainView, SLOT(removeTab(int)));
 
-    //make the menu's change when the part does, except it doesn't seem to work :(
+    //make the menu's change when the part does, except it doesn't seem to work :( FIXME
+    m_manager->setAllowNestedParts(true);
+    connect(mainView, SIGNAL(currentChanged(int)),
+	    this, SLOT(slotUpdateMenu(int)));
+    
     connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
             this, SLOT(createGUI(KParts::Part*)));
 
@@ -151,16 +155,19 @@ void Shell::readerTab(const KUrl *url)
     //this can probably be done with tabWidget alone? FIXME?
     ReaderPage * curPage = new ReaderPage(url, this);
     if (curPage) {
-        tabPages.append(curPage);
-        //parent should be mainview as that is that is where the tabs are stored, rather than "this",
-        //which is the actual parent as the tab switching is where the actually part changing is going
-        //to come from...
-        m_manager = new KParts::PartManager(mainView);
         m_manager->addPart(curPage->getPart());
-	
 	QString filename = url->fileName();
         mainView->addTab(curPage, filename );
     }
 
 }
 
+void Shell::slotUpdateMenu(int index)
+{
+  if(index > 0) {
+    ReaderPage *curPage = qobject_cast<ReaderPage *>(mainView->widget(index)); 
+    KParts::ReadOnlyPart *curpart = curPage->getPart();
+    setupGUI(Keys | ToolBar | Save);
+    m_manager->setActivePart(curpart);
+  }
+}
