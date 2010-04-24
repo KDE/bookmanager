@@ -63,8 +63,7 @@ Shell::Shell(QWidget *parent)
   connect(mainView, SIGNAL(tabCloseRequested(int)),
 	  mainView, SLOT(removeTab(int)));
   
-  //make the menu's change when the part does
-  
+  //make the menu's change when the part does, except it doesn't seem to work :(
   connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
 	  this, SLOT(createGUI(KParts::Part*)));
 
@@ -168,7 +167,6 @@ void Shell::readerTab(const KUrl *url)
       
       //re-setup the gui to integrate the parts actions into the existing menus
       setupGUI(Keys | ToolBar | Save);
-      createGUI(m_part);
     }
   
 }
