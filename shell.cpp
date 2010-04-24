@@ -26,46 +26,45 @@
 #include <KNS3/DownloadDialog>
 #include <KNS3/Entry>
 #include <KTabWidget>
-#include <QVBoxLayout>
 #include <KUrl>
 #include <KMimeTypeTrader>
-#include <kvbox.h>
 #include <kmimetype.h>
 
 #include "importdialog.h"
 #include "shell.h"
-	 
+#include "readerpage.h"
+
 //PUBLIC
 Shell::Shell(QWidget *parent)
-  : KParts::MainWindow(parent, Qt::Window)
-{  
-  //need set up the initial tab before the main window
-  mainView = new KTabWidget(this);
-  
-  
-  m_collect = new Collection(mainView);
-  mainView->addTab(m_collect, i18n("Collection")); 
-  
-  setCentralWidget(mainView);
-  setupActions();
-   
-  //parent should be mainview as that is that is where the tabs are stored, rather than "this",
-  //which is the actual parent as the tab switching is where the actually part changing is going
-  //to come from...
-  m_manager = new KParts::PartManager(mainView);
-  
-  
-  connect(m_collect, SIGNAL(loadBook(KUrl*)),
-	  this, SLOT(slotReaderTab(KUrl*)));
-  
-  //make tabs closable
-  mainView->setTabsClosable(true);
-  connect(mainView, SIGNAL(tabCloseRequested(int)),
-	  mainView, SLOT(removeTab(int)));
-  
-  //make the menu's change when the part does, except it doesn't seem to work :(
-  connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
-	  this, SLOT(createGUI(KParts::Part*)));
+        : KParts::MainWindow(parent, Qt::Window)
+{
+    //need set up the initial tab before the main window
+    mainView = new KTabWidget(this);
+
+
+    m_collect = new Collection(mainView);
+    mainView->addTab(m_collect, i18n("Collection"));
+
+    setCentralWidget(mainView);
+    setupActions();
+
+    //parent should be mainview as that is that is where the tabs are stored, rather than "this",
+    //which is the actual parent as the tab switching is where the actually part changing is going
+    //to come from...
+    m_manager = new KParts::PartManager(mainView);
+
+
+    connect(m_collect, SIGNAL(loadBook(KUrl*)),
+            this, SLOT(slotReaderTab(KUrl*)));
+
+    //make tabs closable
+    mainView->setTabsClosable(true);
+    connect(mainView, SIGNAL(tabCloseRequested(int)),
+            mainView, SLOT(removeTab(int)));
+
+    //make the menu's change when the part does, except it doesn't seem to work :(
+    connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
+            this, SLOT(createGUI(KParts::Part*)));
 
 }
 Shell::~Shell()
@@ -84,34 +83,34 @@ void Shell::slotGetNewStuff()
     //may need to filter for updated entries but I don't think books get updated often
     //without changing the release date and number, which would warrant a new entry anyway maybe?
     //do books have minor version updates?
-    foreach(KNS3::Entry  entries, downDialog.changedEntries() ){
-        if(entries.status() == KNS3::Entry::Installed){
-	  QString nil = "";//placeholder for empty info
-	  ImportDialog *impDialog = new ImportDialog(widget());
-	  connect(impDialog, SIGNAL(signalNewBook(QString,QString,QString,QString,QString,QString,KUrl*)),
-	    m_collect, SLOT(createBook(QString,QString,QString,QString,QString,QString,KUrl*)));
-	  KUrl *location = new KUrl(KUrl(entries.installedFiles().first()));
-	  impDialog->init(entries.name(), entries.summary(),nil, 
-			  entries.version(),nil, nil, location);
-	  impDialog->show();
-	}
-	  
+    foreach(KNS3::Entry  entries, downDialog.changedEntries() ) {
+        if (entries.status() == KNS3::Entry::Installed) {
+            QString nil = "";//placeholder for empty info
+            ImportDialog *impDialog = new ImportDialog(widget());
+            connect(impDialog, SIGNAL(signalNewBook(QString,QString,QString,QString,QString,QString,KUrl*)),
+                    m_collect, SLOT(createBook(QString,QString,QString,QString,QString,QString,KUrl*)));
+            KUrl *location = new KUrl(KUrl(entries.installedFiles().first()));
+            impDialog->init(entries.name(), entries.summary(),nil,
+                            entries.version(),nil, nil, location);
+            impDialog->show();
+        }
+
     }
 }
 
 void Shell::slotImport()
 {
-  ImportDialog *dialog = new ImportDialog(this);
-  connect(dialog, SIGNAL(signalNewBook(QString,QString,QString,QString,QString,QString,KUrl*)),
-	    m_collect, SLOT(createBook(QString,QString,QString,QString,QString,QString,KUrl*)));
-  dialog->show();
+    ImportDialog *dialog = new ImportDialog(this);
+    connect(dialog, SIGNAL(signalNewBook(QString,QString,QString,QString,QString,QString,KUrl*)),
+            m_collect, SLOT(createBook(QString,QString,QString,QString,QString,QString,KUrl*)));
+    dialog->show();
 }
 
 //creates a new tab
 void Shell::slotReaderTab(KUrl *url)
 {
-  //create a tab with the correct reader for the mimetype.
-  readerTab(url);
+    //create a tab with the correct reader for the mimetype.
+    readerTab(url);
 }
 
 
@@ -126,20 +125,20 @@ void Shell::setupActions()
     actionCollection()->addAction("ghns", ghns);
     connect( ghns, SIGNAL (triggered(bool)),
              this, SLOT(slotGetNewStuff()));
-	     
+
     import = new KAction(this);
     import->setText(i18n("&Import a new Book"));
     import->setShortcut(Qt::Key_I);
     actionCollection()->addAction("import", import);
     connect(import, SIGNAL(triggered()),
-	    this, SLOT(slotImport()));
-    
+            this, SLOT(slotImport()));
+
     remove = new KAction(this);
     remove->setText(i18n("&Remove a book"));
     actionCollection()->addAction("remove", remove);
     connect(remove, SIGNAL(triggered()),
-	    m_collect, SLOT(remBook()));
-	     
+            m_collect, SLOT(remBook()));
+
     KStandardAction::quit ( kapp, SLOT ( quit() ),
                             actionCollection() );
     setupGUI();
@@ -148,26 +147,20 @@ void Shell::setupActions()
 
 void Shell::readerTab(const KUrl *url)
 {
-  //reading the docs makes things much easier :)
-  QString mimeType = KMimeType::findByUrl( *url )->name();
-
-  //parent should be mainview as that is that is where the tabs are stored, rather than "this",
-  //which is the actual parent as the tab switching is where the actually part changing is going
-  //to come from...
-  m_manager = new KParts::PartManager(mainView);
-  bool active = true;
-  
-  m_part = KMimeTypeTrader::createPartInstanceFromQuery<KParts::ReadOnlyPart>( mimeType, mainView, parent() ); 
-  if(m_part) {
-      m_part->widget()->setFocusPolicy(Qt::StrongFocus);
-      m_manager->addPart(m_part, active);
-      m_part->openUrl(*url);
-      //FIXME should show the parts name not Okular Reader as the title
-      mainView->addTab(m_part->widget(),i18n("Okular Reader") );
-      
-      //re-setup the gui to integrate the parts actions into the existing menus
-      setupGUI(Keys | ToolBar | Save);
+    //create the page widget in a qlist so we have a nicely indexed list of the pages...
+    //this can probably be done with tabWidget alone? FIXME?
+    ReaderPage * curPage = new ReaderPage(url, this);
+    if (curPage) {
+        tabPages.append(curPage);
+        //parent should be mainview as that is that is where the tabs are stored, rather than "this",
+        //which is the actual parent as the tab switching is where the actually part changing is going
+        //to come from...
+        m_manager = new KParts::PartManager(mainView);
+        m_manager->addPart(curPage->getPart());
+	
+	QString filename = url->fileName();
+        mainView->addTab(curPage, filename );
     }
-  
+
 }
 
