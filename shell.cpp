@@ -151,8 +151,8 @@ void Shell::setupActions()
 
 void Shell::readerTab(const KUrl *url)
 {
-    //create the page widget in a qlist so we have a nicely indexed list of the pages...
-    //this can probably be done with tabWidget alone? FIXME?
+    //reader page will open appropriate kpart based on the url, and
+    //using partmanager will keep the menus current for the displayed tab
     ReaderPage * curPage = new ReaderPage(url, this);
     if (curPage) {
         m_manager->addPart(curPage->getPart());
