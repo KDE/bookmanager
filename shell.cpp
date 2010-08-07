@@ -29,6 +29,7 @@
 #include <KUrl>
 #include <KMimeTypeTrader>
 #include <kmimetype.h>
+#include <kfiledialog.h>
 
 #include "importdialog.h"
 #include "shell.h"
@@ -115,6 +116,8 @@ void Shell::slotReaderTab(KUrl *url)
 void Shell::setupActions()
 {
     //File menu
+    open = KStandardAction::open(this, SLOT(slotOpenFile()), actionCollection());
+    
     ghns = new KAction(this);
     ghns->setText(i18n("&Get Books From Internet..."));
     ghns->setIcon(KIcon("get-hot-new-stuff"));
@@ -146,6 +149,7 @@ void Shell::setupActions()
     actionCollection()->addAction("showCollection", showCollection);
     connect(showCollection, SIGNAL(triggered()),
 	this, SLOT(slotToggleCollection()));
+    
     setupGUI();
 }
 
@@ -182,4 +186,14 @@ void Shell::slotRemoveTab(int index)
   } else {
       mainView->removeTab(index);
   }
+}
+
+void Shell::slotOpenFile()
+{
+ QStringList filelist = KFileDialog::getOpenFileNames();
+ QString filename;
+ foreach(filename, filelist){
+   KUrl tempUrl = filename;
+   slotReaderTab(&tempUrl);
+ }
 }

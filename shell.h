@@ -42,6 +42,7 @@ class Shell : public KParts::MainWindow
     virtual ~Shell();
     
   private slots:
+    void slotOpenFile();
     void slotGetNewStuff();
     void slotImport();
     void slotToggleCollection();
@@ -58,6 +59,7 @@ class Shell : public KParts::MainWindow
     
     //need to declare actions here so they can be shared between the context and
     //top menu. I think?
+    KAction *open;
     KAction *import;
     KAction *ghns;
     KAction *remove;
