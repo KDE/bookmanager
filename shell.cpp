@@ -60,7 +60,7 @@ Shell::Shell(QWidget *parent)
     //make tabs closable
     mainView->setTabsClosable(true);
     connect(mainView, SIGNAL(tabCloseRequested(int)),
-            mainView, SLOT(removeTab(int)));
+            this, SLOT(slotRemoveTab(int)));
 
 }
 Shell::~Shell()
@@ -114,6 +114,7 @@ void Shell::slotReaderTab(KUrl *url)
 
 void Shell::setupActions()
 {
+    //File menu
     ghns = new KAction(this);
     ghns->setText(i18n("&Get Books From Internet..."));
     ghns->setIcon(KIcon("get-hot-new-stuff"));
@@ -137,6 +138,14 @@ void Shell::setupActions()
 
     KStandardAction::quit ( kapp, SLOT ( quit() ),
                             actionCollection() );
+    //Window menu
+    showCollection = new KToggleAction(this);
+    showCollection->setText(i18n("Collection Manager"));
+    //FIXME make this remember state from last use
+    showCollection->setChecked(true); //show the collection by default  
+    actionCollection()->addAction("showCollection", showCollection);
+    connect(showCollection, SIGNAL(triggered()),
+	this, SLOT(slotToggleCollection()));
     setupGUI();
 }
 
@@ -152,4 +161,25 @@ void Shell::readerTab(const KUrl *url)
         mainView->addTab(curPage, filename );
     }
 
+}
+
+void Shell::slotToggleCollection()
+{
+  //open and close the collection tab
+  if(showCollection->isChecked()){
+    mainView->addTab(m_collect, i18n("Collection"));
+  } else {
+    mainView->removeTab(mainView->indexOf(m_collect));
+  }
+}
+
+void Shell::slotRemoveTab(int index)
+{
+  //check to see if we are closing the collection tab, so we can toggle the toggle
+  if(index == mainView->indexOf(m_collect)){
+      showCollection->setChecked(false);
+      slotToggleCollection();
+  } else {
+      mainView->removeTab(index);
+  }
 }

@@ -23,6 +23,7 @@
 
 #include <kparts/partmanager.h>
 #include <kparts/mainwindow.h>
+#include <ktoggleaction.h>
 #include "collection.h"
 #include "readerpage.h"
 
@@ -43,6 +44,8 @@ class Shell : public KParts::MainWindow
   private slots:
     void slotGetNewStuff();
     void slotImport();
+    void slotToggleCollection();
+    void slotRemoveTab(int index);
     void slotReaderTab(KUrl *url);
     
   private:
@@ -58,5 +61,8 @@ class Shell : public KParts::MainWindow
     KAction *import;
     KAction *ghns;
     KAction *remove;
+    
+     //add a veiw collection action to show/hide the collection manager tab
+    KToggleAction *showCollection;
 };
 #endif // SHELL_H
