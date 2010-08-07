@@ -44,7 +44,6 @@ class Shell : public KParts::MainWindow
     void slotGetNewStuff();
     void slotImport();
     void slotReaderTab(KUrl *url);
-    void slotUpdateMenu(int index);
     
   private:
     void setupActions();
