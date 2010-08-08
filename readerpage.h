@@ -34,7 +34,7 @@ class ReaderPage : public QWidget
 {
     Q_OBJECT
 public:
-    ReaderPage(const KUrl *url, QWidget* parent = 0);
+    explicit ReaderPage(const KUrl *url, QWidget* parent = 0);
 
     KParts::ReadOnlyPart* getPart();
 
