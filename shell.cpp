@@ -75,13 +75,13 @@ Shell::~Shell()
 void Shell::slotGetNewStuff()
 {
 
-    KNS3::DownloadDialog downDialog(widget());
-    downDialog.exec();
+    QPointer<KNS3::DownloadDialog> downDialog = new KNS3::DownloadDialog(this);
+    downDialog->exec();
     //this will pop up an import dialog for each changed entry that is installed
     //may need to filter for updated entries but I don't think books get updated often
     //without changing the release date and number, which would warrant a new entry anyway maybe?
     //do books have minor version updates?
-    foreach(const KNS3::Entry &entries, downDialog.changedEntries()) {
+    foreach(const KNS3::Entry &entries, downDialog->changedEntries()) {
         if (entries.status() == KNS3::Entry::Installed) {
             QString nil = "";//placeholder for empty info
             ImportDialog *impDialog = new ImportDialog(widget());
@@ -94,6 +94,7 @@ void Shell::slotGetNewStuff()
         }
 
     }
+    delete downDialog;
 }
 
 void Shell::slotImport()
