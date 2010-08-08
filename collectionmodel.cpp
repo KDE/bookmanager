@@ -16,11 +16,13 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 */
+#include "collectionmodel.h"
+
 #include <klocale.h>
 #include <QStringList>
 #include <qheaderview.h>
 #include <kdebug.h>
-#include "collectionmodel.h"
+
 
 CollectionModel::CollectionModel()
         : QSqlTableModel()
@@ -29,11 +31,16 @@ CollectionModel::CollectionModel()
     setSort(Title, Qt::DescendingOrder);
 
     //probably an easier way to do this but...fix the header and make it translatable. I hope.
+    //don't translate hidden values though... no one sees the id or disk location
     QStringList headerNames;
-    headerNames << ki18n("ID").toString() << ki18n("Title").toString()
-    << ki18n("Summary").toString() << ki18n("Author").toString()
-    << ki18n("Edition").toString() << ki18n("Release Date").toString()
-    << ki18n("Genre").toString() << ki18n("Disk Location").toString();
+    headerNames << "ID" 
+    << ki18nc("This book's title","Title").toString()
+    << ki18nc("A short summary of this book", "Summary").toString() 
+    << ki18nc("A person who writes books","Author").toString()
+    << ki18nc("A books edition or version number", "Edition").toString() 
+    << ki18nc("The date the book was released", "Release Date").toString()
+    << ki18nc("The type or style of a book, examples: Science Fiction, History","Genre").toString() 
+    << "Disk Location";
     const int colCount = columnCount();
     for (int i = 0; i < colCount; i++) {
         setHeaderData(i, Qt::Horizontal, headerNames.at(i));
