@@ -62,7 +62,6 @@ Shell::Shell(QWidget *parent)
     mainView->setTabsClosable(true);
     connect(mainView, SIGNAL(tabCloseRequested(int)),
             this, SLOT(slotRemoveTab(int)));
-
 }
 Shell::~Shell()
 {
@@ -117,6 +116,8 @@ void Shell::setupActions()
 {
     //File menu
     open = KStandardAction::open(this, SLOT(slotOpenFile()), actionCollection());
+    //add the action manually so it doesnt add a toolbar action
+    actionCollection()->addAction("open", open); 
     
     ghns = new KAction(this);
     ghns->setText(i18n("&Get Books From Internet..."));
