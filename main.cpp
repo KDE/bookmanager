@@ -24,17 +24,18 @@
 
 #include "shell.h"
 
-int main(int argc, char *argv[]){
-  KAboutData aboutData( "bookmanager", "bookmanager",
-                        ki18n("Book Manager"), "0.01",
-                        ki18n("An Ebook library manager."),
-                        KAboutData::License_GPL,
-                        ki18n("Copyright (c) 2010 Brian Korbein"));
-  KCmdLineArgs::init(argc, argv, &aboutData);
-  KApplication app;
+int main(int argc, char *argv[])
+{
+    KAboutData aboutData("bookmanager", "bookmanager",
+                         ki18n("Book Manager"), "0.01",
+                         ki18n("An Ebook library manager."),
+                         KAboutData::License_GPL,
+                         ki18n("Copyright (c) 2010 Brian Korbein"));
+    KCmdLineArgs::init(argc, argv, &aboutData);
+    KApplication app;
 
-  Shell* shell = new Shell();
-  shell->show();
+    Shell* shell = new Shell();
+    shell->show();
 
-  return app.exec();
+    return app.exec();
 }

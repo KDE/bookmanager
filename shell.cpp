@@ -79,15 +79,15 @@ void Shell::slotGetNewStuff()
     //may need to filter for updated entries but I don't think books get updated often
     //without changing the release date and number, which would warrant a new entry anyway maybe?
     //do books have minor version updates?
-    foreach(KNS3::Entry  entries, downDialog.changedEntries() ) {
+    foreach(KNS3::Entry  entries, downDialog.changedEntries()) {
         if (entries.status() == KNS3::Entry::Installed) {
             QString nil = "";//placeholder for empty info
             ImportDialog *impDialog = new ImportDialog(widget());
-            connect(impDialog, SIGNAL(signalNewBook(QString,QString,QString,QString,QString,QString,KUrl*)),
-                    m_collect, SLOT(createBook(QString,QString,QString,QString,QString,QString,KUrl*)));
+            connect(impDialog, SIGNAL(signalNewBook(QString, QString, QString, QString, QString, QString, KUrl*)),
+                    m_collect, SLOT(createBook(QString, QString, QString, QString, QString, QString, KUrl*)));
             KUrl *location = new KUrl(KUrl(entries.installedFiles().first()));
-            impDialog->init(entries.name(), entries.summary(),nil,
-                            entries.version(),nil, nil, location);
+            impDialog->init(entries.name(), entries.summary(), nil,
+                            entries.version(), nil, nil, location);
             impDialog->show();
         }
 
@@ -97,8 +97,8 @@ void Shell::slotGetNewStuff()
 void Shell::slotImport()
 {
     ImportDialog *dialog = new ImportDialog(this);
-    connect(dialog, SIGNAL(signalNewBook(QString,QString,QString,QString,QString,QString,KUrl*)),
-            m_collect, SLOT(createBook(QString,QString,QString,QString,QString,QString,KUrl*)));
+    connect(dialog, SIGNAL(signalNewBook(QString, QString, QString, QString, QString, QString, KUrl*)),
+            m_collect, SLOT(createBook(QString, QString, QString, QString, QString, QString, KUrl*)));
     dialog->show();
 }
 
@@ -117,15 +117,15 @@ void Shell::setupActions()
     //File menu
     open = KStandardAction::open(this, SLOT(slotOpenFile()), actionCollection());
     //add the action manually so it doesnt add a toolbar action
-    actionCollection()->addAction("open", open); 
-    
+    actionCollection()->addAction("open", open);
+
     ghns = new KAction(this);
     ghns->setText(i18n("&Get Books From Internet..."));
     ghns->setIcon(KIcon("get-hot-new-stuff"));
     ghns->setShortcut(Qt::Key_G);
     actionCollection()->addAction("ghns", ghns);
-    connect( ghns, SIGNAL (triggered(bool)),
-             this, SLOT(slotGetNewStuff()));
+    connect(ghns, SIGNAL(triggered(bool)),
+            this, SLOT(slotGetNewStuff()));
 
     import = new KAction(this);
     import->setText(i18n("&Import a new Book"));
@@ -140,17 +140,17 @@ void Shell::setupActions()
     connect(remove, SIGNAL(triggered()),
             m_collect, SLOT(remBook()));
 
-    KStandardAction::quit ( kapp, SLOT ( quit() ),
-                            actionCollection() );
+    KStandardAction::quit(kapp, SLOT(quit()),
+                          actionCollection());
     //Window menu
     showCollection = new KToggleAction(this);
     showCollection->setText(i18n("Collection Manager"));
     //FIXME make this remember state from last use
-    showCollection->setChecked(true); //show the collection by default  
+    showCollection->setChecked(true); //show the collection by default
     actionCollection()->addAction("showCollection", showCollection);
     connect(showCollection, SIGNAL(triggered()),
-	this, SLOT(slotToggleCollection()));
-    
+            this, SLOT(slotToggleCollection()));
+
     setupGUI();
 }
 
@@ -162,39 +162,39 @@ void Shell::readerTab(const KUrl *url)
     ReaderPage * curPage = new ReaderPage(url, this);
     if (curPage) {
         m_manager->addPart(curPage->getPart());
-	QString filename = url->fileName();
-        mainView->addTab(curPage, filename );
+        QString filename = url->fileName();
+        mainView->addTab(curPage, filename);
     }
 
 }
 
 void Shell::slotToggleCollection()
 {
-  //open and close the collection tab
-  if(showCollection->isChecked()){
-    mainView->addTab(m_collect, i18n("Collection"));
-  } else {
-    mainView->removeTab(mainView->indexOf(m_collect));
-  }
+    //open and close the collection tab
+    if (showCollection->isChecked()) {
+        mainView->addTab(m_collect, i18n("Collection"));
+    } else {
+        mainView->removeTab(mainView->indexOf(m_collect));
+    }
 }
 
 void Shell::slotRemoveTab(int index)
 {
-  //check to see if we are closing the collection tab, so we can toggle the toggle
-  if(index == mainView->indexOf(m_collect)){
-      showCollection->setChecked(false);
-      slotToggleCollection();
-  } else {
-      mainView->removeTab(index);
-  }
+    //check to see if we are closing the collection tab, so we can toggle the toggle
+    if (index == mainView->indexOf(m_collect)) {
+        showCollection->setChecked(false);
+        slotToggleCollection();
+    } else {
+        mainView->removeTab(index);
+    }
 }
 
 void Shell::slotOpenFile()
 {
- QStringList filelist = KFileDialog::getOpenFileNames();
- QString filename;
- foreach(filename, filelist){
-   KUrl tempUrl = filename;
-   slotReaderTab(&tempUrl);
- }
+    QStringList filelist = KFileDialog::getOpenFileNames();
+    QString filename;
+    foreach(filename, filelist) {
+        KUrl tempUrl = filename;
+        slotReaderTab(&tempUrl);
+    }
 }

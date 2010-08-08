@@ -27,29 +27,29 @@
 class CollectionModel;
 class Collection : public QTableView
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     Collection(QWidget* parent = 0);
-    
-  public slots:
+
+public slots:
     void createBook(QString title, QString summary, QString author, QString release,
-	       QString releaseDate, QString genre, KUrl *url);
-    void remBook();       
+                    QString releaseDate, QString genre, KUrl *url);
+    void remBook();
     void updateModel();
-    
-  private slots:  
+
+private slots:
     void openBook(QModelIndex index);
-	       
-  signals:
+
+signals:
     void newBook(QString title, QString summary, QString author, QString release,
-	       QString releaseDate, QString genre, KUrl *url);
+                 QString releaseDate, QString genre, KUrl *url);
     void loadBook(KUrl *url);
-  private:
+private:
     CollectionDB *m_db;
     CollectionModel *m_model;
-    enum columnLayout {ID, Title,Summary,Author, Release, ReleaseDate, Genre, Location};
+    enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};
 
-    
+
 
 };
 

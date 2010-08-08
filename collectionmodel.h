@@ -24,13 +24,13 @@
 
 class CollectionModel : public QSqlTableModel
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  CollectionModel();
-  ~CollectionModel();
-  
+    CollectionModel();
+    ~CollectionModel();
+
 private:
-  enum columnLayout {ID, Title,Summary,Author, Release, ReleaseDate, Genre, Location};
+    enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};
 };
 
 #endif // COLLECTIONMODEL_H

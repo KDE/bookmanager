@@ -23,27 +23,27 @@
 #include "collectionmodel.h"
 
 CollectionModel::CollectionModel()
-  : QSqlTableModel()
+        : QSqlTableModel()
 {
-  setTable("collection");
-  setSort(Title, Qt::DescendingOrder);
-  
-  //probably an easier way to do this but...fix the header and make it translatable. I hope.
-  QStringList headerNames;
-  headerNames << ki18n("ID").toString() << ki18n("Title").toString() 
-	      << ki18n("Summary").toString() << ki18n("Author").toString() 
-	      << ki18n("Edition").toString() << ki18n("Release Date").toString()
-	      << ki18n("Genre").toString() << ki18n("Disk Location").toString();
-  const int colCount = columnCount();
-  for(int i = 0; i < colCount; i++){
-    setHeaderData(i, Qt::Horizontal, headerNames.at(i));
-  }
-  
-  select();
-  
+    setTable("collection");
+    setSort(Title, Qt::DescendingOrder);
+
+    //probably an easier way to do this but...fix the header and make it translatable. I hope.
+    QStringList headerNames;
+    headerNames << ki18n("ID").toString() << ki18n("Title").toString()
+    << ki18n("Summary").toString() << ki18n("Author").toString()
+    << ki18n("Edition").toString() << ki18n("Release Date").toString()
+    << ki18n("Genre").toString() << ki18n("Disk Location").toString();
+    const int colCount = columnCount();
+    for (int i = 0; i < colCount; i++) {
+        setHeaderData(i, Qt::Horizontal, headerNames.at(i));
+    }
+
+    select();
+
 }
 
 CollectionModel::~CollectionModel()
 {
-  clear();
+    clear();
 }

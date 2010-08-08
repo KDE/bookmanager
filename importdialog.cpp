@@ -26,65 +26,65 @@
 #include <KIO/NetAccess>
 
 ImportDialog::ImportDialog(QWidget *parent)
-  : KDialog(parent)
+        : KDialog(parent)
 {
-   //should really be setting these in the ui file...
-  //cancelButton->setIcon(KIcon("dialog-close"));
-  //ImportButton->setIcon(KIcon("dialog-ok-apply"));
-  
-  //resume the regularly scheduled setting up the dialog
-  setupUi(this);
-  connect(ImportButton, SIGNAL(clicked()),
-	  this, SLOT(slotImportClicked()));
-	  
-  //test to see if the file actually exists before adding it
-  connect(locationUrlRequestor, SIGNAL(textChanged(QString)),
-	  this, SLOT(checkUrl(QString)));
-  
-  connect(this, SIGNAL(urlIsGood()),
-	  this, SLOT(slotEnableImport()));
+    //should really be setting these in the ui file...
+    //cancelButton->setIcon(KIcon("dialog-close"));
+    //ImportButton->setIcon(KIcon("dialog-ok-apply"));
+
+    //resume the regularly scheduled setting up the dialog
+    setupUi(this);
+    connect(ImportButton, SIGNAL(clicked()),
+            this, SLOT(slotImportClicked()));
+
+    //test to see if the file actually exists before adding it
+    connect(locationUrlRequestor, SIGNAL(textChanged(QString)),
+            this, SLOT(checkUrl(QString)));
+
+    connect(this, SIGNAL(urlIsGood()),
+            this, SLOT(slotEnableImport()));
 }
 
 void ImportDialog::init(QString title, QString summary, QString author, QString release, QString releaseDate, QString genre, KUrl* url)
 {
-  //we set these to an empty string so setting them without testing to verify
-  //real values should be ok? exept for the url, which can't be zero so... ima check that
-  titleEdit->setText(title);
-  descEdit->setText(summary);
-  authorEdit->setText(author);
-  relNumEdit->setText(release);
-  relDateEdit->setText(releaseDate);
-  genreEdit->setText(genre);
-  if(url->url() != "0"){
-    locationUrlRequestor->setUrl(*url);
-  }
-  
+    //we set these to an empty string so setting them without testing to verify
+    //real values should be ok? exept for the url, which can't be zero so... ima check that
+    titleEdit->setText(title);
+    descEdit->setText(summary);
+    authorEdit->setText(author);
+    relNumEdit->setText(release);
+    relDateEdit->setText(releaseDate);
+    genreEdit->setText(genre);
+    if (url->url() != "0") {
+        locationUrlRequestor->setUrl(*url);
+    }
+
 }
 
 void ImportDialog::slotImportClicked()
 {
- QString title = titleEdit->text();
- QString summary = descEdit->toPlainText();
- QString author = authorEdit->text();
- QString release = relNumEdit->text();
- QString releaseDate = relDateEdit->text();
- QString genre = genreEdit->text();
- KUrl url = locationUrlRequestor->url();
- emit signalNewBook(title, summary,author,release,releaseDate,genre,&url);
- close();
+    QString title = titleEdit->text();
+    QString summary = descEdit->toPlainText();
+    QString author = authorEdit->text();
+    QString release = relNumEdit->text();
+    QString releaseDate = relDateEdit->text();
+    QString genre = genreEdit->text();
+    KUrl url = locationUrlRequestor->url();
+    emit signalNewBook(title, summary, author, release, releaseDate, genre, &url);
+    close();
 }
 
 void ImportDialog::slotEnableImport()
 {
-  ImportButton->setEnabled(true);
+    ImportButton->setEnabled(true);
 }
 
 
 void ImportDialog::checkUrl(QString url)
 {
-  KUrl file = KUrl(url);
-  bool read = true;
-  if(KIO::NetAccess::exists(file, read, NULL)){
-    emit urlIsGood();
-  }
+    KUrl file = KUrl(url);
+    bool read = true;
+    if (KIO::NetAccess::exists(file, read, NULL)) {
+        emit urlIsGood();
+    }
 }

@@ -24,20 +24,23 @@
 #include <qwidget.h>
 
 
-namespace KParts { class ReadOnlyPart; }
+namespace KParts
+{
+class ReadOnlyPart;
+}
 class KUrl;
 
 class ReaderPage : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  ReaderPage(const KUrl *url, QWidget* parent = 0);
-  
-  KParts::ReadOnlyPart* getPart();
-  
+    ReaderPage(const KUrl *url, QWidget* parent = 0);
+
+    KParts::ReadOnlyPart* getPart();
+
 private:
-  KParts::ReadOnlyPart *m_part;
-  
+    KParts::ReadOnlyPart *m_part;
+
 };
 
 #endif // READERTAB_H

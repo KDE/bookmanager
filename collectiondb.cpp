@@ -33,52 +33,52 @@
 //PUBLIC
 CollectionDB::CollectionDB()
 {
-  //if we can't find a database in the standard data directory just create a new one for now,
-  //eventually it might be possible to import databases but not now.
-  QString dbPath = KStandardDirs::locateLocal("data", "bookmanager/collection.db");
-  bool createCollection = !QFile(dbPath).exists();
-  const QString type = "QSQLITE";
-  
-  m_db = QSqlDatabase::addDatabase(type);
-  m_db.setDatabaseName(dbPath);
-  bool ok =  m_db.open();
-  if(!ok){
-    KMessageBox::error(this, "Unable to open or create a collection", 
-		       m_db.lastError().text());
-    return; //if we don't have a database connection we can't do anything useful so... bye :)
-  }
-  //create the initial database structure if it not done already...
-  if(createCollection == true){
-    initDB();
-  }
+    //if we can't find a database in the standard data directory just create a new one for now,
+    //eventually it might be possible to import databases but not now.
+    QString dbPath = KStandardDirs::locateLocal("data", "bookmanager/collection.db");
+    bool createCollection = !QFile(dbPath).exists();
+    const QString type = "QSQLITE";
+
+    m_db = QSqlDatabase::addDatabase(type);
+    m_db.setDatabaseName(dbPath);
+    bool ok =  m_db.open();
+    if (!ok) {
+        KMessageBox::error(this, "Unable to open or create a collection",
+                           m_db.lastError().text());
+        return; //if we don't have a database connection we can't do anything useful so... bye :)
+    }
+    //create the initial database structure if it not done already...
+    if (createCollection == true) {
+        initDB();
+    }
 }
 
 CollectionDB::~CollectionDB()
 {
-  //may want to verify that all changes have been written if close doesn't do that already?
-  m_db.close();
+    //may want to verify that all changes have been written if close doesn't do that already?
+    m_db.close();
 }
 
 //PUBLIC SLOTS
-void CollectionDB::addBook(QString title, QString summary, 
-			   QString author, QString release, 
-			   QString releaseDate, QString genre,
-			   KUrl* url)
+void CollectionDB::addBook(QString title, QString summary,
+                           QString author, QString release,
+                           QString releaseDate, QString genre,
+                           KUrl* url)
 {
-  QSqlQuery query;
-  //set id to NULL for sqlite to autoincrement the id, we don't care about the id's so...
-  query.prepare("INSERT INTO collection (title, summary, author, release, releaseDate, genre, url) "
-                   "VALUES (:title, :summary, :author, :release, :releaseDate, :genre, :url)");
-     query.bindValue(0, title);
-     query.bindValue(1, summary);
-     query.bindValue(2, author);
-     query.bindValue(3, release);
-     query.bindValue(4, releaseDate);
-     query.bindValue(5, genre);
-     query.bindValue(6, url->url());
-     query.exec();
-     query.finish();
-     emit isDirty();
+    QSqlQuery query;
+    //set id to NULL for sqlite to autoincrement the id, we don't care about the id's so...
+    query.prepare("INSERT INTO collection (title, summary, author, release, releaseDate, genre, url) "
+                  "VALUES (:title, :summary, :author, :release, :releaseDate, :genre, :url)");
+    query.bindValue(0, title);
+    query.bindValue(1, summary);
+    query.bindValue(2, author);
+    query.bindValue(3, release);
+    query.bindValue(4, releaseDate);
+    query.bindValue(5, genre);
+    query.bindValue(6, url->url());
+    query.exec();
+    query.finish();
+    emit isDirty();
 }
 
 
@@ -87,8 +87,7 @@ bool CollectionDB::initDB()
 {
     // Create collection table
     bool ret = false;
-    if (m_db.isOpen())
-    {
+    if (m_db.isOpen()) {
         QSqlQuery query;
         ret = query.exec("create table collection "
                          "(id integer primary key, "
@@ -99,7 +98,7 @@ bool CollectionDB::initDB()
                          "releaseDate text, "
                          "genre text, "
                          "url text)");
-	query.finish();
+        query.finish();
 
     }
     return ret;

@@ -27,75 +27,75 @@
 #include "collectionmodel.h"
 
 Collection::Collection(QWidget* parent)
-  : QTableView(parent)
+        : QTableView(parent)
 {
-  m_db = new CollectionDB();
-  m_model = new CollectionModel();  
-  //set up the view
-  setModel(m_model);
-  setEditTriggers(QAbstractItemView::NoEditTriggers); //TODO make the table editable??
-  setSelectionBehavior(QAbstractItemView::SelectRows);
-  //create a prettier header for the view
-  QHeaderView *head = horizontalHeader();
-  head->setResizeMode(QHeaderView::Stretch);
-  head->setMovable(true);
-  
-  hideColumn(ID);
-  hideColumn(Location);
-  show();
-  
-  //lots of qstrings... should probably be a qstringlist?
-  connect(this, SIGNAL(newBook(QString,QString,QString,QString,QString,QString,KUrl*)),
-	  m_db, SLOT(addBook(QString,QString,QString,QString,QString,QString,KUrl*)));
-	  
-  //don't forget to update the model if the db gets dirty
-  connect(m_db, SIGNAL(isDirty()),
-	  this, SLOT(updateModel()));
-  
+    m_db = new CollectionDB();
+    m_model = new CollectionModel();
+    //set up the view
+    setModel(m_model);
+    setEditTriggers(QAbstractItemView::NoEditTriggers); //TODO make the table editable??
+    setSelectionBehavior(QAbstractItemView::SelectRows);
+    //create a prettier header for the view
+    QHeaderView *head = horizontalHeader();
+    head->setResizeMode(QHeaderView::Stretch);
+    head->setMovable(true);
+
+    hideColumn(ID);
+    hideColumn(Location);
+    show();
+
+    //lots of qstrings... should probably be a qstringlist?
+    connect(this, SIGNAL(newBook(QString, QString, QString, QString, QString, QString, KUrl*)),
+            m_db, SLOT(addBook(QString, QString, QString, QString, QString, QString, KUrl*)));
+
+    //don't forget to update the model if the db gets dirty
+    connect(m_db, SIGNAL(isDirty()),
+            this, SLOT(updateModel()));
+
     //load the book on doubleclick anywhere in that row?
-  connect(this, SIGNAL(doubleClicked(QModelIndex)),
-	  this, SLOT(openBook(QModelIndex)));
-  
+    connect(this, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(openBook(QModelIndex)));
+
 }
 
 void Collection::createBook(QString title, QString summary, QString author, QString release, QString releaseDate, QString genre, KUrl* url)
 {
-  emit newBook(title, summary, author, release, releaseDate, genre, url);
+    emit newBook(title, summary, author, release, releaseDate, genre, url);
 }
 
 void Collection::remBook()
 {
-  QModelIndex removeMe;
+    QModelIndex removeMe;
 
-  QModelIndexList removeUs = selectedIndexes();
-  
-  //the foreach loops over every column in each row so im using a counter to exit the loop when
-  //it starts on the second column. 
-  int index = removeUs.at(0).row();
-  
-  foreach(removeMe, removeUs) {
-    int row = removeMe.row();
-    if(row < index) {
-      return;
+    QModelIndexList removeUs = selectedIndexes();
+
+    //the foreach loops over every column in each row so im using a counter to exit the loop when
+    //it starts on the second column.
+    int index = removeUs.at(0).row();
+
+    foreach(removeMe, removeUs) {
+        int row = removeMe.row();
+        if (row < index) {
+            return;
+        }
+        m_model->removeRow(row);
+        index += 1;
     }
-    m_model->removeRow(row);
-    index += 1;
-  }
 }
 
 
 void Collection::updateModel()
 {
-  m_model->select();
+    m_model->select();
 }
 
 void Collection::openBook(QModelIndex index)
 {
-  //use the layout enum to recreate the index with the books url selected
-  //so that the model doesn't need to match the DB ordering...
-  QModelIndex urlIndex = m_model->index(index.row(), Location);
-  //this bit has caused a lot of issues so i'm leaving a debug in...
-  kDebug() << m_model->data(urlIndex).toString();
-  KUrl bookUrl =KUrl(m_model->data(urlIndex).toString());
-  emit loadBook(&bookUrl);
+    //use the layout enum to recreate the index with the books url selected
+    //so that the model doesn't need to match the DB ordering...
+    QModelIndex urlIndex = m_model->index(index.row(), Location);
+    //this bit has caused a lot of issues so i'm leaving a debug in...
+    kDebug() << m_model->data(urlIndex).toString();
+    KUrl bookUrl = KUrl(m_model->data(urlIndex).toString());
+    emit loadBook(&bookUrl);
 }

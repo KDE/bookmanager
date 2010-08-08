@@ -33,22 +33,22 @@ class KUrl;
 
 class CollectionDB : public QWidget
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     CollectionDB();
     ~CollectionDB();
 
-  public slots:
+public slots:
     void addBook(QString title, QString summary, QString author, QString release,
-	       QString releaseDate, QString genre, KUrl *url);
-  signals:
+                 QString releaseDate, QString genre, KUrl *url);
+signals:
     void isDirty();
-    
-  private:
+
+private:
     bool initDB();
-    
+
     QSqlDatabase m_db;
-    
+
 };
 
 #endif // COLLECTIONDB_H

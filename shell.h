@@ -27,44 +27,44 @@
 #include "collection.h"
 #include "readerpage.h"
 
-	 
+
 class KUrl;
 class KTabWidget;
 //we want to be able to embed kparts to read the files managed here so we are going to derive from KParts::MainWindow rather than KMainWindow
 class Shell : public KParts::MainWindow
 
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     //default Constructor
-    Shell(QWidget *parent=0 );
+    Shell(QWidget *parent = 0);
     //default Destructor
     virtual ~Shell();
-    
-  private slots:
+
+private slots:
     void slotOpenFile();
     void slotGetNewStuff();
     void slotImport();
     void slotToggleCollection();
     void slotRemoveTab(int index);
     void slotReaderTab(KUrl *url);
-    
-  private:
+
+private:
     void setupActions();
     void readerTab(const KUrl* url);
-    
+
     KTabWidget *mainView;
     Collection *m_collect;
     KParts::PartManager *m_manager;
-    
+
     //need to declare actions here so they can be shared between the context and
     //top menu. I think?
     KAction *open;
     KAction *import;
     KAction *ghns;
     KAction *remove;
-    
-     //add a veiw collection action to show/hide the collection manager tab
+
+    //add a veiw collection action to show/hide the collection manager tab
     KToggleAction *showCollection;
 };
 #endif // SHELL_H

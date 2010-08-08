@@ -26,21 +26,21 @@
 #include "QVBoxLayout"
 
 ReaderPage::ReaderPage(const KUrl* url, QWidget* parent)
-  : QWidget(parent)
+        : QWidget(parent)
 {
-  QVBoxLayout *mainlayout = new QVBoxLayout;
-  QString mimeType = KMimeType::findByUrl(*url)->name();
-  m_part = KMimeTypeTrader::createPartInstanceFromQuery<KParts::ReadOnlyPart>( mimeType, this, parent);
-  if(m_part){
-    m_part->widget()->setFocusPolicy(Qt::StrongFocus);
-    m_part->openUrl(*url);
-    mainlayout->addWidget(m_part->widget());
-    setLayout(mainlayout);
-  }
+    QVBoxLayout *mainlayout = new QVBoxLayout;
+    QString mimeType = KMimeType::findByUrl(*url)->name();
+    m_part = KMimeTypeTrader::createPartInstanceFromQuery<KParts::ReadOnlyPart>(mimeType, this, parent);
+    if (m_part) {
+        m_part->widget()->setFocusPolicy(Qt::StrongFocus);
+        m_part->openUrl(*url);
+        mainlayout->addWidget(m_part->widget());
+        setLayout(mainlayout);
+    }
 }
 
 KParts::ReadOnlyPart* ReaderPage::getPart()
 {
-  return m_part;
+    return m_part;
 }
-  
+
