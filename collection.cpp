@@ -16,15 +16,16 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 */
-#include <QSqlTableModel>
-
 #include "collection.h"
+#include "collectionmodel.h"
+
+#include <QSqlTableModel>
 #include <kdebug.h>
 #include <QSqlError>
 #include <qheaderview.h>
 #include <klocale.h>
 #include <QStringList>
-#include "collectionmodel.h"
+
 
 Collection::Collection(QWidget* parent)
         : QTableView(parent)
@@ -65,15 +66,12 @@ void Collection::createBook(QString title, QString summary, QString author, QStr
 
 void Collection::remBook()
 {
-    QModelIndex removeMe;
-
-    QModelIndexList removeUs = selectedIndexes();
-
     //the foreach loops over every column in each row so im using a counter to exit the loop when
     //it starts on the second column.
+    QModelIndexList removeUs = selectedIndexes();
     int index = removeUs.at(0).row();
 
-    foreach(removeMe, removeUs) {
+    foreach(const QModelIndex &removeMe,  removeUs) {
         int row = removeMe.row();
         if (row < index) {
             return;
