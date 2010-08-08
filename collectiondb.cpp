@@ -16,6 +16,8 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 */
+#include "collectiondb.h"
+	   
 //KDE includes
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -28,7 +30,7 @@
 #include <QFile>
 #include <QSqlError>
 
-#include "collectiondb.h"
+
 
 //PUBLIC
 CollectionDB::CollectionDB()
