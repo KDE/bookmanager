@@ -16,6 +16,8 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 */
+#include "shell.h"
+
 #include <KApplication>
 #include <KAction>
 #include <KLocale>
@@ -32,7 +34,7 @@
 #include <kfiledialog.h>
 
 #include "importdialog.h"
-#include "shell.h"
+
 #include "readerpage.h"
 
 //PUBLIC
@@ -79,7 +81,7 @@ void Shell::slotGetNewStuff()
     //may need to filter for updated entries but I don't think books get updated often
     //without changing the release date and number, which would warrant a new entry anyway maybe?
     //do books have minor version updates?
-    foreach(KNS3::Entry  entries, downDialog.changedEntries()) {
+    foreach(const KNS3::Entry &entries, downDialog.changedEntries()) {
         if (entries.status() == KNS3::Entry::Installed) {
             QString nil = "";//placeholder for empty info
             ImportDialog *impDialog = new ImportDialog(widget());
@@ -116,7 +118,7 @@ void Shell::setupActions()
 {
     //File menu
     open = KStandardAction::open(this, SLOT(slotOpenFile()), actionCollection());
-    //add the action manually so it doesnt add a toolbar action
+    //add the action manually so it doesn't add a toolbar action
     actionCollection()->addAction("open", open);
 
     ghns = new KAction(this);
@@ -191,9 +193,7 @@ void Shell::slotRemoveTab(int index)
 
 void Shell::slotOpenFile()
 {
-    QStringList filelist = KFileDialog::getOpenFileNames();
-    QString filename;
-    foreach(filename, filelist) {
+    foreach(const QString &filename, KFileDialog::getOpenFileNames()) {
         KUrl tempUrl = filename;
         slotReaderTab(&tempUrl);
     }
