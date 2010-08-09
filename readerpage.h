@@ -18,8 +18,8 @@
 */
 
 
-#ifndef READERTAB_H
-#define READERTAB_H
+#ifndef READERPAGE_H
+#define READERPAGE_H
 
 #include <qwidget.h>
 
@@ -43,4 +43,4 @@ private:
 
 };
 
-#endif // READERTAB_H
+#endif // READERPAGE_H
