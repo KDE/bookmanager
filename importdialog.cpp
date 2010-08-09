@@ -48,7 +48,7 @@ ImportDialog::ImportDialog(QWidget *parent)
 void ImportDialog::init(QString title, QString summary, QString author, QString release, QString releaseDate, QString genre, KUrl* url)
 {
     //we set these to an empty string so setting them without testing to verify
-    //real values should be ok? exept for the url, which can't be zero so... ima check that
+    //real values should be ok? except for the url, which can't be zero so... ima check that
     titleEdit->setText(title);
     descEdit->setText(summary);
     authorEdit->setText(author);

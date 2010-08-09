@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Title</string>
+        <string comment="A books title">Title</string>
        </property>
        <property name="buddy">
         <cstring>titleEdit</cstring>
@@ -40,7 +40,7 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Author</string>
+        <string comment="A person who writes books.">Author</string>
        </property>
        <property name="buddy">
         <cstring>authorEdit</cstring>
@@ -59,7 +59,7 @@
        <item>
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>Release Number</string>
+          <string comment="A books edition or release number.">Release Number</string>
          </property>
          <property name="buddy">
           <cstring>relNumEdit</cstring>
@@ -95,7 +95,7 @@
      <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Genre</string>
+        <string comment="A books type or style, examples- Science fiction or history">Genre</string>
        </property>
        <property name="buddy">
         <cstring>genreEdit</cstring>
@@ -108,7 +108,7 @@
      <item>
       <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>Location</string>
+        <string comment="The on disk path to a book.">Location</string>
        </property>
        <property name="buddy">
         <cstring>locationUrlRequestor</cstring>
@@ -125,7 +125,7 @@
      <item>
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Description</string>
+        <string comment="A brief summary or description of the book">Description</string>
        </property>
       </widget>
      </item>
