@@ -64,6 +64,14 @@ Shell::Shell(QWidget *parent)
     mainView->setTabsClosable(true);
     connect(mainView, SIGNAL(tabCloseRequested(int)),
             this, SLOT(slotRemoveTab(int)));
+    
+    //make the menu's change when the part does, except it doesn't seem to work :( FIXME
+    m_manager->setAllowNestedParts(true);
+    connect(mainView, SIGNAL(currentChanged(int)),
+	    this, SLOT(slotUpdateMenu(int)));
+    
+    connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
+            this, SLOT(createGUI(KParts::Part*)));
 }
 Shell::~Shell()
 {
@@ -198,4 +206,14 @@ void Shell::slotOpenFile()
         KUrl tempUrl = filename;
         slotReaderTab(&tempUrl);
     }
+}
+
+void Shell::slotUpdateMenu(int index)
+{
+  if(index > 0) {
+    ReaderPage *curPage = qobject_cast<ReaderPage *>(mainView->widget(index)); 
+    KParts::ReadOnlyPart *curpart = curPage->getPart();
+    setupGUI(Keys | ToolBar | Save);
+    m_manager->setActivePart(curpart);
+  }
 }

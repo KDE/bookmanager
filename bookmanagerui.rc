@@ -16,8 +16,15 @@
   <Menu name="window">
     <text>&amp;Window</text>
     <Action name="showCollection" />
+    <Merge />
   </Menu>
   
   <Merge />
 </MenuBar>
+<ToolBar name="toolbar">
+  <text>Main Toolbar </text>
+  <Action name="open" />	
+  <Action name="ghns" />
+  <Merge />
+</ToolBar>
 </kpartgui>

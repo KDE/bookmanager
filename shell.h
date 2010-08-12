@@ -48,6 +48,7 @@ private slots:
     void slotToggleCollection();
     void slotRemoveTab(int index);
     void slotReaderTab(KUrl *url);
+    void slotUpdateMenu(int index);
 
 private:
     void setupActions();
