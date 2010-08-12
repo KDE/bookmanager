@@ -127,7 +127,6 @@ void Shell::setupActions()
 {
     //File menu
     open = KStandardAction::open(this, SLOT(slotOpenFile()), actionCollection());
-    //add the action manually so it doesn't add a toolbar action
     actionCollection()->addAction("open", open);
 
     ghns = new KAction(this);
