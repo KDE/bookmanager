@@ -69,15 +69,19 @@ void Collection::remBook()
     //the foreach loops over every column in each row so im using a counter to exit the loop when
     //it starts on the second column.
     QModelIndexList removeUs = selectedIndexes();
-    int index = removeUs.at(0).row();
+    //verify that we got at least one index... if the remove book command is called 
+    //without having anything selected we segfault :(
+    if(removeUs.length() > 0){
+      int index = removeUs.at(0).row();
 
-    foreach(const QModelIndex &removeMe,  removeUs) {
-        int row = removeMe.row();
-        if (row < index) {
-            return;
-        }
-        m_model->removeRow(row);
-        index += 1;
+      foreach(const QModelIndex &removeMe,  removeUs) {
+	  int row = removeMe.row();
+	  if (row < index) {
+	      return;
+	  }
+	  m_model->removeRow(row);
+	  index += 1;
+      }
     }
 }
 
