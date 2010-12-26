@@ -9,10 +9,6 @@ include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} )
 set(bookmanager_SRCS   
     main.cpp
     shell.cpp
-    collectiondb.cpp
-    collection.cpp 
-    collectionmodel.cpp
-    importdialog.cpp
     readerpage.cpp
  )
 

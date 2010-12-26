@@ -25,15 +25,12 @@
 #include <KStandardAction>
 #include <KMessageBox>
 #include <KDebug>
-#include <KNS3/DownloadDialog>
-#include <KNS3/Entry>
 #include <KTabWidget>
 #include <KUrl>
 #include <KMimeTypeTrader>
 #include <kmimetype.h>
 #include <kfiledialog.h>
 
-#include "importdialog.h"
 
 #include "readerpage.h"
 
@@ -45,20 +42,10 @@ Shell::Shell(QWidget *parent)
     mainView = new KTabWidget(this);
 
 
-    m_collect = new Collection(mainView);
-    mainView->addTab(m_collect, i18n("Collection"));
-
-    setCentralWidget(mainView);
     setupActions();
-
-    //parent should be mainview as that is that is where the tabs are stored, rather than "this",
-    //which is the actual parent as the tab switching is where the actually part changing is going
-    //to come from...
-    m_manager = new KParts::PartManager(mainView);
-
-
-    connect(m_collect, SIGNAL(loadBook(KUrl*)),
-            this, SLOT(slotReaderTab(KUrl*)));
+    
+    //this is probably wrong FIXME
+    m_manager = new KParts::PartManager(this);
 
     //make tabs closable
     mainView->setTabsClosable(true);
@@ -80,39 +67,6 @@ Shell::~Shell()
 
 
 // PRIVATE SLOTS
-void Shell::slotGetNewStuff()
-{
-
-    QPointer<KNS3::DownloadDialog> downDialog = new KNS3::DownloadDialog(this);
-    downDialog->exec();
-    //this will pop up an import dialog for each changed entry that is installed
-    //may need to filter for updated entries but I don't think books get updated often
-    //without changing the release date and number, which would warrant a new entry anyway maybe?
-    //do books have minor version updates?
-    foreach(const KNS3::Entry &entries, downDialog->changedEntries()) {
-        if (entries.status() == KNS3::Entry::Installed) {
-            QString nil = "";//placeholder for empty info
-            ImportDialog *impDialog = new ImportDialog(widget());
-            connect(impDialog, SIGNAL(signalNewBook(QString, QString, QString, QString, QString, QString, KUrl*)),
-                    m_collect, SLOT(createBook(QString, QString, QString, QString, QString, QString, KUrl*)));
-            KUrl *location = new KUrl(KUrl(entries.installedFiles().first()));
-            impDialog->init(entries.name(), entries.summary(), nil,
-                            entries.version(), nil, nil, location);
-            impDialog->show();
-        }
-
-    }
-    delete downDialog;
-}
-
-void Shell::slotImport()
-{
-    ImportDialog *dialog = new ImportDialog(this);
-    connect(dialog, SIGNAL(signalNewBook(QString, QString, QString, QString, QString, QString, KUrl*)),
-            m_collect, SLOT(createBook(QString, QString, QString, QString, QString, QString, KUrl*)));
-    dialog->show();
-}
-
 //creates a new tab
 void Shell::slotReaderTab(KUrl *url)
 {
@@ -129,37 +83,8 @@ void Shell::setupActions()
     open = KStandardAction::open(this, SLOT(slotOpenFile()), actionCollection());
     actionCollection()->addAction("open", open);
 
-    ghns = new KAction(this);
-    ghns->setText(i18n("&Get Books From Internet..."));
-    ghns->setIcon(KIcon("get-hot-new-stuff"));
-    ghns->setShortcut(Qt::Key_G);
-    actionCollection()->addAction("ghns", ghns);
-    connect(ghns, SIGNAL(triggered(bool)),
-            this, SLOT(slotGetNewStuff()));
-
-    import = new KAction(this);
-    import->setText(i18n("&Import a new Book"));
-    import->setShortcut(Qt::Key_I);
-    actionCollection()->addAction("import", import);
-    connect(import, SIGNAL(triggered()),
-            this, SLOT(slotImport()));
-
-    remove = new KAction(this);
-    remove->setText(i18n("&Remove a book"));
-    actionCollection()->addAction("remove", remove);
-    connect(remove, SIGNAL(triggered()),
-            m_collect, SLOT(remBook()));
-
     KStandardAction::quit(kapp, SLOT(quit()),
                           actionCollection());
-    //Window menu
-    showCollection = new KToggleAction(this);
-    showCollection->setText(i18n("Collection Manager"));
-    //FIXME make this remember state from last use
-    showCollection->setChecked(true); //show the collection by default
-    actionCollection()->addAction("showCollection", showCollection);
-    connect(showCollection, SIGNAL(triggered()),
-            this, SLOT(slotToggleCollection()));
 
     setupGUI();
 }
@@ -178,25 +103,9 @@ void Shell::readerTab(const KUrl *url)
 
 }
 
-void Shell::slotToggleCollection()
-{
-    //open and close the collection tab
-    if (showCollection->isChecked()) {
-        mainView->addTab(m_collect, i18n("Collection"));
-    } else {
-        mainView->removeTab(mainView->indexOf(m_collect));
-    }
-}
-
 void Shell::slotRemoveTab(int index)
 {
-    //check to see if we are closing the collection tab, so we can toggle the toggle
-    if (index == mainView->indexOf(m_collect)) {
-        showCollection->setChecked(false);
-        slotToggleCollection();
-    } else {
         mainView->removeTab(index);
-    }
 }
 
 void Shell::slotOpenFile()
