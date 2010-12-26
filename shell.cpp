@@ -82,6 +82,12 @@ void Shell::setupActions()
     //File menu
     open = KStandardAction::open(this, SLOT(slotOpenFile()), actionCollection());
     actionCollection()->addAction("open", open);
+    
+    openNewTab = new KAction(this);
+    openNewTab->setText(i18n("Open file(s) in new tab(s)"));
+    actionCollection()->addAction("openNewTab", openNewTab);
+    connect(openNewTab, SIGNAL(triggered(bool)),
+        this, SLOT(slotOpenFileNewTab()));
 
     KStandardAction::quit(kapp, SLOT(quit()),
                           actionCollection());
@@ -107,8 +113,12 @@ void Shell::slotRemoveTab(int index)
 {
         mainView->removeTab(index);
 }
-
 void Shell::slotOpenFile()
+{
+    //TODO
+}
+
+void Shell::slotOpenFileNewTab()
 {
     foreach(const QString &filename, KFileDialog::getOpenFileNames()) {
         KUrl tempUrl = filename;

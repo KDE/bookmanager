@@ -40,6 +40,7 @@ public:
 
 private slots:
     void slotOpenFile();
+    void slotOpenFileNewTab();
     void slotRemoveTab(int index);
     void slotReaderTab(KUrl *url);
     void slotUpdateMenu(int index);
@@ -54,6 +55,7 @@ private:
     //need to declare actions here so they can be shared between the context and
     //top menu. I think?
     KAction *open;
+    KAction *openNewTab;
     KAction *import;
     KAction *ghns;
     KAction *remove;
