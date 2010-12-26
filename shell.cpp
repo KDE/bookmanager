@@ -40,12 +40,12 @@ Shell::Shell(QWidget *parent)
 {
     //need set up the initial tab before the main window
     mainView = new KTabWidget(this);
-
+    setCentralWidget(mainView);
 
     setupActions();
     
     //this is probably wrong FIXME
-    m_manager = new KParts::PartManager(this);
+    m_manager = new KParts::PartManager(mainView);
 
     //make tabs closable
     mainView->setTabsClosable(true);
