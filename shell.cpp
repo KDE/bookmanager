@@ -115,7 +115,23 @@ void Shell::slotRemoveTab(int index)
 }
 void Shell::slotOpenFile()
 {
-    //TODO
+    //check if there is an open tab...
+    if(mainView->currentIndex() == -1){
+        //no tabs open so we can just use the openFileNewTab slot :D
+        slotOpenFileNewTab();
+    } else {
+        //we have an open tab so...
+        //first get the filename from the user
+        QString filename =  KFileDialog::getOpenFileName();
+        //check if the filename is null, open the file if its NOT null
+        if(!filename.isNull()){
+            KUrl tempUrl = filename;
+            //might be a better way to get the part, but it works elsewhere so...       
+            ReaderPage *curPage = qobject_cast<ReaderPage *>(mainView->widget(mainView->currentIndex())); 
+            KParts::ReadOnlyPart *curpart = curPage->getPart();
+            curpart->openUrl(tempUrl);
+        }
+    }
 }
 
 void Shell::slotOpenFileNewTab()
