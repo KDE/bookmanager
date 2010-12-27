@@ -37,10 +37,10 @@ public:
     explicit ReaderPage(const KUrl *url, QWidget* parent = 0);
 
     KParts::ReadOnlyPart* getPart();
-
+    QString getMimeType();
 private:
     KParts::ReadOnlyPart *m_part;
-
+    QString currentType;
 };
 
 #endif // READERPAGE_H

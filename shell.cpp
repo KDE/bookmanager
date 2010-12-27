@@ -115,6 +115,8 @@ void Shell::slotRemoveTab(int index)
 }
 void Shell::slotOpenFile()
 {
+    //FIXME note: this will need to be fixed when we add in the manager 
+    //FIXME part? or maybe implement openurl in the manager?
     //check if there is an open tab...
     if(mainView->currentIndex() == -1){
         //no tabs open so we can just use the openFileNewTab slot :D
@@ -128,8 +130,24 @@ void Shell::slotOpenFile()
             KUrl tempUrl = filename;
             //might be a better way to get the part, but it works elsewhere so...       
             ReaderPage *curPage = qobject_cast<ReaderPage *>(mainView->widget(mainView->currentIndex())); 
+            //this is kind of naive as most kparts support multiple mimetypes
+            //but i couldn't find an easy way to get a list of supported types
+            //from a kpart... FIXME
+            QString newMimeType = KMimeType::findByUrl(tempUrl)->name();
             KParts::ReadOnlyPart *curpart = curPage->getPart();
-            curpart->openUrl(tempUrl);
+            if(curPage->getMimeType() == newMimeType){
+                curpart->openUrl(tempUrl);
+            } else {
+                //if the mimetype has changed we need to delete the currentpage and open a replacement
+                ReaderPage *newPage = new ReaderPage(&tempUrl, this);
+                if(newPage) {
+                    int index = mainView->currentIndex();
+                    mainView->removeTab(index);
+                    mainView->insertTab(index, newPage, tempUrl.fileName());
+                    m_manager->replacePart(curpart, newPage->getPart());
+                    delete(curPage);
+                }
+            }
         }
     }
 }

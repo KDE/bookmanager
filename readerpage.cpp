@@ -29,8 +29,8 @@ ReaderPage::ReaderPage(const KUrl* url, QWidget* parent)
         : QWidget(parent)
 {
     QVBoxLayout *mainlayout = new QVBoxLayout;
-    QString mimeType = KMimeType::findByUrl(*url)->name();
-    m_part = KMimeTypeTrader::createPartInstanceFromQuery<KParts::ReadOnlyPart>(mimeType, this, parent);
+    QString currentType = KMimeType::findByUrl(*url)->name();
+    m_part = KMimeTypeTrader::createPartInstanceFromQuery<KParts::ReadOnlyPart>(currentType, this, parent);
     if (m_part) {
         m_part->widget()->setFocusPolicy(Qt::StrongFocus);
         m_part->openUrl(*url);
@@ -44,3 +44,7 @@ KParts::ReadOnlyPart* ReaderPage::getPart()
     return m_part;
 }
 
+QString ReaderPage::getMimeType()
+{
+    return currentType;
+}
