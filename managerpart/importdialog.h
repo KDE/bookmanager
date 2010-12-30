@@ -16,39 +16,32 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 */
+#ifndef IMPORTDIALOG_H
+#define IMPORTDIALOG_H
 
-
-#ifndef COLLECTIONDB_H
-#define COLLECTIONDB_H
-//KDE includes
+#include <KDialog>
+#include <QString>
 #include <KUrl>
 
-//QT includes
-#include <QSqlDatabase>
-#include <QSqlTableModel>
-#include <QString>
-#include <QWidget>
+//don't forget to include the ui-file
+#include "ui_importdialog.h"
+#include "bookstruct.h"
 
-class KUrl;
-
-class CollectionDB : public QWidget
+class ImportDialog : public KDialog, public Ui_importDialog
 {
     Q_OBJECT
 public:
-    CollectionDB();
-    ~CollectionDB();
+    ImportDialog(QWidget *parent = 0);
 
-public slots:
-    void addBook(QString title, QString summary, QString author, QString release,
-                 QString releaseDate, QString genre, KUrl *url);
+private slots:
+    void slotImportClicked();
+    void slotEnableImport();
+    void checkUrl(QString);
 signals:
-    void isDirty();
-
-private:
-    bool initDB();
-
-    QSqlDatabase m_db;
+    //connect this to the collection to add books
+    void signalNewBook(dbusBook *book);
+    void urlIsGood();
 
 };
 
-#endif // COLLECTIONDB_H
+#endif // IMPORTDIALOG_H

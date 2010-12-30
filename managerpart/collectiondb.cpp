@@ -62,22 +62,19 @@ CollectionDB::~CollectionDB()
 }
 
 //PUBLIC SLOTS
-void CollectionDB::addBook(QString title, QString summary,
-                           QString author, QString release,
-                           QString releaseDate, QString genre,
-                           KUrl* url)
+void CollectionDB::addBook(dbusBook *book)
 {
     QSqlQuery query;
     //set id to NULL for sqlite to autoincrement the id, we don't care about the id's so...
     query.prepare("INSERT INTO collection (title, summary, author, release, releaseDate, genre, url) "
                   "VALUES (:title, :summary, :author, :release, :releaseDate, :genre, :url)");
-    query.bindValue(0, title);
-    query.bindValue(1, summary);
-    query.bindValue(2, author);
-    query.bindValue(3, release);
-    query.bindValue(4, releaseDate);
-    query.bindValue(5, genre);
-    query.bindValue(6, url->url());
+    query.bindValue(0, book->title);
+    query.bindValue(1, book->summary);
+    query.bindValue(2, book->author);
+    query.bindValue(3, book->release);
+    query.bindValue(4, book->releaseDate);
+    query.bindValue(5, book->genre);
+    query.bindValue(6, book->url);
     query.exec();
     query.finish();
     emit isDirty();

@@ -18,25 +18,41 @@
 */
 
 
-#ifndef BOOKSTRUCT_H
-#define BOOKSTRUCT_H
+#ifndef COLLECTION_H
+#define COLLECTION_H
 
-#include <QString>
 
-/* This struct defines the basic data needed for a book. and is much
- * nicer to use than remembering the layout for all the function calls :)
- * uses all strings so it can be streamed by dbus, if needed later
- */
+#include "collectiondb.h"
+#include "bookstruct.h"
 
-struct dbusBook {
-    QString title;
-    QString summary;
-    QString author;
-    QString release;
-    QString releaseDate;
-    QString genre;
-    QString url;
+#include <QTableView>
+
+
+class CollectionModel;
+class Collection : public QTableView
+{
+    Q_OBJECT
+public:
+    Collection(QWidget* parent = 0);
+
+public slots:
+    void createBook(dbusBook *book);
+    void remBook();
+    void updateModel();
+
+private slots:
+    void openBook(QModelIndex index);
+
+signals:
+    void newBook(dbusBook *book);
+    void loadBook(KUrl *url);
+private:
+    CollectionDB *m_db;
+    CollectionModel *m_model;
+    enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};
+
+
+
 };
 
-
-#endif // BOOKSTRUCT_H
+#endif // COLLECTION_H

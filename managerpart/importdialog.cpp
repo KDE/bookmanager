@@ -45,32 +45,17 @@ ImportDialog::ImportDialog(QWidget *parent)
             this, SLOT(slotEnableImport()));
 }
 
-void ImportDialog::init(QString title, QString summary, QString author, QString release, QString releaseDate, QString genre, KUrl* url)
-{
-    //we set these to an empty string so setting them without testing to verify
-    //real values should be ok? except for the url, which can't be zero so... ima check that
-    titleEdit->setText(title);
-    descEdit->setText(summary);
-    authorEdit->setText(author);
-    relNumEdit->setText(release);
-    relDateEdit->setText(releaseDate);
-    genreEdit->setText(genre);
-    if (url->url() != "0") {
-        locationUrlRequestor->setUrl(*url);
-    }
-
-}
-
 void ImportDialog::slotImportClicked()
 {
-    QString title = titleEdit->text();
-    QString summary = descEdit->toPlainText();
-    QString author = authorEdit->text();
-    QString release = relNumEdit->text();
-    QString releaseDate = relDateEdit->text();
-    QString genre = genreEdit->text();
-    KUrl url = locationUrlRequestor->url();
-    emit signalNewBook(title, summary, author, release, releaseDate, genre, &url);
+    dbusBook *book;
+    book->title = titleEdit->text();
+    book->summary = descEdit->toPlainText();
+    book->author = authorEdit->text();
+    book->release = relNumEdit->text();
+    book->releaseDate = relDateEdit->text();
+    book->genre = genreEdit->text();
+    book->url = locationUrlRequestor->url().url();
+    emit signalNewBook(book);
     close();
 }
 

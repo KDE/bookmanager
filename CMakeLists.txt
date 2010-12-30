@@ -1,7 +1,10 @@
 project(bookmanager)
+#add the kpart directory
 
 find_package(KDE4 REQUIRED)
 include (KDE4Defaults)
+
+add_subdirectory(managerpart)
 
 include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} )
 
@@ -11,8 +14,6 @@ set(bookmanager_SRCS
     shell.cpp
     readerpage.cpp
  )
-
-kde4_add_ui_files(bookmanager_SRCS importdialog.ui)
 
 kde4_add_executable(bookmanager ${bookmanager_SRCS})
 

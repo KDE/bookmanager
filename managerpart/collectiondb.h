@@ -18,39 +18,38 @@
 */
 
 
-#ifndef COLLECTION_H
-#define COLLECTION_H
+#ifndef COLLECTIONDB_H
+#define COLLECTIONDB_H
 
-#include <QTableView>
-#include "collectiondb.h"
+#include "bookstruct.h"
+//KDE includes
+#include <KUrl>
 
-class CollectionModel;
-class Collection : public QTableView
+//QT includes
+#include <QSqlDatabase>
+#include <QSqlTableModel>
+#include <QString>
+#include <QWidget>
+
+class KUrl;
+
+class CollectionDB : public QWidget
 {
     Q_OBJECT
 public:
-    Collection(QWidget* parent = 0);
+    CollectionDB();
+    ~CollectionDB();
 
 public slots:
-    void createBook(QString title, QString summary, QString author, QString release,
-                    QString releaseDate, QString genre, KUrl *url);
-    void remBook();
-    void updateModel();
-
-private slots:
-    void openBook(QModelIndex index);
-
+    void addBook(dbusBook *book);
 signals:
-    void newBook(QString title, QString summary, QString author, QString release,
-                 QString releaseDate, QString genre, KUrl *url);
-    void loadBook(KUrl *url);
+    void isDirty();
+
 private:
-    CollectionDB *m_db;
-    CollectionModel *m_model;
-    enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};
+    bool initDB();
 
-
+    QSqlDatabase m_db;
 
 };
 
-#endif // COLLECTION_H
+#endif // COLLECTIONDB_H
