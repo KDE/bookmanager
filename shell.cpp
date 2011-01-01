@@ -52,7 +52,6 @@ Shell::Shell(QWidget *parent)
     connect(mainView, SIGNAL(tabCloseRequested(int)),
             this, SLOT(slotRemoveTab(int)));
     
-    //make the menu's change when the part does, except it doesn't seem to work :( FIXME
     m_manager->setAllowNestedParts(true);
     connect(mainView, SIGNAL(currentChanged(int)),
 	    this, SLOT(slotUpdateMenu(int)));
@@ -169,3 +168,43 @@ void Shell::slotUpdateMenu(int index)
     m_manager->setActivePart(curpart);
   }
 }
+
+void Shell::slotLoadCollection()
+{
+    loadCollection();
+}
+
+void Shell::loadCollection()
+{
+    //load the collection manager by name, like the okular shell does
+    //since we don't really have any other way to find the part
+    KPluginFactory *factory = KPluginLoader("bookmanagerpart").factory();
+    if(!factory){
+        //alert the user of failure
+        KMessageBox::error(this, i18n("Unable to load the collection."));
+        //then return
+        m_collection = 0;
+        return;
+    }
+    //if we get to here then everything is working :D and we can cast our part into a part
+    m_collection = factory->create<KParts::Part>(this);
+    if(m_collection){
+        //and now we can perform some setup for our collection so the user can actually use it :D
+        //first we need to tell the part manager that we have a new part for it
+        m_manager->addPart(m_collection);
+        //then we stuff the collection into a tab...
+        mainView->addTab(m_collection->widget(), i18n("Collection"));
+        //TODO set up communication between the part and the shell
+        //so we can actually open files with it :D
+    }
+}
+
+
+
+
+
+
+
+
+
+

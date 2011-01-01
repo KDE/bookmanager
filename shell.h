@@ -44,11 +44,16 @@ private slots:
     void slotRemoveTab(int index);
     void slotReaderTab(KUrl *url);
     void slotUpdateMenu(int index);
+    
+    void slotLoadCollection();
 
 private:
     void setupActions();
     void readerTab(const KUrl* url);
-
+    
+    void loadCollection();
+    KParts::Part *m_collection;
+    
     KTabWidget *mainView;
     KParts::PartManager *m_manager;
 
