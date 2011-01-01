@@ -49,6 +49,12 @@ Shell::Shell(QWidget *parent)
 
     //make tabs closable
     mainView->setTabsClosable(true);
+    
+    //check if the collection toggle is turned on, load the collection if it is
+    if(showCollection->isChecked()){
+        loadCollection();
+    }
+    
     connect(mainView, SIGNAL(tabCloseRequested(int)),
             this, SLOT(slotRemoveTab(int)));
     
@@ -90,6 +96,15 @@ void Shell::setupActions()
 
     KStandardAction::quit(kapp, SLOT(quit()),
                           actionCollection());
+    
+    //Window menu
+    showCollection = new KToggleAction(this);
+    showCollection->setText(i18n("Collection Manager"));
+    //FIXME make this remember state from last use
+    showCollection->setChecked(true); //show the collection by default
+    actionCollection()->addAction("showCollection", showCollection);
+    connect(showCollection, SIGNAL(triggered()),
+            this, SLOT(slotToggleCollection()));
 
     setupGUI();
 }
@@ -114,37 +129,43 @@ void Shell::slotRemoveTab(int index)
 }
 void Shell::slotOpenFile()
 {
-    //FIXME note: this will need to be fixed when we add in the manager 
-    //FIXME part? or maybe implement openurl in the manager?
+    //FIXME this is getting far to deeply indented... maybe some of it should be pulled out?
     //check if there is an open tab...
     if(mainView->currentIndex() == -1){
         //no tabs open so we can just use the openFileNewTab slot :D
         slotOpenFileNewTab();
     } else {
-        //we have an open tab so...
-        //first get the filename from the user
-        QString filename =  KFileDialog::getOpenFileName();
-        //check if the filename is null, open the file if its NOT null
-        if(!filename.isNull()){
-            KUrl tempUrl = filename;
-            //might be a better way to get the part, but it works elsewhere so...       
-            ReaderPage *curPage = qobject_cast<ReaderPage *>(mainView->widget(mainView->currentIndex())); 
-            //this is kind of naive as most kparts support multiple mimetypes
-            //but i couldn't find an easy way to get a list of supported types
-            //from a kpart... FIXME
-            QString newMimeType = KMimeType::findByUrl(tempUrl)->name();
-            KParts::ReadOnlyPart *curpart = curPage->getPart();
-            if(curPage->getMimeType() == newMimeType){
-                curpart->openUrl(tempUrl);
-            } else {
-                //if the mimetype has changed we need to delete the currentpage and open a replacement
-                ReaderPage *newPage = new ReaderPage(&tempUrl, this);
-                if(newPage) {
-                    int index = mainView->currentIndex();
-                    mainView->removeTab(index);
-                    mainView->insertTab(index, newPage, tempUrl.fileName());
-                    m_manager->replacePart(curpart, newPage->getPart());
-                    delete(curPage);
+        //check to see if the collection manager is open, and if thats our current tab
+        //since we can't open files with the collection manager...
+        if(showCollection->isChecked() && (mainView->currentIndex() == 0)){
+            //we're trying to open things in the collection... which is bad, so use a new tab :D
+            slotOpenFileNewTab();
+        } else {
+            //we have an open reader tab so...
+            //first get the filename from the user
+            QString filename =  KFileDialog::getOpenFileName();
+            //check if the filename is null, open the file if its NOT null
+            if(!filename.isNull()){
+                KUrl tempUrl = filename;
+                //might be a better way to get the part, but it works elsewhere so...       
+                ReaderPage *curPage = qobject_cast<ReaderPage *>(mainView->widget(mainView->currentIndex())); 
+                //this is kind of naive as most kparts support multiple mimetypes
+                //but i couldn't find an easy way to get a list of supported types
+                //from a kpart... FIXME
+                QString newMimeType = KMimeType::findByUrl(tempUrl)->name();
+                KParts::ReadOnlyPart *curpart = curPage->getPart();
+                if(curPage->getMimeType() == newMimeType){
+                    curpart->openUrl(tempUrl);
+                } else {
+                    //if the mimetype has changed we need to delete the currentpage and open a replacement
+                    ReaderPage *newPage = new ReaderPage(&tempUrl, this);
+                    if(newPage) {
+                        int index = mainView->currentIndex();
+                        mainView->removeTab(index);
+                        mainView->insertTab(index, newPage, tempUrl.fileName());
+                        m_manager->replacePart(curpart, newPage->getPart());
+                        delete(curPage);
+                    }
                 }
             }
         }
@@ -169,9 +190,14 @@ void Shell::slotUpdateMenu(int index)
   }
 }
 
-void Shell::slotLoadCollection()
+void Shell::slotToggleCollection()
 {
-    loadCollection();
+    //open and close the collection tab
+    if(showCollection->isChecked()){
+        loadCollection();
+    } else {
+        mainView->removeTab( mainView->indexOf(m_collection->widget()) );
+    }
 }
 
 void Shell::loadCollection()
@@ -193,7 +219,10 @@ void Shell::loadCollection()
         //first we need to tell the part manager that we have a new part for it
         m_manager->addPart(m_collection);
         //then we stuff the collection into a tab...
-        mainView->addTab(m_collection->widget(), i18n("Collection"));
+        //always use tab 0 for the collection, this makes it easy to check if the collection is open, 
+        //and find it so we don't have to do mainview->indexof... everytime we open something to track
+        //it down and make sure we aren't clobbering it with file->open, which causes a crash :(
+        mainView->insertTab(0, m_collection->widget(), i18n("Collection"));
         //TODO set up communication between the part and the shell
         //so we can actually open files with it :D
     }

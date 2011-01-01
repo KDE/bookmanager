@@ -24,6 +24,8 @@
 #include <kparts/partmanager.h>
 #include <kparts/mainwindow.h>
 #include "readerpage.h"
+#include <ktoggleaction.h>
+
 
 class KUrl;
 class KTabWidget;
@@ -45,7 +47,7 @@ private slots:
     void slotReaderTab(KUrl *url);
     void slotUpdateMenu(int index);
     
-    void slotLoadCollection();
+    void slotToggleCollection();
 
 private:
     void setupActions();
@@ -62,8 +64,9 @@ private:
     KAction *open;
     KAction *openNewTab;
     KAction *import;
-    KAction *ghns;
     KAction *remove;
 
+    
+    KToggleAction *showCollection;
 };
 #endif // SHELL_H
