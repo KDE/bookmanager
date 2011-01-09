@@ -50,11 +50,7 @@ Shell::Shell(QWidget *parent)
     //make tabs closable
     mainView->setTabsClosable(true);
     
-    //check if the collection toggle is turned on, load the collection if it is
-    if(showCollection->isChecked()){
-        loadCollection();
-    }
-    
+    //make sure the partmanager is connected before we start loading parts!
     connect(mainView, SIGNAL(tabCloseRequested(int)),
             this, SLOT(slotRemoveTab(int)));
     
@@ -64,6 +60,13 @@ Shell::Shell(QWidget *parent)
     
     connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
             this, SLOT(createGUI(KParts::Part*)));
+    
+    
+    //check if the collection toggle is turned on, load the collection if it is
+    
+    if(showCollection->isChecked()){
+        loadCollection();
+    }
 }
 Shell::~Shell()
 {
