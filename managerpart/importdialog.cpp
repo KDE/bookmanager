@@ -47,7 +47,7 @@ ImportDialog::ImportDialog(QWidget *parent)
 
 void ImportDialog::slotImportClicked()
 {
-    dbusBook *book;
+    dbusBook *book = new dbusBook;
     book->title = titleEdit->text();
     book->summary = descEdit->toPlainText();
     book->author = authorEdit->text();

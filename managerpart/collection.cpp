@@ -45,8 +45,8 @@ Collection::Collection(QWidget* parent)
     show();
 
     //lots of qstrings... should probably be a qstringlist?
-    connect(this, SIGNAL(newBook(dbusBook)),
-            m_db, SLOT(addBook(dbusBook)));
+    connect(this, SIGNAL(newBook(dbusBook *)),
+            m_db, SLOT(addBook(dbusBook *)));
 
     //don't forget to update the model if the db gets dirty
     connect(m_db, SIGNAL(isDirty()),
