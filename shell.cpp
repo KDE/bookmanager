@@ -30,9 +30,11 @@
 #include <KMimeTypeTrader>
 #include <kmimetype.h>
 #include <kfiledialog.h>
-
+#include <QDBusConnection>
+#include <QDBusInterface>
 
 #include "readerpage.h"
+#include <qdbusconnection.h>
 
 //PUBLIC
 Shell::Shell(QWidget *parent)
@@ -182,6 +184,11 @@ void Shell::slotOpenFileNewTab()
         slotReaderTab(&tempUrl);
     }
 }
+void Shell::slotOpenFileNewTab(QString filename)
+{
+    KUrl tempUrl = filename;
+    slotReaderTab(&tempUrl);
+}
 
 void Shell::slotUpdateMenu(int index)
 {
@@ -226,8 +233,14 @@ void Shell::loadCollection()
         //and find it so we don't have to do mainview->indexof... everytime we open something to track
         //it down and make sure we aren't clobbering it with file->open, which causes a crash :(
         mainView->insertTab(0, m_collection->widget(), i18n("Collection"));
-        //TODO set up communication between the part and the shell
-        //so we can actually open files with it :D
+        
+        //connect to the loadbook signal
+        QDBusConnection bus = QDBusConnection::sessionBus();
+        QDBusInterface *interface = 
+            new QDBusInterface("org.bookmanager.BookManagerPart","/BookManagerPart",
+                               "", bus, this);
+        connect(interface, SIGNAL(loadBook(QString)),
+                this, SLOT(slotOpenFileNewTab(QString)));
     }
 }
 

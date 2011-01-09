@@ -38,6 +38,9 @@ class BookManagerPart : public KParts::Part
 public:
     BookManagerPart(QWidget*, QObject* parent, const QVariantList&);
         
+signals:
+    void loadBook(QString url);
+    
 private slots:
     void slotImport();
 private:

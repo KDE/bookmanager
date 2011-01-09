@@ -43,6 +43,7 @@ public:
 private slots:
     void slotOpenFile();
     void slotOpenFileNewTab();
+    void slotOpenFileNewTab(QString filename);
     void slotRemoveTab(int index);
     void slotReaderTab(KUrl *url);
     void slotUpdateMenu(int index);

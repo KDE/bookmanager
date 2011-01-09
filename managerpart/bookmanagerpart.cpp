@@ -51,8 +51,16 @@ BookManagerPart::BookManagerPart(QWidget *,QObject * parent, const QVariantList&
         
     //set up the widget
     
+    
+    
     m_collect = new Collection;
     setWidget(m_collect);
+    
+    //connect the loadBook signal in the collection to the the one
+    //here so it will get emitted properly by dbus 
+    //FIXME probably a better way to do this
+    connect(m_collect, SIGNAL(loadBook(QString)),
+        this, SIGNAL(loadBook(QString)));
     
     setupActions();
 }
