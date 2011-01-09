@@ -26,12 +26,18 @@
 #include "bookstruct.h"
 
 #include <QTableView>
+#include <QtDBus>
+
 
 
 class CollectionModel;
 class Collection : public QTableView
 {
     Q_OBJECT
+    //I'm pretty sure this is correct? I'd make it org.kde but
+    //I think I'd need to actually be part of kde proper to use it?
+    Q_CLASSINFO("D-Bus Interface", "org.bookmanager.BookManagerPart")
+    
 public:
     Collection(QWidget* parent = 0);
 
@@ -45,7 +51,8 @@ private slots:
 
 signals:
     void newBook(dbusBook *book);
-    void loadBook(KUrl *url);
+    //can't emit a Kurl, so emit it as a string
+   Q_SCRIPTABLE void loadBook(QString url);
 private:
     CollectionDB *m_db;
     CollectionModel *m_model;

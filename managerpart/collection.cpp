@@ -26,7 +26,6 @@
 #include <klocale.h>
 #include <QStringList>
 
-
 Collection::Collection(QWidget* parent)
         : QTableView(parent)
 {
@@ -99,5 +98,7 @@ void Collection::openBook(QModelIndex index)
     //this bit has caused a lot of issues so i'm leaving a debug in...
     kDebug() << m_model->data(urlIndex).toString();
     KUrl bookUrl = KUrl(m_model->data(urlIndex).toString());
-    emit loadBook(&bookUrl);
+    //emit it as a qstring so we can send it easily over dbus :D
+    emit loadBook(bookUrl.url());
 }
+
