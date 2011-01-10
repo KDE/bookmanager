@@ -89,7 +89,7 @@ void BookManagerPart::setupActions()
 void BookManagerPart::slotImport()
 {
     ImportDialog *dialog = new ImportDialog();
-    connect(dialog, SIGNAL(signalNewBook(book *)),
-            m_collect, SLOT(createBook(book *)));
+    connect(dialog, SIGNAL(signalNewBook(dbusBook*)),
+            m_collect, SLOT(createBook(dbusBook *)));
     dialog->show();
 }
