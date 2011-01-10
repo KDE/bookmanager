@@ -221,36 +221,46 @@ void Shell::slotToggleCollection()
 
 void Shell::loadCollection()
 {
-    //load the collection manager by name, like the okular shell does
-    //since we don't really have any other way to find the part
-    KPluginFactory *factory = KPluginLoader("bookmanagerpart").factory();
-    if(!factory){
-        //alert the user of failure
-        KMessageBox::error(this, i18n("Unable to load the collection."));
-        //then return
-        m_collection = 0;
-        return;
+    int index = 0;
+    //check to see if the part is already loaded
+    if(!m_collection){
+        //load the collection manager by name, like the okular shell does
+        //since we don't really have any other way to find the part
+        KPluginFactory *factory = KPluginLoader("bookmanagerpart").factory();
+        if(!factory){
+            //alert the user of failure
+            KMessageBox::error(this, i18n("Unable to load the collection."));
+            //then return
+            m_collection = 0;
+            return;
+        }
+        //if we get to here then everything is working :D and we can cast our part into a part
+        m_collection = factory->create<KParts::Part>(this);
+        if(m_collection){
+            //and now we can perform some setup for our collection so the user can actually use it :D
+            //first we need to tell the part manager that we have a new part for it
+            m_manager->addPart(m_collection);
+            //then we stuff the collection into a tab...
+            //always use tab 0 for the collection, this makes it easy to check if the collection is open, 
+            //and find it so we don't have to do mainview->indexof... everytime we open something to track
+            //it down and make sure we aren't clobbering it with file->open, which causes a crash :(
+            index = mainView->insertTab(0, m_collection->widget(), i18n("Collection"));
+            
+            //connect to the loadbook signal
+            QDBusConnection bus = QDBusConnection::sessionBus();
+            QDBusInterface *interface = 
+                new QDBusInterface("org.bookmanager.BookManagerPart","/BookManagerPart",
+                                "", bus, this);
+            connect(interface, SIGNAL(loadBook(QString)),
+                    this, SLOT(slotOpenFileNewTab(QString)));
+        }
+    } else {
+        //if we already have a loaded collection, redisplay it
+        index =  mainView->insertTab(0, m_collection->widget(), i18n("Collection"));
     }
-    //if we get to here then everything is working :D and we can cast our part into a part
-    m_collection = factory->create<KParts::Part>(this);
-    if(m_collection){
-        //and now we can perform some setup for our collection so the user can actually use it :D
-        //first we need to tell the part manager that we have a new part for it
-        m_manager->addPart(m_collection);
-        //then we stuff the collection into a tab...
-        //always use tab 0 for the collection, this makes it easy to check if the collection is open, 
-        //and find it so we don't have to do mainview->indexof... everytime we open something to track
-        //it down and make sure we aren't clobbering it with file->open, which causes a crash :(
-        mainView->insertTab(0, m_collection->widget(), i18n("Collection"));
-        
-        //connect to the loadbook signal
-        QDBusConnection bus = QDBusConnection::sessionBus();
-        QDBusInterface *interface = 
-            new QDBusInterface("org.bookmanager.BookManagerPart","/BookManagerPart",
-                               "", bus, this);
-        connect(interface, SIGNAL(loadBook(QString)),
-                this, SLOT(slotOpenFileNewTab(QString)));
-    }
+    
+    //switch to the collection tab, which should always be 0...
+    mainView->setCurrentIndex(index);
 }
 
 
