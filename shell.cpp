@@ -133,7 +133,11 @@ void Shell::readerTab(const KUrl *url)
 
 void Shell::slotRemoveTab(int index)
 {
-        mainView->removeTab(index);
+    mainView->removeTab(index);
+    //uncheck the collection toggle if we just hid the collection
+    if(index == 0 && showCollection->isChecked()){
+        showCollection->toggle();
+    }  
 }
 void Shell::slotOpenFile()
 {
