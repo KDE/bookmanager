@@ -123,7 +123,10 @@ void Shell::readerTab(const KUrl *url)
     if (curPage) {
         m_manager->addPart(curPage->getPart());
         QString filename = url->fileName();
-        mainView->addTab(curPage, filename);
+        int index = mainView->addTab(curPage, filename);
+        
+        //then switch to our new tab so we can start reading :D
+        mainView->setCurrentIndex(index);
     }
 
 }
