@@ -1,0 +1,32 @@
+Note: the features planned for each milestone are separated by the 2 parts of the program, collection related features should be listed under "Collection Part", while any features for the user interface/shell should be listed under "Shell". The features listed under each milestone are only the NEW features, features from the previous milestones are assumed to still work under the following milestone. 
+
+version .1
+Collection Part
+     1 Books can be imported
+     2 Books can be deleted 
+     3 Books can be opened
+       note: all of these should be accessable from both the top menu and from a context
+       	     menu, within the part.
+
+Shell
+     1 Files can be opened without using the collection in existing tabs
+     2 Files can be opened into new tabs
+     3 The collection part is loadable/unloadable
+
+
+version .2
+Collection Part
+     1 Books can be sorted by each column
+     2 Book entries can be modified
+Shell
+     1 Remember the load/unload state of the collection between sessions
+
+v .3.... add more stuff here
+
+Version 1
+Collection Part
+     1 User documentation
+     2 Developer docs, how is the db layed out,  what is the dbus interface, etc...
+Shell
+     1 User documentation
+     2 Test setup... This would be a good time to learn how to use the Qt testing bits?
