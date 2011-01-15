@@ -30,7 +30,10 @@ int main(int argc, char *argv[])
                          ki18n("Book Manager"), "0.01",
                          ki18n("An Ebook library manager."),
                          KAboutData::License_GPL,
-                         ki18n("Copyright (c) 2010 Brian Korbein"));
+                         ki18n("Copyright (c) 2010 Brian Korbein"),
+                         KLocalizedString(),
+                         "http://gitorious.org/book-manager/book-manager/"
+                        );
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
 
