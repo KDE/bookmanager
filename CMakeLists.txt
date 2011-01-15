@@ -20,7 +20,23 @@ kde4_add_executable(bookmanager ${bookmanager_SRCS})
 target_link_libraries(bookmanager ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNEWSTUFF3_LIBS} ${QT_QTSQL_LIBRARIES})
 
 
+########### add cpack support to creat packages ##########
+###from the cmake wiki
 
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Simple Ebook Collection manager")
+SET(CPACK_PACKAGE_VENDOR "Brian Korbien")
+##this should really be an actual description, not the featureplan FIXME
+SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/FeaturePlan")
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
+SET(CPACK_PACKAGE_VERSION_MAJOR "0")
+SET(CPACK_PACKAGE_VERSION_MINOR "1")
+SET(CPACK_PACKAGE_VERSION_PATCH "0")
+SET(CPACK_PACKAGE_INSTALL_DIRECTORY "CMake ${CMake_VERSION_MAJOR}.${CMake_VERSION_MINOR}")
+SET(CPACK_STRIP_FILES "bin/MyExecutable")
+SET(CPACK_SOURCE_STRIP_FILES "")
+SET(CPACK_PACKAGE_EXECUTABLES "bookmanager" "Book Manager")
+
+INCLUDE(CPack)
 
 ########### install files ###############
 install(TARGETS bookmanager ${INSTALL_TARGETS_DEFAULT_ARGS} )
