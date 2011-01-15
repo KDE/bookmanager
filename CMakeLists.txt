@@ -24,7 +24,7 @@ target_link_libraries(bookmanager ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_
 ###from the cmake wiki
 
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Simple Ebook Collection manager")
-SET(CPACK_PACKAGE_VENDOR "Brian Korbien")
+SET(CPACK_PACKAGE_VENDOR "")
 ##this should really be an actual description, not the featureplan FIXME
 SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/FeaturePlan")
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
