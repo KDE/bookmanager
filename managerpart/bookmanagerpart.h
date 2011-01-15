@@ -21,6 +21,8 @@
 #define BOOKMANAGERPART_H
 
 #include <kparts/part.h>
+
+class QMenu;
 class Collection;
 class KAction;
 
@@ -43,12 +45,15 @@ signals:
     
 private slots:
     void slotImport();
+    void ShowContextMenu(const QPoint &pos);
 private:
     void setupActions();
     
     Collection *m_collect;
     KAction *import;
     KAction *remove;
+    KAction *openSelected;
+    QMenu *m_contextMenu;
 };
 
 #endif // BOOKMANAGERPART_H

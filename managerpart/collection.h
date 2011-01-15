@@ -29,7 +29,6 @@
 #include <QtDBus>
 
 
-
 class CollectionModel;
 class Collection : public QTableView
 {
@@ -48,6 +47,7 @@ public slots:
 
 private slots:
     void openBook(QModelIndex index);
+    void openBook();
 
 signals:
     void newBook(dbusBook *book);
@@ -56,6 +56,7 @@ signals:
 private:
     CollectionDB *m_db;
     CollectionModel *m_model;
+
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};
 
 

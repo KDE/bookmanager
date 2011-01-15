@@ -32,6 +32,7 @@
 #include <kparts/genericfactory.h>
 #include <KPluginFactory>
 #include <KPluginLoader>
+#include <QMenu>
  
 //Thank you kontact plugin writing instructions for this next part :)
 K_PLUGIN_FACTORY(BookManagerPartFactory, registerPlugin<BookManagerPart>();)
@@ -62,24 +63,41 @@ BookManagerPart::BookManagerPart(QWidget *,QObject * parent, const QVariantList&
     connect(m_collect, SIGNAL(loadBook(QString)),
         this, SIGNAL(loadBook(QString)));
     
+    //turn on context menus
+    m_collect->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_collect, SIGNAL(customContextMenuRequested(QPoint)), 
+        this, SLOT(ShowContextMenu(QPoint)));
+    
     setupActions();
 }
 
 void BookManagerPart::setupActions()
 {
+    //initialize the context menu
+    m_contextMenu = new QMenu(this->widget());
 
+    //setup the actions
     import = new KAction(this);
     import->setText(i18n("&Import a new Book"));
     import->setShortcut(Qt::Key_I);
     actionCollection()->addAction("import", import);
+    m_contextMenu->addAction(import);
     connect(import, SIGNAL(triggered()),
             this, SLOT(slotImport()));
 
     remove = new KAction(this);
     remove->setText(i18n("&Remove a book"));
     actionCollection()->addAction("remove", remove);
+    m_contextMenu->addAction(remove);
     connect(remove, SIGNAL(triggered()),
              m_collect, SLOT(remBook()));
+    
+    //for use in the context menu
+    openSelected = new KAction(this);
+    openSelected->setText(i18n("&Open this book"));
+    m_contextMenu->addAction(openSelected);
+    connect(openSelected, SIGNAL(triggered()),
+            m_collect, SLOT(openBook()));//FIXME this is gonna need an index... which we have no way to send it :(
     
     //set the ui resource file
     setXMLFile("managerpart.rc");
@@ -92,4 +110,22 @@ void BookManagerPart::slotImport()
     connect(dialog, SIGNAL(signalNewBook(dbusBook*)),
             m_collect, SLOT(createBook(dbusBook *)));
     dialog->show();
+}
+
+
+void BookManagerPart::ShowContextMenu(const QPoint& pos)
+{
+    //use indexat to get our index from the qpoint
+    QModelIndex curIndex = m_collect->indexAt(pos);
+    if(!curIndex.isValid()){
+        //the user clicked in the whitespace so we need to disable open and remove
+        openSelected->setEnabled(false);
+        remove->setEnabled(false);
+        m_contextMenu->exec(QCursor::pos());
+        //after we close the menu, turn open and remove back on
+        openSelected->setEnabled(true);
+        remove->setEnabled(true);
+    } else {
+        m_contextMenu->exec(QCursor::pos());
+    }
 }

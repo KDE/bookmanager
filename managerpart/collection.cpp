@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <QStringList>
 
+
 Collection::Collection(QWidget* parent)
         : QTableView(parent)
 {
@@ -100,5 +101,32 @@ void Collection::openBook(QModelIndex index)
     KUrl bookUrl = KUrl(m_model->data(urlIndex).toString());
     //emit it as a qstring so we can send it easily over dbus :D
     emit loadBook(bookUrl.url());
+
 }
 
+void Collection::openBook()
+{
+    //this uses selectedIndexes and a  foreach to let us open multiple books as needed without
+    //needing to pass in the index. I should probably replace all the uses of 
+    //Collection::openBook(QModelIndex index) with this, as its more flexible, in theory at least.
+    
+    //the foreach loops over every column in each row so im using a counter to exit the loop when
+    //it starts on the second column.
+    QModelIndexList openUs = selectedIndexes();
+    //verify that we got at least one index... if the remove book command is called 
+    //without having anything selected we segfault :(
+    if(openUs.length() > 0){
+      int index = openUs.at(0).row();
+
+      foreach(const QModelIndex &openMe,  openUs) {
+      int row = openMe.row();
+      if (row < index) {
+          return;
+      }
+      //here we cheat and just call the old version to actually do all the work.
+      openBook(openMe);
+      index += 1;
+      }
+    }
+    
+}
