@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="bookmanagerpart" version="1">
+    <MenuBar>
+        <Menu name="Collection"><text>Collection</text>
+          <Action name="import"/>
+          <Action name="remove"/>
+        </Menu>
+    </MenuBar>
+    
+</kpartgui>
