@@ -6,7 +6,7 @@ include (KDE4Defaults)
 
 add_subdirectory(managerpart)
 
-include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} )
+include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 
 set(bookmanager_SRCS   
@@ -14,7 +14,7 @@ set(bookmanager_SRCS
     shell.cpp
     readerpage.cpp
  )
-
+kde4_add_kcfg_files(bookmanager_SRCS GENERATE_MOC bookmanager.kcfgc)
 kde4_add_executable(bookmanager ${bookmanager_SRCS})
 
 target_link_libraries(bookmanager ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNEWSTUFF3_LIBS} ${QT_QTSQL_LIBRARIES})
@@ -42,4 +42,5 @@ INCLUDE(CPack)
 install(TARGETS bookmanager ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES bookmanager.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES bookmanagerui.rc  DESTINATION  ${DATA_INSTALL_DIR}/bookmanager )
-install( FILES bookmanager.knsrc DESTINATION ${CONFIG_INSTALL_DIR})		
+install( FILES bookmanager.knsrc DESTINATION ${CONFIG_INSTALL_DIR})
+install( FILES bookmanager.kcfg DESTINATION ${KCFG_INSTALL_DIR})
