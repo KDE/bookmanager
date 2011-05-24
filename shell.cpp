@@ -52,14 +52,17 @@ Shell::Shell(QWidget *parent)
     //make tabs closable
     mainView->setTabsClosable(true);
     
-    //make sure the partmanager is connected before we start loading parts!
+	//zero out the collection so it can be properly checked for existance later on
+	m_collection = 0;
+    
     connect(mainView, SIGNAL(tabCloseRequested(int)),
             this, SLOT(slotRemoveTab(int)));
     
     m_manager->setAllowNestedParts(true);
     connect(mainView, SIGNAL(currentChanged(int)),
 	    this, SLOT(slotUpdateMenu(int)));
-    
+	
+    //make sure the partmanager is connected before we start loading parts!
     connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
             this, SLOT(createGUI(KParts::Part*)));
     
@@ -149,7 +152,7 @@ void Shell::slotOpenFile()
     } else {
         //check to see if the collection manager is open, and if thats our current tab
         //since we can't open files with the collection manager...
-        if(showCollection->isChecked() && (mainView->currentIndex() == 0)){
+        if(mainView->indexOf(m_collection->widget()) == mainView->currentIndex()){
             //we're trying to open things in the collection... which is bad, so use a new tab :D
             slotOpenFileNewTab();
         } else {
@@ -217,6 +220,7 @@ void Shell::slotToggleCollection()
 {
     //open and close the collection tab
     if(showCollection->isChecked()){
+        //redisplay the collection and switch to its tab
         loadCollection();
     } else {
         mainView->removeTab( mainView->indexOf(m_collection->widget()) );
@@ -259,11 +263,10 @@ void Shell::loadCollection()
                     this, SLOT(slotOpenFileNewTab(QString)));
         }
     } else {
-        //if we already have a loaded collection, redisplay it
-        index =  mainView->insertTab(0, m_collection->widget(), i18n("Collection"));
-    }
-    
-    //switch to the collection tab, which should always be 0...
+		//if the collection already exists just reload it
+		index = mainView->insertTab(0, m_collection->widget(), i18n("Collection"));
+	}
+    //switch to the collection tab, which should always be 0 but use the index anyway...
     mainView->setCurrentIndex(index);
 }
 
