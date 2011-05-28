@@ -35,6 +35,7 @@
 
 #include "readerpage.h"
 #include <qdbusconnection.h>
+#include "bookmanagerconfig.h"
 
 //PUBLIC
 Shell::Shell(QWidget *parent)
@@ -67,8 +68,8 @@ Shell::Shell(QWidget *parent)
             this, SLOT(createGUI(KParts::Part*)));
     
     
-    //check if the collection toggle is turned on, load the collection if it is
-    
+    //check if the collection toggle is turned on in the config, load the collection if it is
+    showCollection->setChecked(BookManagerConfig::collection());
     if(showCollection->isChecked()){
         loadCollection();
     }
@@ -225,6 +226,8 @@ void Shell::slotToggleCollection()
     } else {
         mainView->removeTab( mainView->indexOf(m_collection->widget()) );
     }
+	//save the current state of the tab to the config file
+	slotSaveConfig();
 }
 
 void Shell::loadCollection()
@@ -270,7 +273,19 @@ void Shell::loadCollection()
     mainView->setCurrentIndex(index);
 }
 
+bool Shell::readConfig()
+{
+	//read the config file to check for the users collection loading preference, defaults to show collection
+	return BookManagerConfig::collection();
+}
 
+
+void Shell::slotSaveConfig()
+{
+//save the users collection loading preference
+	BookManagerConfig::setCollection(showCollection->isChecked());
+	BookManagerConfig::self()->writeConfig();
+}
 
 
 

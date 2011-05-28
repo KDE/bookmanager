@@ -49,9 +49,10 @@ private slots:
     void slotUpdateMenu(int index);
     
     void slotToggleCollection();
-
+	void slotSaveConfig();
 private:
-    void setupActions();
+    bool readConfig();
+	void setupActions();
     void readerTab(const KUrl* url);
     
     void loadCollection();

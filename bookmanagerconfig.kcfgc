@@ -1,0 +1,4 @@
+File=bookmanagerconfig.kcfg
+ClassName=BookManagerConfig
+Singleton=true 
+Mutators=true

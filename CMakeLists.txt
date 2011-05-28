@@ -14,7 +14,8 @@ set(bookmanager_SRCS
     shell.cpp
     readerpage.cpp
  )
-kde4_add_kcfg_files(bookmanager_SRCS GENERATE_MOC bookmanager.kcfgc)
+
+kde4_add_kcfg_files(bookmanager_SRCS bookmanagerconfig.kcfgc)
 kde4_add_executable(bookmanager ${bookmanager_SRCS})
 
 target_link_libraries(bookmanager ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNEWSTUFF3_LIBS} ${QT_QTSQL_LIBRARIES})
@@ -43,4 +44,4 @@ install(TARGETS bookmanager ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES bookmanager.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES bookmanagerui.rc  DESTINATION  ${DATA_INSTALL_DIR}/bookmanager )
 install( FILES bookmanager.knsrc DESTINATION ${CONFIG_INSTALL_DIR})
-install( FILES bookmanager.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+install( FILES bookmanagerconfig.kcfg DESTINATION ${KCFG_INSTALL_DIR})
