@@ -104,3 +104,21 @@ bool CollectionDB::initDB()
 }
 
 
+bool CollectionDB::checkdupe(dbusBook* book, int &id)
+// Check for duplicate entries in the database using the url and prompt the user to either overwrite
+// cancel the import, use the id reference to pass the id back to the caller when it's found
+{
+
+	QSqlQuery query;
+	query.prepare("Select id FROM collection WHERE url = :url");
+	query.bindValue(0, book->url);
+	query.exec();
+	//if the query returns a result query.first will return true, and we can get the id of the original
+	if(query.first()){
+		id = query.value().toInt();
+		query.finish();
+		return true;
+	}
+	query.finish();
+	return false;
+}
