@@ -36,6 +36,7 @@ Collection::Collection(QWidget* parent)
     setModel(m_model);
     setEditTriggers(QAbstractItemView::NoEditTriggers); //TODO make the table editable??
     setSelectionBehavior(QAbstractItemView::SelectRows);
+	setSortingEnabled(true);//enable sorting for the table
     //create a prettier header for the view
     QHeaderView *head = horizontalHeader();
     head->setResizeMode(QHeaderView::Stretch);
