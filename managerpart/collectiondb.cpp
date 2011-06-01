@@ -22,6 +22,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <kurl.h>
 
 //QT includes
@@ -30,7 +31,8 @@
 #include <QFile>
 #include <QSqlError>
 
-
+#include <iostream>
+using namespace std;
 
 //PUBLIC
 CollectionDB::CollectionDB()
@@ -64,18 +66,44 @@ CollectionDB::~CollectionDB()
 //PUBLIC SLOTS
 void CollectionDB::addBook(dbusBook *book)
 {
+	int id;
     QSqlQuery query;
-    //set id to NULL for sqlite to autoincrement the id, we don't care about the id's so...
-    query.prepare("INSERT INTO collection (title, summary, author, release, releaseDate, genre, url) "
-                  "VALUES (:title, :summary, :author, :release, :releaseDate, :genre, :url)");
-    query.bindValue(0, book->title);
-    query.bindValue(1, book->summary);
-    query.bindValue(2, book->author);
-    query.bindValue(3, book->release);
-    query.bindValue(4, book->releaseDate);
-    query.bindValue(5, book->genre);
-    query.bindValue(6, book->url);
-    query.exec();
+	if(checkdupe(book, id)){
+		//this is a dupe, check with the user to see if we want to overwrite or cancel
+		if(KMessageBox::warningContinueCancel 
+			(this, i18n("Would you like to overwrite the existing entry for this file?")) 
+			== 2){//2 is the buttoncode for cancel
+				return;//if the user hit cancel, return without doing anything
+			} else {
+				//if the user didn't cancel then we have some work to do :P
+				query.prepare
+				("UPDATE collection SET title = :title, summary = :summary,"
+				" author = :author, release = :release, releaseDate = :releaseDate," 
+				" genre = :genre, url = :url "
+				" WHERE id = :id");
+				query.bindValue(0, book->title);
+				query.bindValue(1, book->summary); 
+				query.bindValue(2, book->author); 
+				query.bindValue(3, book->release);
+				query.bindValue(4, book->releaseDate);
+				query.bindValue(5, book->genre); 
+				query.bindValue(6, book->url); 
+				query.bindValue(7, id); 
+				query.exec();
+			}
+	}else {
+		//set id to NULL for sqlite to autoincrement the id, we don't care about the id's so...
+		query.prepare("INSERT INTO collection (title, summary, author, release, releaseDate, genre, url) "
+					"VALUES (:title, :summary, :author, :release, :releaseDate, :genre, :url)");
+		query.bindValue(0, book->title);
+		query.bindValue(1, book->summary);
+		query.bindValue(2, book->author);
+		query.bindValue(3, book->release);
+		query.bindValue(4, book->releaseDate);
+		query.bindValue(5, book->genre);
+		query.bindValue(6, book->url);
+		query.exec();
+	}
     query.finish();
     emit isDirty();
 }
@@ -115,7 +143,7 @@ bool CollectionDB::checkdupe(dbusBook* book, int &id)
 	query.exec();
 	//if the query returns a result query.first will return true, and we can get the id of the original
 	if(query.first()){
-		id = query.value().toInt();
+		id = query.value(0).toInt();
 		query.finish();
 		return true;
 	}
