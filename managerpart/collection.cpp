@@ -34,7 +34,7 @@ Collection::Collection(QWidget* parent)
     m_model = new CollectionModel();
     //set up the view
     setModel(m_model);
-    setEditTriggers(QAbstractItemView::NoEditTriggers); //TODO make the table editable??
+    setEditTriggers(QAbstractItemView::SelectedClicked);
     setSelectionBehavior(QAbstractItemView::SelectRows);
 	setSortingEnabled(true);//enable sorting for the table
     //create a prettier header for the view
