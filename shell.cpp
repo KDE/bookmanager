@@ -124,15 +124,21 @@ void Shell::readerTab(const KUrl *url)
     //reader page will open appropriate kpart based on the url, and
     //using partmanager will keep the menus current for the displayed tab
     ReaderPage * curPage = new ReaderPage(url, this);
-    if (curPage) {
-        m_manager->addPart(curPage->getPart());
+	KParts::ReadOnlyPart *thisPart = 0;
+	//get the part first, so we can check and see if it was successfully created
+	thisPart = curPage->getPart();
+    if (thisPart != 0) {
+        m_manager->addPart(thisPart);
         QString filename = url->fileName();
         int index = mainView->addTab(curPage, filename);
         
         //then switch to our new tab so we can start reading :D
         mainView->setCurrentIndex(index);
-    }
-
+    } else {
+		//if we couldn't open the part, display an error 
+		KMessageBox::error(this, i18n("Book Manager was unable to load the file: ").append(url->prettyUrl()), url->prettyUrl());	
+		
+	}
 }
 
 void Shell::slotRemoveTab(int index)
