@@ -97,7 +97,7 @@ void BookManagerPart::setupActions()
     openSelected->setText(i18n("&Open this book"));
     m_contextMenu->addAction(openSelected);
     connect(openSelected, SIGNAL(triggered()),
-            m_collect, SLOT(openBook()));//FIXME this is gonna need an index... which we have no way to send it :(
+            m_collect, SLOT(openBook()));
     
     //set the ui resource file
     setXMLFile("managerpart.rc");
