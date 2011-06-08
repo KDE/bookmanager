@@ -45,6 +45,7 @@ signals:
     
 private slots:
     void slotImport();
+	void slotSearch();
     void ShowContextMenu(const QPoint &pos);
 private:
     void setupActions();
@@ -53,6 +54,7 @@ private:
     KAction *import;
     KAction *remove;
     KAction *openSelected;
+	KAction *search;
     QMenu *m_contextMenu;
 };
 

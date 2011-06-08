@@ -91,6 +91,13 @@ void BookManagerPart::setupActions()
     m_contextMenu->addAction(remove);
     connect(remove, SIGNAL(triggered()),
              m_collect, SLOT(remBook()));
+	
+	search = new KAction(this);
+	search->setText(i18n("&Search the Collection"));
+	actionCollection()->addAction("search", search);
+	m_contextMenu->addAction(search);
+	connect(search, SIGNAL(triggered()),
+			this, SLOT(slotSearch()));
     
     //for use in the context menu
     openSelected = new KAction(this);
@@ -128,4 +135,8 @@ void BookManagerPart::ShowContextMenu(const QPoint& pos)
     } else {
         m_contextMenu->exec(QCursor::pos());
     }
+}
+void BookManagerPart::slotSearch()
+{
+	//TODO
 }
