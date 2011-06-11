@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SearchPage</class>
+ <widget class="QWidget" name="SearchPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>823</width>
+    <height>472</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLineEdit" name="queryEdit">
+       <property name="inputMask">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="searchButton">
+       <property name="text">
+        <string>Search</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableView" name="resultTable"/>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>queryEdit</tabstop>
+  <tabstop>searchButton</tabstop>
+  <tabstop>resultTable</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>queryEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>searchButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>694</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>811</x>
+     <y>18</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

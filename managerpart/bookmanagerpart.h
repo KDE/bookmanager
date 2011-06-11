@@ -22,8 +22,8 @@
 
 #include <kparts/part.h>
 
+class SearchPage;
 class QMenu;
-class Collection;
 class KAction;
 
 /*
@@ -50,7 +50,7 @@ private slots:
 private:
     void setupActions();
     
-    Collection *m_collect;
+    SearchPage *m_searchpage;
     KAction *import;
     KAction *remove;
     KAction *openSelected;

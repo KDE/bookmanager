@@ -1,7 +1,8 @@
 #based off the kontact plugin tutorial on techbase
 include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} )
 
-set(bookmanager_manager_PART_SRCS 
+set(bookmanager_manager_PART_SRCS
+	searchpage.cpp
     bookmanagerpart.cpp
     importdialog.cpp
     collection.cpp
@@ -12,7 +13,7 @@ set(bookmanager_manager_PART_SRCS
 qt4_add_dbus_adaptor(bookmanager_manager_PART_SRCS org.bookmanager.BookManagerPart.xml
                     bookmanagerpart.h BookManagerPart)
 
-kde4_add_ui_files(bookmanager_manager_PART_SRCS importdialog.ui)
+kde4_add_ui_files(bookmanager_manager_PART_SRCS importdialog.ui searchpage.ui)
 
 kde4_add_plugin(bookmanagerpart ${bookmanager_manager_PART_SRCS})
 
