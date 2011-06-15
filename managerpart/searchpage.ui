@@ -27,9 +27,38 @@
       </widget>
      </item>
      <item>
+      <widget class="QComboBox" name="searchTypeBox">
+       <property name="toolTip">
+        <string>Search the collection by...</string>
+       </property>
+       <item>
+        <property name="text">
+         <string comment="The name of a book">Title</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string comment="The writer of a book">Author</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string comment="The books category">Genre</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="searchButton">
        <property name="text">
         <string>Search</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="resetButton">
+       <property name="text">
+        <string>Reset</string>
        </property>
       </widget>
      </item>
@@ -42,7 +71,6 @@
  </widget>
  <tabstops>
   <tabstop>queryEdit</tabstop>
-  <tabstop>searchButton</tabstop>
   <tabstop>resultTable</tabstop>
  </tabstops>
  <resources/>
