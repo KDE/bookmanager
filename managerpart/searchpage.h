@@ -31,8 +31,11 @@ public slots:
 private slots:
     void openBook(QModelIndex index);
     void openBook();
+	void newQuery();
+	void resetQuery();
 
 signals:
+	void query(QString *query, QString *column);
     void newBook(dbusBook *book);
     //can't emit a Kurl, so emit it as a string
    Q_SCRIPTABLE void loadBook(QString url);
@@ -41,7 +44,7 @@ private:
     CollectionModel *m_model;
 
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};
-
+	
 };
 
 #endif // SEARCHPAGE_H

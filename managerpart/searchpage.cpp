@@ -63,6 +63,13 @@ SearchPage::SearchPage(QWidget *parent) :
     //load the book on doubleclick anywhere in that row?
     connect(resultTable, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(openBook(QModelIndex)));
+	
+	//connect the ui signals to the query slots
+	connect(searchButton, SIGNAL(clicked(bool)),
+			this, SLOT(newQuery()));
+			
+	connect(resetButton, SIGNAL(clicked(bool)),
+		this, SLOT(resetQuery()));
 
 }
 
@@ -145,4 +152,29 @@ QModelIndex SearchPage::indexAt(const QPoint& pos)
 {
 	return resultTable->indexAt(pos);
 }
+
+//when the user clicks the search button, pull values from the lineedit and combobox 
+//and emit the newQuery signal.
+void SearchPage::newQuery()
+{
+	QString querytext;
+	QString columnName;
 	
+	//get the values from the ui...
+	//if the query edit is empty default to *, otherwise emit whatever is contained
+	querytext = queryEdit->text().isEmpty() ? "*" : queryEdit->text();
+	columnName = searchTypeBox->currentText();
+	
+	emit query(&querytext, &columnName);
+}
+
+
+void SearchPage::resetQuery()
+{
+	//clear the lineedit
+	queryEdit->clear();
+	//reset the query to the default by emiting a defaulted query
+	QString text = "*";
+	QString column = "title"; //doesn't really matter which column we pick...
+	emit query(&text, &column);
+}
