@@ -19,8 +19,11 @@
 
 #ifndef COLLECTIONMODEL_H
 #define COLLECTIONMODEL_H
+
 #include <qsqltablemodel.h>
 #include "collectiondb.h"
+
+class QString;
 
 class CollectionModel : public QSqlTableModel
 {
@@ -28,6 +31,9 @@ class CollectionModel : public QSqlTableModel
 public:
     CollectionModel();
     ~CollectionModel();
+	
+public slots:
+	void query(QString *queryText, QString *columnName);
 
 private:
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};

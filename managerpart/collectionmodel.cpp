@@ -21,8 +21,8 @@
 #include <klocale.h>
 #include <QStringList>
 #include <qheaderview.h>
-#include <kdebug.h>
-
+#include <QSqlQuery>
+#include <QString>
 
 CollectionModel::CollectionModel()
         : QSqlTableModel()
@@ -53,4 +53,22 @@ CollectionModel::CollectionModel()
 CollectionModel::~CollectionModel()
 {
     clear();
+}
+
+void CollectionModel::query(QString* queryText, QString* columnName)
+{
+	/*
+	 * In order for us to do case insensitive searchs, and partial word searchs
+	 * we will use sqlite3's built in LIKE operator, documented at
+	 * http://www.sqlite.org/lang_expr.html
+	 * which, combined with appended % at the start and end of the search string
+	 * will give us partial, case insensitive matching. 	 */	
+	
+	//prepare the filter
+	QString filterText;
+	filterText.append(columnName->toLower()).append(" LIKE ")
+		.append("\"%").append(queryText).append("%\"");
+		
+	//run the filter
+	setFilter(filterText);
 }

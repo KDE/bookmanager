@@ -70,6 +70,8 @@ SearchPage::SearchPage(QWidget *parent) :
 			
 	connect(resetButton, SIGNAL(clicked(bool)),
 		this, SLOT(resetQuery()));
+	connect(this, SIGNAL(query(QString*,QString*)),
+		m_model, SLOT(query(QString*,QString*)));
 
 }
 
@@ -162,7 +164,7 @@ void SearchPage::newQuery()
 	
 	//get the values from the ui...
 	//if the query edit is empty default to *, otherwise emit whatever is contained
-	querytext = queryEdit->text().isEmpty() ? "*" : queryEdit->text();
+	querytext = queryEdit->text();
 	columnName = searchTypeBox->currentText();
 	
 	emit query(&querytext, &columnName);
@@ -174,7 +176,7 @@ void SearchPage::resetQuery()
 	//clear the lineedit
 	queryEdit->clear();
 	//reset the query to the default by emiting a defaulted query
-	QString text = "*";
+	QString text = "";
 	QString column = "title"; //doesn't really matter which column we pick...
 	emit query(&text, &column);
 }
