@@ -45,7 +45,6 @@ signals:
     
 private slots:
     void slotImport();
-	void slotSearch();
     void ShowContextMenu(const QPoint &pos);
 private:
     void setupActions();

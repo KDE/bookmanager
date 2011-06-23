@@ -26,13 +26,13 @@ public:
 public slots:
     void createBook(dbusBook *book);
     void remBook();
-    void updateModel();
+    void updateModel();	
+	void newQuery();
+	void resetQuery();
 
 private slots:
     void openBook(QModelIndex index);
     void openBook();
-	void newQuery();
-	void resetQuery();
 
 signals:
 	void query(QString *query, QString *column);
