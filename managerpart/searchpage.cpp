@@ -104,7 +104,9 @@ void SearchPage::remBook()
 
 void SearchPage::updateModel()
 {
-    m_model->select();
+	//reset the query instead of just reselecting because the filter may not show our 
+	//newly added book
+    resetQuery();
 }
 
 void SearchPage::openBook(QModelIndex index)
