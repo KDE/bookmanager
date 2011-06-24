@@ -17,17 +17,10 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLineEdit" name="queryEdit">
-       <property name="inputMask">
-        <string/>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
+      <widget class="KLineEdit" name="queryEdit"/>
      </item>
      <item>
-      <widget class="QComboBox" name="searchTypeBox">
+      <widget class="KComboBox" name="searchTypeBox">
        <property name="toolTip">
         <string>Search the collection by...</string>
        </property>
@@ -69,8 +62,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
-  <tabstop>queryEdit</tabstop>
   <tabstop>resultTable</tabstop>
  </tabstops>
  <resources/>
@@ -82,12 +81,12 @@
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>694</x>
-     <y>16</y>
+     <x>489</x>
+     <y>18</y>
     </hint>
     <hint type="destinationlabel">
-     <x>811</x>
-     <y>18</y>
+     <x>725</x>
+     <y>27</y>
     </hint>
    </hints>
   </connection>
