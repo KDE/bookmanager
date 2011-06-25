@@ -53,7 +53,7 @@ Shell::Shell(QWidget *parent)
     //make tabs closable
     mainView->setTabsClosable(true);
     
-	//zero out the collection so it can be properly checked for existance later on
+	//zero out the collection so it can be properly checked for existence later on
 	m_collection = 0;
     
     connect(mainView, SIGNAL(tabCloseRequested(int)),
@@ -259,7 +259,7 @@ void Shell::loadCollection()
             m_manager->addPart(m_collection);
             //then we stuff the collection into a tab...
             //always use tab 0 for the collection, this makes it easy to check if the collection is open, 
-            //and find it so we don't have to do mainview->indexof... everytime we open something to track
+            //and find it so we don't have to do mainview->indexof... every time we open something to track
             //it down and make sure we aren't clobbering it with file->open, which causes a crash :(
             index = mainView->insertTab(0, m_collection->widget(), i18n("Collection"));
             
