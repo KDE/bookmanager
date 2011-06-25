@@ -26,8 +26,10 @@
 #include <qheaderview.h>
 #include <klocale.h>
 #include <QStringList>
+#include <QScrollBar>
 
 
+#include <QTextStream>
 
 SearchPage::SearchPage(QWidget *parent) :
     QWidget(parent)
@@ -154,8 +156,33 @@ void SearchPage::openBook()
 //can be contextual...
 QModelIndex SearchPage::indexAt(const QPoint& pos)
 {
-	return resultTable->indexAt(pos);
+	//we have to map the position to the parent widget because the tableview gives
+	//it relative to the viewport, while we care about the whole widget
+	return  resultTable->indexAt(mapToViewport(pos));
 }
+
+//map the position to the viewport from from the Translates the widget
+//coordinate pos to the coordinate system of the viewport
+const QPoint SearchPage::mapToViewport(const QPoint& pos)
+{
+	//FIXME use magic numbers to offset the pointer to the corner of the viewport
+	//i can't find a better way to get the offset, since the functions that should give
+	//it are protected and i don't have access
+	QPoint convertedpoint(pos - QPoint(23, 58));
+	/*
+	 * debugging code to display the position of the mouse and the position of the first row.
+	 * im leaving this in here because i really would like to find a better solution than 
+	 * magic numbers based on guessing what the upper right hand of the viewport is
+	 * the only solution i can see would be to subclass the tableview just to expose the
+	 * two values i need.
+	QTextStream out(stdout);
+	out << "NOT "  << pos.x() << ","<< pos.y() << " "<<  resultTable->indexAt(convertedpoint).row() << "\n";
+	out << "CON " << convertedpoint.x() << ","<< convertedpoint.y()  << "\n";
+	out << "ONE " << resultTable->rowViewportPosition(1) << "\n"; 
+	*/
+	return convertedpoint;
+}
+
 
 //when the user clicks the search button, pull values from the lineedit and combobox 
 //and emit the newQuery signal.

@@ -45,6 +45,8 @@ signals:
 private:
     CollectionDB *m_db;
     CollectionModel *m_model;
+	
+	const QPoint mapToViewport(const QPoint& pos);
 
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};
 	
