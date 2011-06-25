@@ -11,23 +11,16 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLineEdit" name="queryEdit">
-       <property name="inputMask">
-        <string/>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
+      <widget class="KLineEdit" name="queryEdit"/>
      </item>
      <item>
-      <widget class="QComboBox" name="searchTypeBox">
+      <widget class="KComboBox" name="searchTypeBox">
        <property name="toolTip">
         <string>Search the collection by...</string>
        </property>
@@ -43,22 +36,28 @@
        </item>
        <item>
         <property name="text">
-         <string comment="The books category">Genre</string>
+         <string comment="The book's category">Genre</string>
         </property>
        </item>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="searchButton">
+       <property name="accessibleName">
+        <string/>
+       </property>
+       <property name="accessibleDescription">
+        <string/>
+       </property>
        <property name="text">
-        <string>Search</string>
+        <string comment="Search the book collection">Search</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="resetButton">
        <property name="text">
-        <string>Reset</string>
+        <string comment="Reset the search">Reset</string>
        </property>
       </widget>
      </item>
@@ -69,8 +68,19 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
-  <tabstop>queryEdit</tabstop>
   <tabstop>resultTable</tabstop>
  </tabstops>
  <resources/>
@@ -82,12 +92,12 @@
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>694</x>
-     <y>16</y>
+     <x>489</x>
+     <y>18</y>
     </hint>
     <hint type="destinationlabel">
-     <x>811</x>
-     <y>18</y>
+     <x>725</x>
+     <y>27</y>
     </hint>
    </hints>
   </connection>
