@@ -1,5 +1,0 @@
-[KNewStuff3]
-ProvidersUrl=http://bookmanagertestsite.nfshost.com/provider.xml
-TargetDir=bookmanager
-Uncompress=archive
-Categories=Books, Ebooks
