@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -36,22 +36,28 @@
        </item>
        <item>
         <property name="text">
-         <string comment="The books category">Genre</string>
+         <string comment="The book's category">Genre</string>
         </property>
        </item>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="searchButton">
+       <property name="accessibleName">
+        <string/>
+       </property>
+       <property name="accessibleDescription">
+        <string/>
+       </property>
        <property name="text">
-        <string>Search</string>
+        <string comment="Search the book collection">Search</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="resetButton">
        <property name="text">
-        <string>Reset</string>
+        <string comment="Reset the search">Reset</string>
        </property>
       </widget>
      </item>
@@ -67,6 +73,11 @@
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
