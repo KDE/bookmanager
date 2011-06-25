@@ -14,7 +14,10 @@ class QModelIndex;
 class SearchPage : public QWidget, public Ui_SearchPage
 {
     Q_OBJECT
-
+    //I'm pretty sure this is correct? I'd make it org.kde but
+    //I think I'd need to actually be part of kde proper to use it?
+    Q_CLASSINFO("D-Bus Interface", "org.bookmanager.BookManagerPart")
+    
 public:
 	SearchPage(QWidget *parent = 0);
 	
@@ -42,6 +45,8 @@ signals:
 private:
     CollectionDB *m_db;
     CollectionModel *m_model;
+	
+	const QPoint mapToViewport(const QPoint& pos);
 
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};
 	
