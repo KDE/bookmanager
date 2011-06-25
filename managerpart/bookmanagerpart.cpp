@@ -41,7 +41,7 @@ K_PLUGIN_FACTORY(BookManagerPartFactory, registerPlugin<BookManagerPart>();)
 K_EXPORT_PLUGIN(BookManagerPartFactory("bookmanagerpart", "BookManager"))
 
 //qwidget and qvariant are added here even though we don't use them
-//otherwise it doesnt build :(
+//otherwise it doesn't build :(
 BookManagerPart::BookManagerPart(QWidget *,QObject * parent, const QVariantList&) : Part(parent)
 {
     //set up the dbus bits --taken from the techbase tutorial
