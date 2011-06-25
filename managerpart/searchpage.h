@@ -23,6 +23,7 @@
 #include <QWidget>
 
 #include "ui_searchpage.h"
+#include "bookstruct.h"
 
 
 

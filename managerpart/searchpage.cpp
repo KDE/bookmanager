@@ -16,9 +16,11 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 */
+#include "searchpage.h"
+
 #include "collectiondb.h"
 #include "collectionmodel.h"
-#include "searchpage.h"
+#include "bookstruct.h"
 
 #include <QSqlTableModel>
 #include <kdebug.h>
