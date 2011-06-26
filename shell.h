@@ -47,17 +47,17 @@ private slots:
     void slotRemoveTab(int index);
     void slotReaderTab(KUrl *url);
     void slotUpdateMenu(int index);
-    
+
     void slotToggleCollection();
-	void slotSaveConfig();
+    void slotSaveConfig();
 private:
     bool readConfig();
-	void setupActions();
+    void setupActions();
     void readerTab(const KUrl* url);
-    
+
     void loadCollection();
     KParts::Part *m_collection;
-    
+
     KTabWidget *mainView;
     KParts::PartManager *m_manager;
 
@@ -68,7 +68,7 @@ private:
     KAction *import;
     KAction *remove;
 
-    
+
     KToggleAction *showCollection;
 };
 #endif // SHELL_H

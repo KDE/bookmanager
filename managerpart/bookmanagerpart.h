@@ -39,21 +39,21 @@ class BookManagerPart : public KParts::Part
     Q_OBJECT
 public:
     BookManagerPart(QWidget*, QObject* parent, const QVariantList&);
-        
+
 signals:
     void loadBook(QString url);
-    
+
 private slots:
     void slotImport();
     void ShowContextMenu(const QPoint &pos);
 private:
     void setupActions();
-    
+
     SearchPage *m_searchpage;
     KAction *import;
     KAction *remove;
     KAction *openSelected;
-	KAction *search;
+    KAction *search;
     QMenu *m_contextMenu;
 };
 

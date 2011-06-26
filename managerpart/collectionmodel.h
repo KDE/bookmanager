@@ -31,9 +31,9 @@ class CollectionModel : public QSqlTableModel
 public:
     CollectionModel();
     ~CollectionModel();
-	
+
 public slots:
-	void query(QString *queryText, QString *columnName);
+    void query(QString *queryText, QString *columnName);
 
 private:
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};

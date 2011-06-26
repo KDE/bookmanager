@@ -26,7 +26,7 @@
 #include "QVBoxLayout"
 
 ReaderPage::ReaderPage(const KUrl* url, QWidget* parent)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     QVBoxLayout *mainlayout = new QVBoxLayout;
     QString currentType = KMimeType::findByUrl(*url)->name();

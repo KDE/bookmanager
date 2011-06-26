@@ -33,7 +33,7 @@
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <QMenu>
- 
+
 //Thank you kontact plugin writing instructions for this next part :)
 K_PLUGIN_FACTORY(BookManagerPartFactory, registerPlugin<BookManagerPart>();)
 //I think this is right? my component is named "bookmanagerpart" and i think the
@@ -42,32 +42,32 @@ K_EXPORT_PLUGIN(BookManagerPartFactory("bookmanagerpart", "BookManager"))
 
 //qwidget and qvariant are added here even though we don't use them
 //otherwise it doesn't build :(
-BookManagerPart::BookManagerPart(QWidget *,QObject * parent, const QVariantList&) : Part(parent)
+BookManagerPart::BookManagerPart(QWidget *, QObject * parent, const QVariantList&) : Part(parent)
 {
     //set up the dbus bits --taken from the techbase tutorial
     new BookManagerPartAdaptor(this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.registerObject("/BookManagerPart", this);
     dbus.registerService("org.bookmanager.BookManagerPart");
-        
+
     //set up the widget
-    
-    
-    
+
+
+
     m_searchpage = new SearchPage;
     setWidget(m_searchpage);
-    
+
     //connect the loadBook signal in the collection to the the one
-    //here so it will get emitted properly by dbus 
+    //here so it will get emitted properly by dbus
     //FIXME probably a better way to do this
     connect(m_searchpage, SIGNAL(loadBook(QString)),
-        this, SIGNAL(loadBook(QString)));
-    
+            this, SIGNAL(loadBook(QString)));
+
     //turn on context menus
     m_searchpage->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(m_searchpage, SIGNAL(customContextMenuRequested(QPoint)), 
-        this, SLOT(ShowContextMenu(QPoint)));
-    
+    connect(m_searchpage, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(ShowContextMenu(QPoint)));
+
     setupActions();
 }
 
@@ -90,22 +90,22 @@ void BookManagerPart::setupActions()
     actionCollection()->addAction("remove", remove);
     m_contextMenu->addAction(remove);
     connect(remove, SIGNAL(triggered()),
-             m_searchpage, SLOT(remBook()));
-	
-	search = new KAction(this);
-	search->setText(i18n("Start a new &Search"));
-	actionCollection()->addAction("search", search);
-	m_contextMenu->addAction(search);
-	connect(search, SIGNAL(triggered()),
-			m_searchpage, SLOT(resetQuery()));
-    
+            m_searchpage, SLOT(remBook()));
+
+    search = new KAction(this);
+    search->setText(i18n("Start a new &Search"));
+    actionCollection()->addAction("search", search);
+    m_contextMenu->addAction(search);
+    connect(search, SIGNAL(triggered()),
+            m_searchpage, SLOT(resetQuery()));
+
     //for use in the context menu
     openSelected = new KAction(this);
     openSelected->setText(i18n("&Open this book"));
     m_contextMenu->addAction(openSelected);
     connect(openSelected, SIGNAL(triggered()),
             m_searchpage, SLOT(openBook()));
-    
+
     //set the ui resource file
     setXMLFile("managerpart.rc");
 
@@ -124,7 +124,7 @@ void BookManagerPart::ShowContextMenu(const QPoint& pos)
 {
     //use indexat to get our index from the qpoint
     QModelIndex curIndex = m_searchpage->indexAt(pos);
-    if(!curIndex.isValid()){
+    if (!curIndex.isValid()) {
         //the user clicked in the whitespace so we need to disable open and remove
         openSelected->setEnabled(false);
         remove->setEnabled(false);

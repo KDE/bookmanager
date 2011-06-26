@@ -26,7 +26,7 @@
 #include <KIO/NetAccess>
 
 ImportDialog::ImportDialog(QWidget *parent)
-        : KDialog(parent)
+    : KDialog(parent)
 {
     //should really be setting these in the ui file...
     //cancelButton->setIcon(KIcon("dialog-close"));

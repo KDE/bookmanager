@@ -25,7 +25,7 @@
 #include <QString>
 
 CollectionModel::CollectionModel()
-        : QSqlTableModel()
+    : QSqlTableModel()
 {
     setTable("collection");
     setSort(Title, Qt::DescendingOrder);
@@ -33,14 +33,14 @@ CollectionModel::CollectionModel()
     //probably an easier way to do this but...fix the header and make it translatable. I hope.
     //don't translate hidden values though... no one sees the id or disk location
     QStringList headerNames;
-    headerNames << "ID" 
-    << ki18nc("This book's title","Title").toString()
-    << ki18nc("A short summary of this book", "Summary").toString() 
-    << ki18nc("A person who writes books","Author").toString()
-    << ki18nc("A books edition or version number", "Edition").toString() 
-    << ki18nc("The date the book was released", "Release Date").toString()
-    << ki18nc("The type or style of a book, examples: Science Fiction, History","Genre").toString() 
-    << "Disk Location";
+    headerNames << "ID"
+                << ki18nc("This book's title", "Title").toString()
+                << ki18nc("A short summary of this book", "Summary").toString()
+                << ki18nc("A person who writes books", "Author").toString()
+                << ki18nc("A books edition or version number", "Edition").toString()
+                << ki18nc("The date the book was released", "Release Date").toString()
+                << ki18nc("The type or style of a book, examples: Science Fiction, History", "Genre").toString()
+                << "Disk Location";
     const int colCount = columnCount();
     for (int i = 0; i < colCount; i++) {
         setHeaderData(i, Qt::Horizontal, headerNames.at(i));
@@ -57,18 +57,18 @@ CollectionModel::~CollectionModel()
 
 void CollectionModel::query(QString* queryText, QString* columnName)
 {
-	/*
-	 * In order for us to do case insensitive searchs, and partial word searchs
-	 * we will use sqlite3's built in LIKE operator, documented at
-	 * http://www.sqlite.org/lang_expr.html
-	 * which, combined with appended % at the start and end of the search string
-	 * will give us partial, case insensitive matching. 	 */	
-	
-	//prepare the filter
-	QString filterText;
-	filterText.append(columnName->toLower()).append(" LIKE ")
-		.append("\"%").append(queryText).append("%\"");
-		
-	//run the filter
-	setFilter(filterText);
+    /*
+     * In order for us to do case insensitive searchs, and partial word searchs
+     * we will use sqlite3's built in LIKE operator, documented at
+     * http://www.sqlite.org/lang_expr.html
+     * which, combined with appended % at the start and end of the search string
+     * will give us partial, case insensitive matching.      */
+
+    //prepare the filter
+    QString filterText;
+    filterText.append(columnName->toLower()).append(" LIKE ")
+    .append("\"%").append(queryText).append("%\"");
+
+    //run the filter
+    setFilter(filterText);
 }

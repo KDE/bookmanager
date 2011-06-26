@@ -47,8 +47,8 @@ signals:
 
 private:
     bool initDB();
-	bool checkdupe(dbusBook* book, int& id);
-    QSqlDatabase m_db;enum Duplicate {cancel, dupe, overwrite};
+    bool checkdupe(dbusBook* book, int& id);
+    QSqlDatabase m_db; enum Duplicate {cancel, dupe, overwrite};
 };
 
 #endif // COLLECTIONDB_H
