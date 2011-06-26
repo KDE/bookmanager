@@ -17,12 +17,22 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="KLineEdit" name="queryEdit"/>
+      <widget class="KLineEdit" name="queryEdit">
+       <property name="inputMask">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="KComboBox" name="searchTypeBox">
        <property name="toolTip">
-        <string>Search the collection by...</string>
+        <string comment="Selects what type of search to perform. Examples: search by genre, search by author, search by title.">Search the Collection by...</string>
+       </property>
+       <property name="accessibleName">
+        <string/>
        </property>
        <item>
         <property name="text">
@@ -42,7 +52,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="searchButton">
+      <widget class="KPushButton" name="searchButton">
        <property name="accessibleName">
         <string/>
        </property>
@@ -55,7 +65,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="resetButton">
+      <widget class="KPushButton" name="resetButton">
        <property name="text">
         <string comment="Reset the search">Reset</string>
        </property>
@@ -70,6 +80,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+  <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
@@ -81,6 +96,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>queryEdit</tabstop>
   <tabstop>resultTable</tabstop>
  </tabstops>
  <resources/>
