@@ -76,7 +76,9 @@ Shell::Shell(QWidget *parent)
 }
 Shell::~Shell()
 {
-//TODO
+    m_collection->deleteLater();
+    m_manager->deleteLater();
+    mainView->deleteLater();
 }
 
 
