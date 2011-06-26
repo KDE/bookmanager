@@ -165,21 +165,18 @@ QModelIndex SearchPage::indexAt(const QPoint& pos)
 //coordinate pos to the coordinate system of the viewport
 const QPoint SearchPage::mapToViewport(const QPoint& pos)
 {
-	//FIXME use magic numbers to offset the pointer to the corner of the viewport
-	//i can't find a better way to get the offset, since the functions that should give
-	//it are protected and i don't have access
-	QPoint convertedpoint(pos - QPoint(23, 58));
-	/*
-	 * debugging code to display the position of the mouse and the position of the first row.
-	 * im leaving this in here because i really would like to find a better solution than 
-	 * magic numbers based on guessing what the upper right hand of the viewport is
-	 * the only solution i can see would be to subclass the tableview just to expose the
-	 * two values i need.
-	QTextStream out(stdout);
-	out << "NOT "  << pos.x() << ","<< pos.y() << " "<<  resultTable->indexAt(convertedpoint).row() << "\n";
-	out << "CON " << convertedpoint.x() << ","<< convertedpoint.y()  << "\n";
-	out << "ONE " << resultTable->rowViewportPosition(1) << "\n"; 
-	*/
+	//in order to find the offsets from we need to first find the x,y position of the table
+	//then add in the additional offset of the headers. This is still off by a couple pixels
+	//from the borders, but it's close enough and much better than using just guessing the
+	//numbers
+	int x;
+	int y;
+	x = resultTable->pos().x() + resultTable->verticalHeader()->width();
+	y = resultTable->pos().y() + resultTable->horizontalHeader()->height();
+	
+	//now that we have the offsets, convert the original point to a new viewport based one
+	QPoint convertedpoint(pos - QPoint(x, y));
+	
 	return convertedpoint;
 }
 
