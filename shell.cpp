@@ -76,7 +76,10 @@ Shell::Shell(QWidget *parent)
 }
 Shell::~Shell()
 {
-//TODO
+    //delete all the members
+    delete(m_collection);
+    delete(m_manager);
+    delete(mainView);
 }
 
 
