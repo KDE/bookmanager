@@ -17,7 +17,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLineEdit" name="queryEdit">
+      <widget class="KLineEdit" name="queryEdit">
        <property name="inputMask">
         <string/>
        </property>
@@ -27,9 +27,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="searchTypeBox">
+      <widget class="KComboBox" name="searchTypeBox">
        <property name="toolTip">
-        <string>Search the collection by...</string>
+        <string comment="Selects what type of search to perform. Examples: search by genre, search by author, search by title.">Search the Collection by...</string>
+       </property>
+       <property name="accessibleName">
+        <string/>
        </property>
        <item>
         <property name="text">
@@ -43,20 +46,20 @@
        </item>
        <item>
         <property name="text">
-         <string comment="The books category">Genre</string>
+         <string comment="the books category">Genre</string>
         </property>
        </item>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="searchButton">
+      <widget class="KPushButton" name="searchButton">
        <property name="text">
         <string>Search</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="resetButton">
+      <widget class="KPushButton" name="resetButton">
        <property name="text">
         <string>Reset</string>
        </property>
@@ -69,6 +72,23 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>queryEdit</tabstop>
   <tabstop>resultTable</tabstop>
