@@ -80,10 +80,6 @@ Shell::~Shell()
     delete(m_collection);
     delete(m_manager);
     delete(mainView);
-    delete(open);
-    delete(openNewTab);
-    delete(import);
-    delete(remove);
 }
 
 
