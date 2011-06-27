@@ -71,6 +71,11 @@ BookManagerPart::BookManagerPart(QWidget *, QObject * parent, const QVariantList
     setupActions();
 }
 
+BookManagerPart::~BookManagerPart()
+{
+    m_searchpage->deleteLater();
+}
+
 void BookManagerPart::setupActions()
 {
     //initialize the context menu

@@ -39,7 +39,7 @@ class BookManagerPart : public KParts::Part
     Q_OBJECT
 public:
     BookManagerPart(QWidget*, QObject* parent, const QVariantList&);
-
+    virtual ~BookManagerPart();
 signals:
     void loadBook(QString url);
 
