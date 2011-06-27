@@ -1,19 +1,14 @@
 #! /usr/bin/awk -f
-# A script to extract the actual suppression info from the output of (for example) valgrind 
---leak-check=full --show-reachable=yes --error-limit=no --gen-suppressions=all ./minimal
+# A script to extract the actual suppression info from the output of (for example) valgrind --leak-check=full --show-reachable=yes --error-limit=no --gen-suppressions=all ./minimal
 # The desired bits are between ^{ and ^} (including the braces themselves).
-# The combined output should either be appended to /usr/lib/valgrind/default.supp, or placed in a .supp 
-of its own
-# If the latter, either tell valgrind about it each time with --suppressions=<filename>, or add that 
-line to ~/.valgrindrc
+# The combined output should either be appended to /usr/lib/valgrind/default.supp, or placed in a .supp of its own
+# If the latter, either tell valgrind about it each time with --suppressions=<filename>, or add that line to ~/.valgrindrc
  
-# NB This script uses the |& operator, which I believe is gawk-specific. In case of failure, check that 
-you're using gawk rather than some other awk
+# NB This script uses the |& operator, which I believe is gawk-specific. In case of failure, check that you're using gawk rather than some other awk
  
 # The script looks for suppressions. When it finds one it stores it temporarily in an array,
 # and also feeds it line by line to the external app 'md5sum' which generates a unique checksum for it.
-# The checksum is used as an index in a different array. If an item with that index already exists the 
-suppression must be a duplicate and is discarded.
+# The checksum is used as an index in a different array. If an item with that index already exists the suppression must be a duplicate and is discarded.
  
 BEGIN { suppression=0; md5sum = "md5sum" }
   # If the line begins with '{', it's the start of a supression; so set the var and initialise things
