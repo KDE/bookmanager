@@ -47,7 +47,6 @@ Shell::Shell(QWidget *parent)
 
     setupActions();
 
-    //this is probably wrong FIXME
     m_manager = new KParts::PartManager(mainView);
 
     //make tabs closable
@@ -111,8 +110,6 @@ void Shell::setupActions()
     //Window menu
     showCollection = new KToggleAction(this);
     showCollection->setText(i18n("Collection Manager"));
-    //FIXME make this remember state from last use
-    showCollection->setChecked(true); //show the collection by default
     actionCollection()->addAction("showCollection", showCollection);
     connect(showCollection, SIGNAL(triggered()),
             this, SLOT(slotToggleCollection()));
