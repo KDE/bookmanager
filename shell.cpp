@@ -36,6 +36,7 @@
 #include "readerpage.h"
 #include <qdbusconnection.h>
 #include "bookmanagerconfig.h"
+#include <kparts/browserextension.h>
 
 //PUBLIC
 Shell::Shell(QWidget *parent)
@@ -65,7 +66,8 @@ Shell::Shell(QWidget *parent)
     //make sure the partmanager is connected before we start loading parts!
     connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
             this, SLOT(createGUI(KParts::Part*)));
-
+    connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
+        this, SLOT(slotpartchanged(KParts::Part*)));
 
     //check if the collection toggle is turned on in the config, load the collection if it is
     showCollection->setChecked(BookManagerConfig::collection());
@@ -92,6 +94,43 @@ void Shell::slotReaderTab(KUrl *url)
 
 //PRIVATE
 
+void Shell::slotpartchanged(KParts::Part* newPart)
+{
+    //cast the part into a readonly part, this should be safe so long as we never load a
+    //non readonly part derived part
+    KParts::ReadOnlyPart * ro_part = qobject_cast< KParts::ReadOnlyPart * >(newPart);
+    KParts::BrowserExtension *be = ro_part->browserExtension();
+    
+    //check if the newpart has a browserExtension, if it does we will want to
+    //activate some actions. This is based on konquerors kongmainwindow.cpp
+    if(be){
+        KParts::BrowserExtension::ActionSlotMap *slotmap = KParts::BrowserExtension::actionSlotMapPtr();
+        KParts::BrowserExtension::ActionSlotMap::const_iterator it = slotmap->constBegin();
+        KParts::BrowserExtension::ActionSlotMap::const_iterator itEnd = slotmap->constEnd();
+
+        //iterate over the slotmap, activating actions as we go
+        for(; it != itEnd; ++it){
+            QAction *act = actionCollection()->action(it.key().data());
+            if(act) {
+                //check for the existence of the slot within this kpart
+                if( be->metaObject()->indexOfSlot(it.key()+"()") != -1){
+                    connect(act, SIGNAL(triggered()), be, it.value());
+                    act->setEnabled(be->isActionEnabled( it.key() ));
+                    const QString text = be->actionText( it.key() );
+                    if(!text.isEmpty()){
+                        act->setText(text);
+                    }
+                }else {
+                    act->setEnabled(false);
+                }
+            }
+        }
+    }
+}
+
+
+
+
 void Shell::setupActions()
 {
     //File menu
@@ -104,9 +143,10 @@ void Shell::setupActions()
     connect(openNewTab, SIGNAL(triggered(bool)),
             this, SLOT(slotOpenFileNewTab()));
 
+    print = actionCollection()->addAction(KStandardAction::Print, "print", 0,0);
+
     KStandardAction::quit(kapp, SLOT(quit()),
                           actionCollection());
-
     //Window menu
     showCollection = new KToggleAction(this);
     showCollection->setText(i18n("Collection Manager"));

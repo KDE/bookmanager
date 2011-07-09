@@ -41,6 +41,7 @@ public:
     virtual ~Shell();
 
 private slots:
+    void slotpartchanged(KParts::Part *newPart);
     void slotOpenFile();
     void slotOpenFileNewTab();
     void slotOpenFileNewTab(QString filename);
@@ -57,6 +58,7 @@ private:
 
     void loadCollection();
     KParts::Part *m_collection;
+    KParts::ReadOnlyPart *curPart;
 
     KTabWidget *mainView;
     KParts::PartManager *m_manager;
@@ -67,6 +69,7 @@ private:
     KAction *openNewTab;
     KAction *import;
     KAction *remove;
+    KAction *print;
 
 
     KToggleAction *showCollection;

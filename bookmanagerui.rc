@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="bookmanager" version="8">
+<kpartgui name="bookmanager" version="9">
 <MenuBar>
   <Menu name="file">
     <text>&amp;File</text>
@@ -7,6 +7,8 @@
     <Action name="openNewTab" />
     <Separator />
     <Merge />
+    <Action name="print"/>
+    <DefineGroup name="print" />
     <Separator />
     <Action name="file_quit" />
     <Separator/>
