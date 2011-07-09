@@ -48,6 +48,7 @@ public:
 
 public slots:
     void createBook(dbusBook *book);
+    void slotEditBooks();
     void remBook();
     void updateModel();
     void newQuery();
@@ -67,7 +68,8 @@ private:
     CollectionModel *m_model;
 
     const QPoint mapToViewport(const QPoint& pos);
-
+    dbusBook getBook(QModelIndex index);
+    
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};
 
 };

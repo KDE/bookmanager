@@ -21,6 +21,7 @@
 #include "collectiondb.h"
 #include "collectionmodel.h"
 #include "bookstruct.h"
+#include "importdialog.h"
 
 #include <QSqlTableModel>
 #include <kdebug.h>
@@ -207,4 +208,48 @@ void SearchPage::resetQuery()
     QString text = "";
     QString column = "title"; //doesn't really matter which column we pick...
     emit query(&text, &column);
+}
+
+void SearchPage::slotEditBooks()
+{
+    QModelIndexList editUs = resultTable->selectionModel()->selectedIndexes();
+
+    //verify that we got at least one index... if the remove book command is called
+    //without having anything selected we segfault :(
+    if (editUs.length() > 0) {
+        int index = editUs.at(0).row();
+
+        foreach(const QModelIndex & editMe,  editUs) {
+            int row = editMe.row();
+            if (row < index) {
+                return;
+            }
+            //use the index to create a bookstruct with the existing info
+            dbusBook curBook = getBook(editMe);
+
+            //reuse the importdialog and createBook slots to edit the book
+            
+            ImportDialog *dialog = new ImportDialog();
+            dialog->setText(&curBook);
+            connect(dialog, SIGNAL(signalNewBook(dbusBook*)),
+                    this, SLOT(createBook(dbusBook *)));
+            dialog->show();
+            index += 1;
+        }
+    }
+}
+
+dbusBook SearchPage::getBook(QModelIndex index)
+{
+    dbusBook book;
+    book.author = m_model->data(m_model->index(index.row(), Author)).toString();
+    book.genre = m_model->data(m_model->index(index.row(), Genre)).toString();
+    book.release = m_model->data(m_model->index(index.row(), Release)).toString();
+    book.releaseDate = m_model->data(m_model->index(index.row(), ReleaseDate)).toString();
+    book.summary = m_model->data(m_model->index(index.row(), Summary)).toString();
+    book.title = m_model->data(m_model->index(index.row(), Title)).toString();
+    book.url = m_model->data(m_model->index(index.row(), Location)).toString();
+
+    return book;
+    
 }
