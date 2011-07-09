@@ -36,6 +36,7 @@
 #include "readerpage.h"
 #include <qdbusconnection.h>
 #include "bookmanagerconfig.h"
+#include <kparts/browserextension.h>
 
 //PUBLIC
 Shell::Shell(QWidget *parent)
@@ -47,14 +48,14 @@ Shell::Shell(QWidget *parent)
 
     setupActions();
 
-    //this is probably wrong FIXME
     m_manager = new KParts::PartManager(mainView);
 
     //make tabs closable
     mainView->setTabsClosable(true);
 
-    //zero out the collection so it can be properly checked for existence later on
+    //zero out the collection, and curPart so it can be properly checked for existence later on
     m_collection = 0;
+    curPart = 0;
 
     connect(mainView, SIGNAL(tabCloseRequested(int)),
             this, SLOT(slotRemoveTab(int)));
@@ -66,7 +67,8 @@ Shell::Shell(QWidget *parent)
     //make sure the partmanager is connected before we start loading parts!
     connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
             this, SLOT(createGUI(KParts::Part*)));
-
+    connect(m_manager, SIGNAL(activePartChanged(KParts::Part*)),
+        this, SLOT(slotPartConnect(KParts::Part*)));
 
     //check if the collection toggle is turned on in the config, load the collection if it is
     showCollection->setChecked(BookManagerConfig::collection());
@@ -76,7 +78,9 @@ Shell::Shell(QWidget *parent)
 }
 Shell::~Shell()
 {
-//TODO
+    m_collection->deleteLater();
+    m_manager->deleteLater();
+    mainView->deleteLater();
 }
 
 
@@ -91,6 +95,69 @@ void Shell::slotReaderTab(KUrl *url)
 
 //PRIVATE
 
+void Shell::slotPartConnect(KParts::Part* newPart)
+{
+    //if the currentpart is set, disconnect it before initializing the new part
+    if(curPart){
+        slotPartDisconnect(curPart->browserExtension());
+    }
+
+    //cast the part into a readonly part, this should be safe so long as we never load a
+    //non readonly part derived part
+    KParts::ReadOnlyPart * ro_part = qobject_cast< KParts::ReadOnlyPart * >(newPart);
+    if(ro_part == 0 || !ro_part->browserExtension()){
+        return;//if the cast fails (ro_part = 0) then we can't do anything.
+    }
+    KParts::BrowserExtension *be = ro_part->browserExtension();
+    
+    //check if the newpart has a browserExtension, if it does we will want to
+    //activate some actions. This is based on konquerors kongmainwindow.cpp
+    if(be){    
+        KParts::BrowserExtension::ActionSlotMap *slotmap = KParts::BrowserExtension::actionSlotMapPtr();
+        KParts::BrowserExtension::ActionSlotMap::const_iterator it = slotmap->constBegin();
+        KParts::BrowserExtension::ActionSlotMap::const_iterator itEnd = slotmap->constEnd();
+
+        //iterate over the slotmap, activating actions as we go
+        for(; it != itEnd; ++it){
+            QAction *act = actionCollection()->action(it.key().data());
+            if(act) {
+                //check for the existence of the slot within this kpart
+                if( be->metaObject()->indexOfSlot(it.key()+"()") != -1){
+                    connect(act, SIGNAL(triggered()), be, it.value());
+                    act->setEnabled(be->isActionEnabled( it.key() ));
+                    const QString text = be->actionText( it.key() );
+                    if(!text.isEmpty()){
+                        act->setText(text);
+                    }
+                }else {
+                    act->setEnabled(false);
+                }
+            }
+        }
+    }
+    //set the currentpart to the newpart
+    curPart = ro_part;
+}
+
+void Shell::slotPartDisconnect(KParts::BrowserExtension *be){
+    //if we got here then the part has no browserExtension, so we need to remove the actions
+    //from the collection
+
+    KParts::BrowserExtension::ActionSlotMap *slotmap = KParts::BrowserExtension::actionSlotMapPtr();
+    KParts::BrowserExtension::ActionSlotMap::const_iterator it = slotmap->constBegin();
+    KParts::BrowserExtension::ActionSlotMap::const_iterator itEnd = slotmap->constEnd();
+    //iterate over the slotmap deactivating as we go... also copied from kongmainwindow.cpp
+    for(; it != itEnd ; ++it){
+        QAction *act = actionCollection()->action(it.key().data());
+        if(act && be->metaObject()->indexOfSlot(it.key()+"()") != -1){
+            act->disconnect(be);
+            act->setDisabled(true);
+        }
+    }
+
+}
+
+
 void Shell::setupActions()
 {
     //File menu
@@ -103,14 +170,16 @@ void Shell::setupActions()
     connect(openNewTab, SIGNAL(triggered(bool)),
             this, SLOT(slotOpenFileNewTab()));
 
+    //since we only need to provide a print action for use with browserExtensions
+    //create and disable it right away
+    print = actionCollection()->addAction(KStandardAction::Print, "print", 0,0);
+    print->setDisabled(true);
+    
     KStandardAction::quit(kapp, SLOT(quit()),
                           actionCollection());
-
     //Window menu
     showCollection = new KToggleAction(this);
     showCollection->setText(i18n("Collection Manager"));
-    //FIXME make this remember state from last use
-    showCollection->setChecked(true); //show the collection by default
     actionCollection()->addAction("showCollection", showCollection);
     connect(showCollection, SIGNAL(triggered()),
             this, SLOT(slotToggleCollection()));
