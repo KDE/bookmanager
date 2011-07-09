@@ -88,6 +88,10 @@ SearchPage::~SearchPage()
     if(m_model){
         m_model->deleteLater();
     }
+    if(m_db){
+        m_db->deleteLater();
+    }
+        
     
 }
 
