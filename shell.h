@@ -41,7 +41,8 @@ public:
     virtual ~Shell();
 
 private slots:
-    void slotpartchanged(KParts::Part *newPart);
+    void slotPartConnect(KParts::Part *newPart);
+    void slotPartDisconnect(KParts::BrowserExtension *be);
     void slotOpenFile();
     void slotOpenFileNewTab();
     void slotOpenFileNewTab(QString filename);
