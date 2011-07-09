@@ -228,7 +228,7 @@ void SearchPage::slotEditBooks()
             dbusBook curBook = getBook(editMe);
 
             //reuse the importdialog and createBook slots to edit the book
-            
+
             ImportDialog *dialog = new ImportDialog();
             dialog->setText(&curBook);
             connect(dialog, SIGNAL(signalNewBook(dbusBook*)),
@@ -251,5 +251,5 @@ dbusBook SearchPage::getBook(QModelIndex index)
     book.url = m_model->data(m_model->index(index.row(), Location)).toString();
 
     return book;
-    
+
 }

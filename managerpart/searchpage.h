@@ -69,7 +69,7 @@ private:
 
     const QPoint mapToViewport(const QPoint& pos);
     dbusBook getBook(QModelIndex index);
-    
+
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};
 
 };

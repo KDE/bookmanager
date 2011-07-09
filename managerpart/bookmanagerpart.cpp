@@ -116,7 +116,7 @@ void BookManagerPart::setupActions()
     m_contextMenu->addAction(edit);
     connect(edit, SIGNAL(triggered()),
             m_searchpage, SLOT(slotEditBooks()));
-    
+
 
     //set the ui resource file
     setXMLFile("managerpart.rc");
