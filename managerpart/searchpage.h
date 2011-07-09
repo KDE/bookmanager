@@ -25,6 +25,7 @@
 #include "ui_searchpage.h"
 #include "bookstruct.h"
 
+class ImportDialog;
 
 
 class CollectionDB;
@@ -40,6 +41,7 @@ class SearchPage : public QWidget, public Ui_SearchPage
 
 public:
     SearchPage(QWidget *parent = 0);
+    virtual ~SearchPage();
 
     //workaround for needing showcontextmenu in bookmanagerpart FIXME
     //this exposes the indexAt function of the tableview so the context menu
@@ -64,6 +66,7 @@ signals:
     //can't emit a Kurl, so emit it as a string
     Q_SCRIPTABLE void loadBook(QString url);
 private:
+    ImportDialog *m_import;
     CollectionDB *m_db;
     CollectionModel *m_model;
 

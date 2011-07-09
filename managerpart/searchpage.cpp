@@ -41,6 +41,7 @@ SearchPage::SearchPage(QWidget *parent) :
 
     m_db = new CollectionDB();
     m_model = new CollectionModel();
+    m_import = 0;
 
     //set up the view
     resultTable->setModel(m_model);
@@ -77,6 +78,17 @@ SearchPage::SearchPage(QWidget *parent) :
     connect(this, SIGNAL(query(QString*, QString*)),
             m_model, SLOT(query(QString*, QString*)));
 
+}
+
+SearchPage::~SearchPage()
+{
+    if(m_import){
+        m_import->deleteLater();
+    }
+    if(m_model){
+        m_model->deleteLater();
+    }
+    
 }
 
 void SearchPage::createBook(dbusBook book)
@@ -228,11 +240,11 @@ void SearchPage::slotEditBooks()
 
             //reuse the importdialog and createBook slots to edit the book
 
-            ImportDialog *dialog = new ImportDialog();
-            dialog->setText(&curBook);
-            connect(dialog, SIGNAL(signalNewBook(dbusBook)),
+            m_import = new ImportDialog();
+            m_import->setText(&curBook);
+            connect(m_import, SIGNAL(signalNewBook(dbusBook)),
                     this, SLOT(createBook(dbusBook )));
-            dialog->show();
+            m_import->show();
             index += 1;
         }
     }
