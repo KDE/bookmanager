@@ -35,6 +35,7 @@ class ReaderPage : public QWidget
     Q_OBJECT
 public:
     explicit ReaderPage(const KUrl *url, QWidget* parent = 0);
+    virtual ~ReaderPage();
 
     KParts::ReadOnlyPart* getPart();
     QString getMimeType();

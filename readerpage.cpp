@@ -39,6 +39,12 @@ ReaderPage::ReaderPage(const KUrl* url, QWidget* parent)
     }
 }
 
+ReaderPage::~ReaderPage()
+{
+    m_part->deleteLater();
+}
+
+
 KParts::ReadOnlyPart* ReaderPage::getPart()
 {
     return m_part;
