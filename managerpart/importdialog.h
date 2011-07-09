@@ -32,7 +32,8 @@ class ImportDialog : public KDialog, public Ui_importDialog
     Q_OBJECT
 public:
     ImportDialog(QWidget *parent = 0);
-
+public slots:
+    void setText(dbusBook *book);
 private slots:
     void slotImportClicked();
     void slotEnableImport();

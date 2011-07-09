@@ -45,6 +45,21 @@ ImportDialog::ImportDialog(QWidget *parent)
             this, SLOT(slotEnableImport()));
 }
 
+void ImportDialog::setText(dbusBook* book)
+{
+    titleEdit->setText(book->title);
+    descEdit->setText(book->summary);
+    authorEdit->setText(book->author);
+    relNumEdit->setText(book->release);
+    relDateEdit->setText(book->releaseDate);
+    genreEdit->setText(book->genre);
+    locationUrlRequestor->setUrl(KUrl(book->url));
+
+    //change the text of the button to save from import
+    ImportButton->setText(i18n("&Save"));
+}
+
+
 void ImportDialog::slotImportClicked()
 {
     dbusBook *book = new dbusBook;
