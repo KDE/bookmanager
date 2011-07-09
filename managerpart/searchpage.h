@@ -47,7 +47,7 @@ public:
     QModelIndex indexAt(const QPoint& pos);
 
 public slots:
-    void createBook(dbusBook *book);
+    void createBook(dbusBook book);
     void slotEditBooks();
     void remBook();
     void updateModel();
@@ -60,7 +60,7 @@ private slots:
 
 signals:
     void query(QString *query, QString *column);
-    void newBook(dbusBook *book);
+    void newBook(dbusBook book);
     //can't emit a Kurl, so emit it as a string
     Q_SCRIPTABLE void loadBook(QString url);
 private:

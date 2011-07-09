@@ -40,7 +40,7 @@ private slots:
     void checkUrl(QString);
 signals:
     //connect this to the collection to add books
-    void signalNewBook(dbusBook *book);
+    void signalNewBook(dbusBook book);
     void urlIsGood();
 
 };

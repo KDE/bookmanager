@@ -64,11 +64,11 @@ CollectionDB::~CollectionDB()
 }
 
 //PUBLIC SLOTS
-void CollectionDB::addBook(dbusBook *book)
+void CollectionDB::addBook(dbusBook book)
 {
     int id;
     QSqlQuery query;
-    if (checkdupe(book, id)) {
+    if (checkdupe(&book, id)) {
         //this is a dupe, check with the user to see if we want to overwrite or cancel
         if (KMessageBox::warningContinueCancel
                 (this, i18n("Would you like to overwrite the existing entry for this file?"))
@@ -81,13 +81,13 @@ void CollectionDB::addBook(dbusBook *book)
              " author = :author, release = :release, releaseDate = :releaseDate,"
              " genre = :genre, url = :url "
              " WHERE id = :id");
-            query.bindValue(0, book->title);
-            query.bindValue(1, book->summary);
-            query.bindValue(2, book->author);
-            query.bindValue(3, book->release);
-            query.bindValue(4, book->releaseDate);
-            query.bindValue(5, book->genre);
-            query.bindValue(6, book->url);
+            query.bindValue(0, book.title);
+            query.bindValue(1, book.summary);
+            query.bindValue(2, book.author);
+            query.bindValue(3, book.release);
+            query.bindValue(4, book.releaseDate);
+            query.bindValue(5, book.genre);
+            query.bindValue(6, book.url);
             query.bindValue(7, id);
             query.exec();
         }
@@ -95,13 +95,13 @@ void CollectionDB::addBook(dbusBook *book)
         //set id to NULL for sqlite to autoincrement the id, we don't care about the id's so...
         query.prepare("INSERT INTO collection (title, summary, author, release, releaseDate, genre, url) "
                       "VALUES (:title, :summary, :author, :release, :releaseDate, :genre, :url)");
-        query.bindValue(0, book->title);
-        query.bindValue(1, book->summary);
-        query.bindValue(2, book->author);
-        query.bindValue(3, book->release);
-        query.bindValue(4, book->releaseDate);
-        query.bindValue(5, book->genre);
-        query.bindValue(6, book->url);
+        query.bindValue(0, book.title);
+        query.bindValue(1, book.summary);
+        query.bindValue(2, book.author);
+        query.bindValue(3, book.release);
+        query.bindValue(4, book.releaseDate);
+        query.bindValue(5, book.genre);
+        query.bindValue(6, book.url);
         query.exec();
     }
     query.finish();

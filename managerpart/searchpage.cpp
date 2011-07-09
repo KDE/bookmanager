@@ -57,9 +57,8 @@ SearchPage::SearchPage(QWidget *parent) :
     resultTable->hideColumn(Location);
     show();
 
-    //lots of qstrings... should probably be a qstringlist?
-    connect(this, SIGNAL(newBook(dbusBook *)),
-            m_db, SLOT(addBook(dbusBook *)));
+    connect(this, SIGNAL(newBook(dbusBook)),
+            m_db, SLOT(addBook(dbusBook)));
 
     //don't forget to update the model if the db gets dirty
     connect(m_db, SIGNAL(isDirty()),
@@ -80,7 +79,7 @@ SearchPage::SearchPage(QWidget *parent) :
 
 }
 
-void SearchPage::createBook(dbusBook *book)
+void SearchPage::createBook(dbusBook book)
 {
     emit newBook(book);
 }
@@ -231,8 +230,8 @@ void SearchPage::slotEditBooks()
 
             ImportDialog *dialog = new ImportDialog();
             dialog->setText(&curBook);
-            connect(dialog, SIGNAL(signalNewBook(dbusBook*)),
-                    this, SLOT(createBook(dbusBook *)));
+            connect(dialog, SIGNAL(signalNewBook(dbusBook)),
+                    this, SLOT(createBook(dbusBook )));
             dialog->show();
             index += 1;
         }

@@ -41,7 +41,7 @@ public:
     ~CollectionDB();
 
 public slots:
-    void addBook(dbusBook *book);
+    void addBook(dbusBook book);
 signals:
     void isDirty();
 

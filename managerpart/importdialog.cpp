@@ -57,14 +57,14 @@ void ImportDialog::setText(dbusBook* book)
 
 void ImportDialog::slotImportClicked()
 {
-    dbusBook *book = new dbusBook;
-    book->title = titleEdit->text();
-    book->summary = descEdit->toPlainText();
-    book->author = authorEdit->text();
-    book->release = relNumEdit->text();
-    book->releaseDate = relDateEdit->text();
-    book->genre = genreEdit->text();
-    book->url = locationUrlRequestor->url().url();
+    dbusBook book;
+    book.title = titleEdit->text();
+    book.summary = descEdit->toPlainText();
+    book.author = authorEdit->text();
+    book.release = relNumEdit->text();
+    book.releaseDate = relDateEdit->text();
+    book.genre = genreEdit->text();
+    book.url = locationUrlRequestor->url().url();
     emit signalNewBook(book);
     close();
 }
