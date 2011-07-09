@@ -28,11 +28,6 @@
 ImportDialog::ImportDialog(QWidget *parent)
     : KDialog(parent)
 {
-    //should really be setting these in the ui file...
-    //cancelButton->setIcon(KIcon("dialog-close"));
-    //ImportButton->setIcon(KIcon("dialog-ok-apply"));
-
-    //resume the regularly scheduled setting up the dialog
     setupUi(this);
     connect(ImportButton, SIGNAL(clicked()),
             this, SLOT(slotImportClicked()));
