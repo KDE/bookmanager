@@ -111,6 +111,13 @@ void BookManagerPart::setupActions()
     connect(openSelected, SIGNAL(triggered()),
             m_searchpage, SLOT(openBook()));
 
+    edit = new KAction(this);
+    edit->setText(i18n("&Edit this book's entry"));
+    m_contextMenu->addAction(edit);
+    connect(edit, SIGNAL(triggered()),
+            m_searchpage, SLOT(slotEditBooks()));
+    
+
     //set the ui resource file
     setXMLFile("managerpart.rc");
 
@@ -137,6 +144,7 @@ void BookManagerPart::ShowContextMenu(const QPoint& pos)
         //after we close the menu, turn open and remove back on
         openSelected->setEnabled(true);
         remove->setEnabled(true);
+        edit->setEnabled(true);
     } else {
         m_contextMenu->exec(QCursor::pos());
     }

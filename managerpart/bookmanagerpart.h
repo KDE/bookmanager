@@ -50,6 +50,7 @@ private:
     void setupActions();
 
     SearchPage *m_searchpage;
+    KAction *edit;
     KAction *import;
     KAction *remove;
     KAction *openSelected;
