@@ -22,6 +22,7 @@
 
 #include <kparts/part.h>
 
+class ImportDialog;
 class SearchPage;
 class QMenu;
 class KAction;
@@ -49,6 +50,7 @@ private slots:
 private:
     void setupActions();
 
+    ImportDialog *m_import;
     SearchPage *m_searchpage;
     KAction *edit;
     KAction *import;

@@ -50,9 +50,8 @@ BookManagerPart::BookManagerPart(QWidget *, QObject * parent, const QVariantList
     dbus.registerObject("/BookManagerPart", this);
     dbus.registerService("org.bookmanager.BookManagerPart");
 
+    m_import = 0;
     //set up the widget
-
-
 
     m_searchpage = new SearchPage;
     setWidget(m_searchpage);
@@ -74,6 +73,7 @@ BookManagerPart::BookManagerPart(QWidget *, QObject * parent, const QVariantList
 BookManagerPart::~BookManagerPart()
 {
     m_searchpage->deleteLater();
+    m_import->deleteLater();
 }
 
 void BookManagerPart::setupActions()
@@ -125,10 +125,10 @@ void BookManagerPart::setupActions()
 
 void BookManagerPart::slotImport()
 {
-    ImportDialog *dialog = new ImportDialog();
-    connect(dialog, SIGNAL(signalNewBook(dbusBook)),
+    m_import = new ImportDialog();
+    connect(m_import, SIGNAL(signalNewBook(dbusBook)),
             m_searchpage, SLOT(createBook(dbusBook)));
-    dialog->show();
+    m_import->show();
 }
 
 
