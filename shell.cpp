@@ -78,8 +78,12 @@ Shell::Shell(QWidget *parent)
 }
 Shell::~Shell()
 {
-    m_collection->deleteLater();
-    m_manager->deleteLater();
+    if(m_collection){
+        m_collection->deleteLater();
+    }
+    if(m_manager){
+        m_manager->deleteLater();
+    }
     mainView->deleteLater();
 }
 
@@ -280,16 +284,16 @@ void Shell::slotOpenFileNewTab(QString filename)
 void Shell::slotUpdateMenu(int index)
 {
     //make sure we are looking at a readerpage before poking readerpage to get the widget
-    if (index != mainView->indexOf(m_collection->widget())) {
-        ReaderPage *curPage = qobject_cast<ReaderPage *>(mainView->widget(index));
-        KParts::ReadOnlyPart *curpart = curPage->getPart();
-        setupGUI(Keys | ToolBar | Save);
-        m_manager->setActivePart(curpart);
-    } else {
+    if (m_collection && (index = mainView->indexOf(m_collection->widget())) ) {
         //if we aren't looking at a reader page then we must be looking
         //at the collection so we can just set that as the current active part
         setupGUI(Keys | ToolBar | Save);
         m_manager->setActivePart(m_collection);
+    } else {
+        ReaderPage *curPage = qobject_cast<ReaderPage *>(mainView->widget(index));
+        KParts::ReadOnlyPart *curpart = curPage->getPart();
+        setupGUI(Keys | ToolBar | Save);
+        m_manager->setActivePart(curpart);
     }
 }
 
