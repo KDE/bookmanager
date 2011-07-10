@@ -27,7 +27,7 @@
 int main(int argc, char *argv[])
 {
     KAboutData aboutData("bookmanager", "bookmanager",
-                         ki18n("Book Manager"), "0.01",
+                         ki18n("Book Manager"), "0.03",
                          ki18n("An Ebook library manager."),
                          KAboutData::License_GPL,
                          ki18n("Copyright (c) 2010 Brian Korbein"),

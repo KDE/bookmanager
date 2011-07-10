@@ -284,16 +284,18 @@ void Shell::slotOpenFileNewTab(QString filename)
 void Shell::slotUpdateMenu(int index)
 {
     //make sure we are looking at a readerpage before poking readerpage to get the widget
-    if (m_collection && (index = mainView->indexOf(m_collection->widget())) ) {
+    if (m_collection->widget() == mainView->widget(index)) {
         //if we aren't looking at a reader page then we must be looking
         //at the collection so we can just set that as the current active part
         setupGUI(Keys | ToolBar | Save);
         m_manager->setActivePart(m_collection);
     } else {
         ReaderPage *curPage = qobject_cast<ReaderPage *>(mainView->widget(index));
-        KParts::ReadOnlyPart *curpart = curPage->getPart();
-        setupGUI(Keys | ToolBar | Save);
-        m_manager->setActivePart(curpart);
+        if(curPage){
+            KParts::ReadOnlyPart *curpart = curPage->getPart();
+            setupGUI(Keys | ToolBar | Save);
+            m_manager->setActivePart(curpart);
+        }
     }
 }
 
