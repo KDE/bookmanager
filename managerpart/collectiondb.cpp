@@ -61,6 +61,7 @@ CollectionDB::~CollectionDB()
 {
     //may want to verify that all changes have been written if close doesn't do that already?
     m_db.close();
+    m_db.removeDatabase(m_db.connectionName());
 }
 
 //PUBLIC SLOTS
