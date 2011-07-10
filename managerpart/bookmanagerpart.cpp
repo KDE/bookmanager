@@ -73,7 +73,9 @@ BookManagerPart::BookManagerPart(QWidget *, QObject * parent, const QVariantList
 BookManagerPart::~BookManagerPart()
 {
     m_searchpage->deleteLater();
-    m_import->deleteLater();
+    if(m_import){
+        m_import->deleteLater();
+    }
 }
 
 void BookManagerPart::setupActions()
