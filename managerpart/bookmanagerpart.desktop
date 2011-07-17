@@ -12,12 +12,14 @@ X-KDE-PluginInfo-EnabledByDefault=true
 
 Comment=BookManager Ebook management part
 Comment[nl]=Boekenbeheerder, onderdeel Ebook-beheer
+Comment[pt]=Componente de gestão de e-books do BookManager
 Comment[pt_BR]=Componente de gerenciamento de Ebook do BookManager
 Comment[sv]=Bokhanterarens Ebook-hanteringsdel
 Comment[uk]=Модуль керування електронними книжками
 Comment[x-test]=xxBookManager Ebook management partxx
 Name=bookmanagerpart
 Name[nl]=bookmanagerpart
+Name[pt]=bookmanagerpart
 Name[pt_BR]=componente do bookmanager
 Name[sv]=Bokhanterings-delprogram
 Name[uk]=bookmanagerpart
