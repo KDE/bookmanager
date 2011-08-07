@@ -1,8 +1,0 @@
-<ghnsproviders><!-- database of free programming books -->
-        <provider downloadurl="http://bookmanagertestsite.nfshost.com/provider-devbooks.xml" icon="bookmark" 
-        nouploadurl="http://okular.kde.org/upload_content.php"> 
-                <title>Programming Books</title>
-        </provider>
-</ghnsproviders>
-
-
