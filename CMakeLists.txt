@@ -4,6 +4,7 @@ project(bookmanager)
 find_package(KDE4 REQUIRED)
 include (KDE4Defaults)
 
+add_subdirectory(doc)
 add_subdirectory(managerpart)
 
 include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})

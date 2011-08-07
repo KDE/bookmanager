@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+    <!ENTITY bookmanager "<application>Book Manager</application>">
+    <!ENTITY kappname "&bookmanager;">
+    <!ENTITY package "playground">
+    <!ENTITY % addindex "IGNORE">
+    <!ENTITY % English "INCLUDE">
+    ]>
+        <book lang="&language;">
+
+            <bookinfo>
+            <title>The &bookmanager; Handbook</title>
+
+            <authorgroup>
+                <author>
+                    <personname>
+                        <firstname>Brian</firstname>
+                        <surname>Korbein</surname>
+                    </personname>
+                    <email>bri.kor.21@gmail.com</email>
+                </author>
+                </authorgroup>
+
+                <!-- TRANS:ROLES_OF_TRANSLATORS -->
+
+                <copyright>
+                    <year>2011</year>
+                    <holder>Brian Korbein</holder>
+                </copyright>
+                <!-- Translators: put here the copyright notice of the translation -->
+                <legalnotice>&underFDL;</legalnotice>
+
+                <date>2011-08-06</date>
+                <releaseinfo>0.3</releaseinfo>
+
+                <abstract>
+                    <para>
+                            &bookmanager; provides a simple interface to manage a collection
+                            of E-books.
+                    </para>
+                </abstract>
+
+                <keywordset>
+                    <keyword>KDE</keyword>
+                    <keyword>PDF</keyword>
+                    <keyword>E-Book</keyword>
+                </keywordset>
+
+            </bookinfo>
+
+            <chapter id="introduction">
+                <title>Introduction</title>
+
+                <para>
+                    &bookmanager; provides a simple interface to manage a collection
+                    of E-books.
+                    </para>
+            </chapter>
+
+        </book>
