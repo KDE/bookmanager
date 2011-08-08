@@ -18,6 +18,7 @@
 */
 #include "shell.h"
 
+#include <qdesktopwidget.h>
 #include <KApplication>
 #include <KAction>
 #include <KLocale>
@@ -74,6 +75,7 @@ Shell::Shell(QWidget *parent)
     showCollection->setChecked(BookManagerConfig::collection());
     if (showCollection->isChecked()) {
         loadCollection();
+
     }
 }
 Shell::~Shell()
@@ -87,6 +89,11 @@ Shell::~Shell()
     mainView->deleteLater();
 }
 
+
+QSize Shell::sizeHint() const
+{
+    return QApplication::desktop()->availableGeometry( this ).size() * 0.75;
+}
 
 // PRIVATE SLOTS
 //creates a new tab

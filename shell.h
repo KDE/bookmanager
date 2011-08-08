@@ -52,6 +52,8 @@ private slots:
 
     void slotToggleCollection();
     void slotSaveConfig();
+
+    QSize sizeHint() const;
 private:
     bool readConfig();
     void setupActions();
