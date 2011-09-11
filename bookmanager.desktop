@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=bookmanager
+Name[es]=gestor de libros
 Name[nl]=bookmanager
 Name[pl]=menadżerksiążek
 Name[pt]=bookmanager
@@ -13,6 +14,7 @@ Type=Application
 X-DocPath=bookmanager/index.html
 GenericName=A KDE4 Application
 GenericName[cs]=Aplikace prostředí KDE 4
+GenericName[es]=Una aplicación para KDE 4
 GenericName[nds]=En Programm för KDE 4
 GenericName[nl]=Een KDE4-programma
 GenericName[pl]=Program dla KDE4
