@@ -15,6 +15,7 @@ Type=Application
 X-DocPath=bookmanager/index.html
 GenericName=A KDE4 Application
 GenericName[cs]=Aplikace prostředí KDE 4
+GenericName[de]=Eine KDE-4-Anwendung
 GenericName[es]=Una aplicación para KDE 4
 GenericName[fr]=Une application pour KDE4
 GenericName[nds]=En Programm för KDE 4
