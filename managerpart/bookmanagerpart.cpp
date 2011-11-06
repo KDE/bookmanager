@@ -33,6 +33,7 @@
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <QMenu>
+#include <QPointer>
 
 //Thank you kontact plugin writing instructions for this next part :)
 K_PLUGIN_FACTORY(BookManagerPartFactory, registerPlugin<BookManagerPart>();)
@@ -127,10 +128,11 @@ void BookManagerPart::setupActions()
 
 void BookManagerPart::slotImport()
 {
-    m_import = new ImportDialog();
-    connect(m_import, SIGNAL(signalNewBook(dbusBook)),
+    QPointer<ImportDialog> importDialog = new ImportDialog;
+    connect(importDialog, SIGNAL(signalNewBook(dbusBook)),
             m_searchpage, SLOT(createBook(dbusBook)));
-    m_import->show();
+    importDialog->exec();
+    delete importDialog;
 }
 
 
