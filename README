@@ -14,7 +14,7 @@ libkde4-devel (This pulls in most of the the other kde4 devel packages)
 
 To Build Book manager from Git
 1) Get the sources
-$> git clone git://gitorious.org/book-manager/book-manager.git
+$> git clone git://anongit.kde.org/bookmanager
 2) Change to the source directory
 $> cd <src-dir>
 3) Create a build directory and change to it
