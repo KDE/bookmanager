@@ -47,6 +47,8 @@ void ImportDialog::setText(dbusBook* book)
     authorEdit->setText(book->author);
     relNumEdit->setText(book->release);
     relDateEdit->setText(book->releaseDate);
+    seriesEdit->setText(book->series);
+    volumeEdit->setText(book->volume);
     genreEdit->setText(book->genre);
     locationUrlRequestor->setUrl(KUrl(book->url));
 
@@ -64,6 +66,8 @@ void ImportDialog::slotImportClicked()
     book.release = relNumEdit->text();
     book.releaseDate = relDateEdit->text();
     book.genre = genreEdit->text();
+    book.series = seriesEdit->text();
+    book.volume = volumeEdit->text();
     book.url = locationUrlRequestor->url().url();
     emit signalNewBook(book);
     close();

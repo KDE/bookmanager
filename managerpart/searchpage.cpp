@@ -259,6 +259,8 @@ dbusBook SearchPage::getBook(QModelIndex index)
     dbusBook book;
     book.author = m_model->data(m_model->index(index.row(), Author)).toString();
     book.genre = m_model->data(m_model->index(index.row(), Genre)).toString();
+    book.series = m_model->data(m_model->index(index.row(), Series)).toString();
+    book.volume = m_model->data(m_model->index(index.row(), Volume)).toString();
     book.release = m_model->data(m_model->index(index.row(), Release)).toString();
     book.releaseDate = m_model->data(m_model->index(index.row(), ReleaseDate)).toString();
     book.summary = m_model->data(m_model->index(index.row(), Summary)).toString();

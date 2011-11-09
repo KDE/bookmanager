@@ -40,6 +40,8 @@ CollectionModel::CollectionModel()
                 << ki18nc("A books edition or version number", "Edition").toString()
                 << ki18nc("The date the book was released", "Release Date").toString()
                 << ki18nc("The type or style of a book, examples: Science Fiction, History", "Genre").toString()
+                << ki18nc("The series of a book ", "Series").toString()
+                << ki18nc("The volume number of a book", "Volume").toString()
                 << "Disk Location";
     const int colCount = columnCount();
     for (int i = 0; i < colCount; i++) {

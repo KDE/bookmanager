@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>391</width>
-    <height>373</height>
+    <width>499</width>
+    <height>476</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -87,6 +87,30 @@
         <widget class="KLineEdit" name="relDateEdit"/>
        </item>
       </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <item>
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Series</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KLineEdit" name="seriesEdit"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Volume</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KLineEdit" name="volumeEdit"/>
      </item>
     </layout>
    </item>
@@ -185,9 +209,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
   </customwidget>
   <customwidget>
    <class>KPushButton</class>
@@ -195,14 +219,14 @@
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>KTextEdit</class>
    <extends>QTextEdit</extends>
    <header>ktextedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -210,8 +234,11 @@
   <tabstop>authorEdit</tabstop>
   <tabstop>relNumEdit</tabstop>
   <tabstop>relDateEdit</tabstop>
+  <tabstop>seriesEdit</tabstop>
+  <tabstop>volumeEdit</tabstop>
   <tabstop>genreEdit</tabstop>
   <tabstop>locationUrlRequestor</tabstop>
+  <tabstop>descEdit</tabstop>
   <tabstop>ImportButton</tabstop>
   <tabstop>cancelButton</tabstop>
  </tabstops>
@@ -224,8 +251,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>350</x>
-     <y>356</y>
+     <x>491</x>
+     <y>461</y>
     </hint>
     <hint type="destinationlabel">
      <x>185</x>

@@ -35,6 +35,8 @@ struct dbusBook {
     QString release;
     QString releaseDate;
     QString genre;
+    QString series;
+    QString volume;
     QString url;
 };
 

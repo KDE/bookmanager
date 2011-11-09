@@ -36,7 +36,8 @@ public slots:
     void query(QString *queryText, QString *columnName);
 
 private:
-    enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre, Location};
+    enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,
+                       Series, Volume, Location};
 };
 
 #endif // COLLECTIONMODEL_H
