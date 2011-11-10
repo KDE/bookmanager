@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>importDialog</class>
- <widget class="QDialog" name="importDialog">
+ <class>importWidget</class>
+ <widget class="QWidget" name="importWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>499</width>
-    <height>476</height>
+    <width>587</width>
+    <height>492</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Import New Books</string>
+   <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -171,40 +171,6 @@
      </item>
     </layout>
    </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_7">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="KPushButton" name="ImportButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Import</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KPushButton" name="cancelButton">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -212,11 +178,6 @@
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
    <class>KTextEdit</class>
@@ -229,36 +190,6 @@
    <header>kurlrequester.h</header>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>titleEdit</tabstop>
-  <tabstop>authorEdit</tabstop>
-  <tabstop>relNumEdit</tabstop>
-  <tabstop>relDateEdit</tabstop>
-  <tabstop>seriesEdit</tabstop>
-  <tabstop>volumeEdit</tabstop>
-  <tabstop>genreEdit</tabstop>
-  <tabstop>locationUrlRequestor</tabstop>
-  <tabstop>descEdit</tabstop>
-  <tabstop>ImportButton</tabstop>
-  <tabstop>cancelButton</tabstop>
- </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>cancelButton</sender>
-   <signal>clicked()</signal>
-   <receiver>importDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>491</x>
-     <y>461</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>185</x>
-     <y>357</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -24,10 +24,12 @@
 #include <KUrl>
 
 //don't forget to include the ui-file
-#include "ui_importdialog.h"
+#include "ui_importwidget.h"
 #include "bookstruct.h"
 
-class ImportDialog : public KDialog, public Ui_importDialog
+class ImportWidget;
+
+class ImportDialog : public KDialog
 {
     Q_OBJECT
 public:
@@ -35,14 +37,22 @@ public:
 public slots:
     void setText(dbusBook *book);
 private slots:
-    void slotImportClicked();
+    void accept();
     void slotEnableImport();
     void checkUrl(QString);
 signals:
     //connect this to the collection to add books
     void signalNewBook(dbusBook book);
     void urlIsGood();
+    
+private:
+    ImportWidget *widget;
+};
 
+class ImportWidget : public QWidget, public Ui_importWidget
+{
+public:
+    ImportWidget(QWidget *parent = 0);
 };
 
 #endif // IMPORTDIALOG_H

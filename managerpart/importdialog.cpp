@@ -28,12 +28,14 @@
 ImportDialog::ImportDialog(QWidget *parent)
     : KDialog(parent)
 {
-    setupUi(this);
-    connect(ImportButton, SIGNAL(clicked()),
-            this, SLOT(slotImportClicked()));
+    widget = new ImportWidget(this);
+    setCaption(i18n("Import a new book"));
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setButtonText(KDialog::Ok, i18n("Import"));
+    setMainWidget(widget);
 
     //test to see if the file actually exists before adding it
-    connect(locationUrlRequestor, SIGNAL(textChanged(QString)),
+    connect(widget->locationUrlRequestor, SIGNAL(textChanged(QString)),
             this, SLOT(checkUrl(QString)));
 
     connect(this, SIGNAL(urlIsGood()),
@@ -42,40 +44,40 @@ ImportDialog::ImportDialog(QWidget *parent)
 
 void ImportDialog::setText(dbusBook* book)
 {
-    titleEdit->setText(book->title);
-    descEdit->setText(book->summary);
-    authorEdit->setText(book->author);
-    relNumEdit->setText(book->release);
-    relDateEdit->setText(book->releaseDate);
-    seriesEdit->setText(book->series);
-    volumeEdit->setText(book->volume);
-    genreEdit->setText(book->genre);
-    locationUrlRequestor->setUrl(KUrl(book->url));
+    widget->titleEdit->setText(book->title);
+    widget->descEdit->setText(book->summary);
+    widget->authorEdit->setText(book->author);
+    widget->relNumEdit->setText(book->release);
+    widget->relDateEdit->setText(book->releaseDate);
+    widget->seriesEdit->setText(book->series);
+    widget->volumeEdit->setText(book->volume);
+    widget->genreEdit->setText(book->genre);
+    widget->locationUrlRequestor->setUrl(KUrl(book->url));
 
     //change the text of the button to save from import
-    ImportButton->setText(i18n("&Save"));
+    setButtonText(KDialog::Ok, i18n("&Save"));
 }
 
 
-void ImportDialog::slotImportClicked()
+void ImportDialog::accept()
 {
     dbusBook book;
-    book.title = titleEdit->text();
-    book.summary = descEdit->toPlainText();
-    book.author = authorEdit->text();
-    book.release = relNumEdit->text();
-    book.releaseDate = relDateEdit->text();
-    book.genre = genreEdit->text();
-    book.series = seriesEdit->text();
-    book.volume = volumeEdit->text();
-    book.url = locationUrlRequestor->url().url();
+    book.title = widget->titleEdit->text();
+    book.summary = widget->descEdit->toPlainText();
+    book.author = widget->authorEdit->text();
+    book.release = widget->relNumEdit->text();
+    book.releaseDate = widget->relDateEdit->text();
+    book.genre = widget->genreEdit->text();
+    book.series = widget->seriesEdit->text();
+    book.volume = widget->volumeEdit->text();
+    book.url = widget->locationUrlRequestor->url().url();
     emit signalNewBook(book);
-    close();
+    KDialog::accept();
 }
 
 void ImportDialog::slotEnableImport()
 {
-    ImportButton->setEnabled(true);
+    enableButtonOk(true);
 }
 
 
@@ -86,4 +88,9 @@ void ImportDialog::checkUrl(QString url)
     if (KIO::NetAccess::exists(file, read, NULL)) {
         emit urlIsGood();
     }
+}
+
+ImportWidget::ImportWidget(QWidget* parent)
+{
+    setupUi(this);
 }
