@@ -49,10 +49,7 @@ SearchPage::SearchPage(QWidget *parent) :
     resultTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     resultTable->setSortingEnabled(true);//enable sorting for the table
 
-    //create a prettier header for the view
-    QHeaderView *head = resultTable->horizontalHeader();
-    head->setResizeMode(QHeaderView::Stretch);
-    head->setMovable(true);
+    fixHeaders();
 
     resultTable->hideColumn(ID);
     resultTable->hideColumn(Location);
@@ -94,6 +91,38 @@ SearchPage::~SearchPage()
         
     
 }
+
+void SearchPage::fixHeaders()
+{
+    //create a prettier header for the view
+    QHeaderView *head = resultTable->horizontalHeader();
+    head->setResizeMode(QHeaderView::Stretch);
+    head->setMovable(true);
+    m_model->setHeaderData(Title, Qt::Horizontal,
+                           QVariant(i18nc("This book's title", "Title")));
+    m_model->setHeaderData(Summary, Qt::Horizontal,
+                           QVariant(i18nc("A short summary of this book",
+                                          "Summary")));
+    m_model->setHeaderData(Author, Qt::Horizontal,
+                           QVariant(i18nc("A person who writes books",
+                                          "Author")));
+    m_model->setHeaderData(Release, Qt::Horizontal,
+                           QVariant(i18nc("A books edition or version number",
+                                          "Edition")));
+    m_model->setHeaderData(ReleaseDate, Qt::Horizontal,
+                           QVariant(i18nc("The date the book was released",
+                                          "Release Date")));
+    m_model->setHeaderData(Genre, Qt::Horizontal,
+                           QVariant(i18nc("The type or style of a book, "
+                                          "examples: Science Fiction, History",
+                                          "Genre")));
+    m_model->setHeaderData(Series, Qt::Horizontal,
+                           QVariant(i18nc("The series of a book ", "Series")));
+    m_model->setHeaderData(Volume, Qt::Horizontal,
+                           QVariant(i18nc("The volume number of a book",
+                                          "Volume")));
+}
+
 
 void SearchPage::createBook(dbusBook book)
 {
@@ -228,12 +257,12 @@ void SearchPage::resetQuery()
 void SearchPage::slotEditBooks()
 {
     QModelIndexList editUs = resultTable->selectionModel()->selectedIndexes();
-
+    
     //verify that we got at least one index... if the remove book command is called
     //without having anything selected we segfault :(
     if (editUs.length() > 0) {
         int index = editUs.at(0).row();
-
+        
         foreach(const QModelIndex & editMe,  editUs) {
             int row = editMe.row();
             if (row < index) {
@@ -241,9 +270,9 @@ void SearchPage::slotEditBooks()
             }
             //use the index to create a bookstruct with the existing info
             dbusBook curBook = getBook(editMe);
-
+            
             //reuse the importdialog and createBook slots to edit the book
-
+            
             m_import = new ImportDialog();
             m_import->setText(&curBook);
             connect(m_import, SIGNAL(signalNewBook(dbusBook)),

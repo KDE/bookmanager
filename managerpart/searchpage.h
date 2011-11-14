@@ -66,6 +66,7 @@ signals:
     //can't emit a Kurl, so emit it as a string
     Q_SCRIPTABLE void loadBook(QString url);
 private:
+    void fixHeaders();
     ImportDialog *m_import;
     CollectionDB *m_db;
     CollectionModel *m_model;

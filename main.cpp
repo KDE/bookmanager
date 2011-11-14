@@ -34,6 +34,9 @@ int main(int argc, char *argv[])
                          KLocalizedString(),
                          "http://gitorious.org/book-manager/book-manager/"
                         );
+    aboutData.addCredit(ki18n("Riccardo Bellini"),
+                        ki18n("Patches and suggestions"),
+                        "ricky88ykcir@gmail.com");
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
 
