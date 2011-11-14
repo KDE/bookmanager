@@ -79,9 +79,6 @@ SearchPage::SearchPage(QWidget *parent) :
 
 SearchPage::~SearchPage()
 {
-    if(m_import){
-        m_import->deleteLater();
-    }
     if(m_model){
         m_model->deleteLater();
     }
@@ -274,6 +271,7 @@ void SearchPage::slotEditBooks()
             //reuse the importdialog and createBook slots to edit the book
             
             m_import = new ImportDialog();
+            m_import->setAttribute(Qt::WA_DeleteOnClose);
             m_import->setText(&curBook);
             connect(m_import, SIGNAL(signalNewBook(dbusBook)),
                     this, SLOT(createBook(dbusBook )));
