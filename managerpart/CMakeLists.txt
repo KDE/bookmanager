@@ -5,6 +5,7 @@ set(bookmanager_manager_PART_SRCS
 	searchpage.cpp
     bookmanagerpart.cpp
     importdialog.cpp
+    queryengine.cpp
     collectiondb.cpp
     bookstruct.h
     collectionmodel.cpp 
@@ -18,7 +19,7 @@ kde4_add_plugin(bookmanagerpart ${bookmanager_manager_PART_SRCS})
 
 
 
-target_link_libraries(bookmanagerpart ${KDE4_KDEUI_LIBS}  ${KDE4_KPARTS_LIBS} ${QT_QTSQL_LIBRARIES})
+target_link_libraries(bookmanagerpart ${KDE4_KDEUI_LIBS}  ${KDE4_KPARTS_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${QT_QTSQL_LIBRARIES})
 
 
 install( TARGETS bookmanagerpart DESTINATION ${PLUGIN_INSTALL_DIR})

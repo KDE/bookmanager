@@ -93,4 +93,11 @@ void ImportDialog::checkUrl(QString url)
 ImportWidget::ImportWidget(QWidget* parent)
 {
     setupUi(this);
+
+    setupAutocompletion();
+}
+
+void ImportWidget::setupAutocompletion()
+{
+    // TODO...
 }
