@@ -65,9 +65,9 @@ void Query::QueryEngine::runQuery()
     QueryEngineInternal *internalEngine = new QueryEngineInternal(m_type, this);
 
     connect(internalEngine, SIGNAL(authorAvailable(QString)), this,
-            SIGNAL(authorAvailable(QString)));
+            SIGNAL(authorAvailable(QString)), Qt::DirectConnection);
     connect(internalEngine, SIGNAL(genreAvailable(QString)), this,
-            SIGNAL(genreAvailable(QString)));
+            SIGNAL(genreAvailable(QString)), Qt::DirectConnection);
 
     QueryProcesserPrivate *job = new QueryProcesserPrivate(internalEngine);
     connect(job, SIGNAL(done(ThreadWeaver::Job*)),

@@ -100,15 +100,25 @@ ImportWidget::ImportWidget(QWidget* parent)
 
 void ImportWidget::setupAutocompletion()
 {
+    KCompletion *authorComp = authorEdit->completionObject();
+    authorEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    authorComp->setIgnoreCase(true);
+    authorComp->setOrder(KCompletion::Sorted);
+
+    KCompletion *genreComp = genreEdit->completionObject();
+    genreEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    genreComp->setIgnoreCase(true);
+    genreComp->setOrder(KCompletion::Sorted);
+
     Query::QueryEngine *engine = new Query::QueryEngine(Query::Author, this);
 
     connect(engine, SIGNAL(authorAvailable(QString)),
-            SLOT(newAuthorComplete(QString)));
+            SLOT(newAuthorComplete(QString)), Qt::QueuedConnection);
     connect(engine, SIGNAL(genreAvailable(QString)),
-            SLOT(newGenreComplete(QString)));
+            SLOT(newGenreComplete(QString)), Qt::QueuedConnection);
 
     connect(engine, SIGNAL(finished()),
-            SLOT(queryCompleted()));
+            SLOT(queryCompleted()), Qt::QueuedConnection);
 
     engine->runQuery();
 
@@ -119,25 +129,27 @@ void ImportWidget::setupAutocompletion()
 
 void ImportWidget::newAuthorComplete(const QString& author)
 {
-    authors.insert(author);
+//     authors.insert(author);
+    authorEdit->completionObject()->addItem(author);
 }
 
 void ImportWidget::newGenreComplete(const QString& genre)
 {
-    genres.insert(genre);
+//     genres.insert(genre);
+    genreEdit->completionObject()->addItem(genre);
 }
 
 void ImportWidget::queryCompleted()
 {
-    KCompletion *authorComp = authorEdit->completionObject();
-    authorEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
-    authorComp->setIgnoreCase(true);
-    authorComp->setOrder(KCompletion::Sorted);
-    authorComp->setItems(authors.toList());
-
-    KCompletion *genreComp = genreEdit->completionObject();
-    genreEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
-    genreComp->setIgnoreCase(true);
-    genreComp->setOrder(KCompletion::Sorted);
-    genreComp->setItems(genres.toList());
+//     KCompletion *authorComp = authorEdit->completionObject();
+//     authorEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+//     authorComp->setIgnoreCase(true);
+//     authorComp->setOrder(KCompletion::Sorted);
+//     authorComp->setItems(authors.toList());
+//
+//     KCompletion *genreComp = genreEdit->completionObject();
+//     genreEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+//     genreComp->setIgnoreCase(true);
+//     genreComp->setOrder(KCompletion::Sorted);
+//     genreComp->setItems(genres.toList());
 }
