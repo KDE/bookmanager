@@ -29,6 +29,8 @@
 
 class ImportWidget;
 
+class KCompletion;
+
 class ImportDialog : public KDialog
 {
     Q_OBJECT
@@ -61,15 +63,11 @@ private slots:
     void newAuthorComplete(const QString &author);
     void newGenreComplete(const QString &genre);
 
-    // when the asynchronous query has finished, we setup
-    // autocompletion.
-    void queryCompleted();
-
 private:
     void setupAutocompletion();
 
-    QSet<QString> authors;
-    QSet<QString> genres;
+    KCompletion *authorComp;
+    KCompletion *genreComp;
 };
 
 #endif // IMPORTDIALOG_H
