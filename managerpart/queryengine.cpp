@@ -20,9 +20,12 @@
 #include "queryengine.h"
 
 #include <QSqlQuery>
+#include <QSqlError>
+#include <QVariant>
 
 #include "threadweaver/Job.h"
 #include "threadweaver/ThreadWeaver.h"
+#include <kdebug.h>
 
 namespace Query {
 
@@ -48,7 +51,7 @@ namespace Query {
 }
 
 Query::QueryEngine::QueryEngine(Query::QueryType type, QObject* parent)
-:QObject(parent), m_internalEngine(0)
+:QObject(parent)
 {
     m_type = type;
 }
@@ -59,14 +62,14 @@ void Query::QueryEngine::runQuery()
     // create the internal query engine and the worker thread,
     // schedule it for running.
     // Also, propagate signals from internal engine
-    m_internalEngine = new QueryEngineInternal(m_type);
+    QueryEngineInternal *internalEngine = new QueryEngineInternal(m_type, this);
 
-    connect(m_internalEngine, SIGNAL(authorAvailable(QString)), this,
+    connect(internalEngine, SIGNAL(authorAvailable(QString)), this,
             SIGNAL(authorAvailable(QString)));
-    connect(m_internalEngine, SIGNAL(genreAvailable(QString)), this,
+    connect(internalEngine, SIGNAL(genreAvailable(QString)), this,
             SIGNAL(genreAvailable(QString)));
 
-    QueryProcesserPrivate *job = new QueryProcesserPrivate(m_internalEngine);
+    QueryProcesserPrivate *job = new QueryProcesserPrivate(internalEngine);
     connect(job, SIGNAL(done(ThreadWeaver::Job*)),
             SLOT(done(ThreadWeaver::Job*)));
     // enqueue as a job
@@ -79,13 +82,13 @@ void Query::QueryEngine::done(ThreadWeaver::Job *job)
     ThreadWeaver::Weaver::instance()->dequeue(job);
     job->deleteLater();
 
-    m_internalEngine->deleteLater();
-
     emit finished();
 }
 
 
-Query::QueryEngineInternal::QueryEngineInternal(Query::QueryType type)
+Query::QueryEngineInternal::QueryEngineInternal(Query::QueryType type,
+                                                QObject *parent)
+: QObject(parent)
 {
     m_type = type;
 
@@ -109,14 +112,31 @@ void Query::QueryEngineInternal::buildQuery()
             break;
     }
 
-    m_query += "FROM collection";
+    m_query += " FROM collection";
 }
 
 void Query::QueryEngineInternal::runQuery()
 {
     QSqlQuery new_query;
+
+    // optimize the execution of the query
+    new_query.setForwardOnly(true);
     new_query.exec(m_query);
     if (new_query.isActive()) {
-        // TODO...
+        // our query is running, start emitting results
+        while (new_query.next()) {
+            QString value = new_query.value(0).toString();
+            switch (m_type) {
+                case Query::Author:
+                    emit authorAvailable(value);
+                    break;
+                case Query::Genre:
+                    emit genreAvailable(value);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
+

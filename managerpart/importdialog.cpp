@@ -18,6 +18,7 @@
 */
 
 #include "importdialog.h"
+#include "queryengine.h"
 
 #include <klocale.h>
 #include <kicon.h>
@@ -99,5 +100,44 @@ ImportWidget::ImportWidget(QWidget* parent)
 
 void ImportWidget::setupAutocompletion()
 {
-    // TODO...
+    Query::QueryEngine *engine = new Query::QueryEngine(Query::Author, this);
+
+    connect(engine, SIGNAL(authorAvailable(QString)),
+            SLOT(newAuthorComplete(QString)));
+    connect(engine, SIGNAL(genreAvailable(QString)),
+            SLOT(newGenreComplete(QString)));
+
+    connect(engine, SIGNAL(finished()),
+            SLOT(queryCompleted()));
+
+    engine->runQuery();
+
+    engine->setType(Query::Genre);
+
+    engine->runQuery();
+}
+
+void ImportWidget::newAuthorComplete(const QString& author)
+{
+    authors.insert(author);
+}
+
+void ImportWidget::newGenreComplete(const QString& genre)
+{
+    genres.insert(genre);
+}
+
+void ImportWidget::queryCompleted()
+{
+    KCompletion *authorComp = authorEdit->completionObject();
+    authorEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    authorComp->setIgnoreCase(true);
+    authorComp->setOrder(KCompletion::Sorted);
+    authorComp->setItems(authors.toList());
+
+    KCompletion *genreComp = genreEdit->completionObject();
+    genreEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    genreComp->setIgnoreCase(true);
+    genreComp->setOrder(KCompletion::Sorted);
+    genreComp->setItems(genres.toList());
 }

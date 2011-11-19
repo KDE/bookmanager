@@ -25,6 +25,11 @@
 // Thanks to Amarok code (tag dialog part) for the idea of a
 // separate thread.
 
+// FIXME try to find a better way to do this.
+// In this way, query are executed every time an import dialog is created,
+// and even if they are run in different threads, they have to fetch all the
+// authors/genres in the database. Behaviour is undefined with huge db!
+
 namespace ThreadWeaver {
     class Job;
 }
@@ -34,11 +39,7 @@ namespace ThreadWeaver {
 namespace Query {
 
     // the field to be selected and passed to the view.
-    // Genre is here for future support of genre autocompletion.
     enum QueryType { Author = 0, Genre };
-
-    // real worker thread.
-    class QueryProcesserPrivate;
 
     class QueryEngineInternal;
 
@@ -48,6 +49,11 @@ namespace Query {
         Q_OBJECT
     public:
         QueryEngine(QueryType type, QObject *parent = 0);
+
+        void setType(QueryType type)
+        {
+            m_type = type;
+        }
 
         void runQuery();
 
@@ -66,7 +72,6 @@ namespace Query {
 
     private:
         QueryType m_type;
-        QueryEngineInternal *m_internalEngine;
     };
 
     // middle-level class, necessary to receive signals from worker thread
@@ -75,7 +80,7 @@ namespace Query {
     {
         Q_OBJECT
     public:
-        QueryEngineInternal(QueryType type);
+        QueryEngineInternal(QueryType type, QObject *parent = 0);
 
         void runQuery();
 

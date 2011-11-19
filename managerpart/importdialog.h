@@ -55,17 +55,21 @@ class ImportWidget : public QWidget, public Ui_importWidget
 public:
     ImportWidget(QWidget *parent = 0);
 
+private slots:
     // when we catch a signal from the query engine, we add author/genre
-    // to our set. When we finish with the query, we set up completion
-    // in KLineEdit.
-public slots:
+    // to our set.
     void newAuthorComplete(const QString &author);
     void newGenreComplete(const QString &genre);
+
+    // when the asynchronous query has finished, we setup
+    // autocompletion.
+    void queryCompleted();
 
 private:
     void setupAutocompletion();
 
     QSet<QString> authors;
+    QSet<QString> genres;
 };
 
 #endif // IMPORTDIALOG_H
