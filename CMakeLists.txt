@@ -6,7 +6,6 @@ include (KDE4Defaults)
 
 add_subdirectory(doc)
 add_subdirectory(managerpart)
-add_subdirectory(po)
 
 include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
