@@ -23,7 +23,7 @@
   <Merge />
 </MenuBar>
 <ToolBar name="toolbar">
-  <text>Main Toolbar </text>
+  <text>Main Toolbar</text>
   <Action name="open" />	
   <Merge />
 </ToolBar>

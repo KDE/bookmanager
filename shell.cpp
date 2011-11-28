@@ -217,7 +217,7 @@ void Shell::readerTab(const KUrl *url)
         mainView->setCurrentIndex(index);
     } else {
         //if we couldn't open the part, display an error
-        KMessageBox::error(this, i18n("Book Manager was unable to load the file: ").append(url->prettyUrl()), url->prettyUrl());
+        KMessageBox::error(this, i18n("Book Manager was unable to load the file: %1", url->prettyUrl()), url->prettyUrl());
 
     }
 }

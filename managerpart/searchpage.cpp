@@ -114,7 +114,7 @@ void SearchPage::fixHeaders()
                                           "examples: Science Fiction, History",
                                           "Genre")));
     m_model->setHeaderData(Series, Qt::Horizontal,
-                           QVariant(i18nc("The series of a book ", "Series")));
+                           QVariant(i18nc("The series of a book", "Series")));
     m_model->setHeaderData(Volume, Qt::Horizontal,
                            QVariant(i18nc("The volume number of a book",
                                           "Volume")));
