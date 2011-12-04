@@ -1,0 +1,5 @@
+- Import books from folder.
+- Avoid creating one dialog for each book to be edited.
+  It should be nice to have maybe "Previous" and "Next" button.
+- "Search in all opened files/entire collection" feature (is it possible?).
+- Add cover picture for the books.
