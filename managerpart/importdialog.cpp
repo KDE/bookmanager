@@ -117,9 +117,6 @@ void ImportWidget::setupAutocompletion()
     connect(engine, SIGNAL(genreAvailable(QString)),
             SLOT(newGenreComplete(QString)), Qt::QueuedConnection);
 
-    connect(engine, SIGNAL(finished()),
-            SLOT(queryCompleted()), Qt::QueuedConnection);
-
     engine->runQuery();
 
     engine->setType(Query::Genre);

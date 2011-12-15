@@ -5,6 +5,7 @@ set(bookmanager_manager_PART_SRCS
 	searchpage.cpp
     bookmanagerpart.cpp
     importdialog.cpp
+    modifydialog.cpp
     queryengine.cpp
     collectiondb.cpp
     bookstruct.h

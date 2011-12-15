@@ -22,6 +22,7 @@
 #include "collectionmodel.h"
 #include "bookstruct.h"
 #include "importdialog.h"
+#include "modifydialog.h"
 
 #include <QSqlTableModel>
 #include <kdebug.h>
@@ -253,31 +254,38 @@ void SearchPage::resetQuery()
 
 void SearchPage::slotEditBooks()
 {
-    QModelIndexList editUs = resultTable->selectionModel()->selectedIndexes();
+    QModelIndexList editUs = resultTable->selectionModel()->selectedRows();
     
     //verify that we got at least one index... if the remove book command is called
     //without having anything selected we segfault :(
-    if (editUs.length() > 0) {
-        int index = editUs.at(0).row();
+//     if (editUs.length() > 0) {
+//         int index = editUs.at(0).row();
+//         
+//         foreach(const QModelIndex & editMe,  editUs) {
+//             int row = editMe.row();
+//             if (row < index) {
+//                 return;
+//             }
+//             //use the index to create a bookstruct with the existing info
+//             dbusBook curBook = getBook(editMe);
+//             
+//             //reuse the importdialog and createBook slots to edit the book
+//             
+//             m_import = new ImportDialog();
+//             m_import->setAttribute(Qt::WA_DeleteOnClose);
+//             m_import->setText(&curBook);
+//             connect(m_import, SIGNAL(signalNewBook(dbusBook)),
+//                     this, SLOT(createBook(dbusBook )));
+//             m_import->show();
+//             index += 1;
+//         }
+//     }
+    if (editUs.size() > 0) {
+        QPointer<ModifyDialog> modifyDialog = new ModifyDialog(editUs, m_model,
+                                                               this);
+        modifyDialog->exec();
         
-        foreach(const QModelIndex & editMe,  editUs) {
-            int row = editMe.row();
-            if (row < index) {
-                return;
-            }
-            //use the index to create a bookstruct with the existing info
-            dbusBook curBook = getBook(editMe);
-            
-            //reuse the importdialog and createBook slots to edit the book
-            
-            m_import = new ImportDialog();
-            m_import->setAttribute(Qt::WA_DeleteOnClose);
-            m_import->setText(&curBook);
-            connect(m_import, SIGNAL(signalNewBook(dbusBook)),
-                    this, SLOT(createBook(dbusBook )));
-            m_import->show();
-            index += 1;
-        }
+        delete modifyDialog;
     }
 }
 
