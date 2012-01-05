@@ -80,19 +80,17 @@ QWidget* ModifyDialog::createMainWidget()
 
 
 void ModifyDialog::applyToAllToggled(bool toggle)
-{
-    // FIXME rename labels to meaningful names...
-    
+{    
     // we can't give the same title to many books
-    importWidget->label->setEnabled(!toggle);
+    importWidget->titleLabel->setEnabled(!toggle);
     importWidget->titleEdit->setEnabled(!toggle);
     
     // we can't assign the same URL to many books
-    importWidget->label_7->setEnabled(!toggle);
+    importWidget->locationLabel->setEnabled(!toggle);
     importWidget->locationUrlRequestor->setEnabled(!toggle);
     
     // we can't give the same volume number to many books
-    importWidget->label_9->setEnabled(!toggle);
+    importWidget->volumeLabel->setEnabled(!toggle);
     importWidget->volumeEdit->setEnabled(!toggle);
     
     // disable "Previous" and "Next" buttons
