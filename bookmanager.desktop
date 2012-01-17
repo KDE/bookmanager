@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=bookmanager
 Name[es]=gestor de libros
+Name[et]=Raamatuhaldur
 Name[fr]=gestionnaire de signets
 Name[nl]=bookmanager
 Name[pl]=menadżerksiążek
@@ -17,6 +18,7 @@ GenericName=A KDE4 Application
 GenericName[cs]=Aplikace prostředí KDE 4
 GenericName[de]=Eine KDE-4-Anwendung
 GenericName[es]=Una aplicación para KDE 4
+GenericName[et]=KDE4 rakendus
 GenericName[fr]=Une application pour KDE4
 GenericName[ga]=Feidhmchlár KDE4
 GenericName[nds]=En Programm för KDE 4
