@@ -21,7 +21,7 @@
 #include "collectiondb.h"
 #include "bookstruct.h"
 #include "importdialog.h"
-#include "collectionmodel.h"
+#include "collectiontreemodel.h"
 
 #include <QSqlTableModel>
 #include <kdebug.h>
@@ -38,7 +38,7 @@ SearchPage::SearchPage(QWidget *parent) :
     setupUi(this); setFocusPolicy(Qt::ClickFocus);
 
     m_db = new CollectionDB();
-    m_model = new CollectionModel();
+    m_model = new CollectionTreeModel();
     m_import = 0;
 
     //set up the view

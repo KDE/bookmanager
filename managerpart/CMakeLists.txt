@@ -9,7 +9,8 @@ set(bookmanager_manager_PART_SRCS
     queryengine.cpp
     collectiondb.cpp
     bookstruct.h
-    collectionmodel.cpp 
+    collectionmodel.cpp
+    collectiontreemodel.cpp
 )
 qt4_add_dbus_adaptor(bookmanager_manager_PART_SRCS org.bookmanager.BookManagerPart.xml
                     bookmanagerpart.h BookManagerPart)

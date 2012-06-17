@@ -29,7 +29,7 @@ class ImportDialog;
 
 
 class CollectionDB;
-class CollectionModel;
+class CollectionTreeModel;
 class QModelIndex;
 
 class SearchPage : public QWidget, public Ui_SearchPage
@@ -69,7 +69,7 @@ private:
     void fixHeaders();
     ImportDialog *m_import;
     CollectionDB *m_db;
-    CollectionModel *m_model;
+    CollectionTreeModel *m_model;
 
     const QPoint mapToViewport(const QPoint& pos);
     dbusBook getBook(QModelIndex index);
