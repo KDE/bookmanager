@@ -19,10 +19,9 @@
 #include "searchpage.h"
 
 #include "collectiondb.h"
-#include "collectionmodel.h"
 #include "bookstruct.h"
 #include "importdialog.h"
-#include "modifydialog.h"
+#include "collectionmodel.h"
 
 #include <QSqlTableModel>
 #include <kdebug.h>
@@ -32,8 +31,6 @@
 #include <QStringList>
 #include <QScrollBar>
 
-
-#include <QTextStream>
 
 SearchPage::SearchPage(QWidget *parent) :
     QWidget(parent)
@@ -45,15 +42,14 @@ SearchPage::SearchPage(QWidget *parent) :
     m_import = 0;
 
     //set up the view
-    resultTable->setModel(m_model);
-    resultTable->setEditTriggers(QAbstractItemView::SelectedClicked);
-    resultTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    resultTable->setSortingEnabled(true);//enable sorting for the table
-
+    resultTree->setModel(m_model);
+    resultTree->setEditTriggers(QAbstractItemView::SelectedClicked);
+    resultTree->setSelectionBehavior(QAbstractItemView::SelectRows);
+    resultTree->setSortingEnabled(true);//enable sorting for the table
     fixHeaders();
 
-    resultTable->hideColumn(ID);
-    resultTable->hideColumn(Location);
+    //resultTree->hideColumn(ID);
+    //resultTree->hideColumn(Location);
     show();
 
     connect(this, SIGNAL(newBook(dbusBook)),
@@ -64,7 +60,7 @@ SearchPage::SearchPage(QWidget *parent) :
             this, SLOT(updateModel()));
 
     //load the book on doubleclick anywhere in that row?
-    connect(resultTable, SIGNAL(doubleClicked(QModelIndex)),
+    connect(resultTree, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(openBook(QModelIndex)));
 
     //connect the ui signals to the query slots
@@ -93,7 +89,7 @@ SearchPage::~SearchPage()
 void SearchPage::fixHeaders()
 {
     //create a prettier header for the view
-    QHeaderView *head = resultTable->horizontalHeader();
+    QHeaderView *head = resultTree->header();
     head->setResizeMode(QHeaderView::Stretch);
     head->setMovable(true);
     m_model->setHeaderData(Title, Qt::Horizontal,
@@ -115,7 +111,7 @@ void SearchPage::fixHeaders()
                                           "examples: Science Fiction, History",
                                           "Genre")));
     m_model->setHeaderData(Series, Qt::Horizontal,
-                           QVariant(i18nc("The series of a book", "Series")));
+                           QVariant(i18nc("The series of a book ", "Series")));
     m_model->setHeaderData(Volume, Qt::Horizontal,
                            QVariant(i18nc("The volume number of a book",
                                           "Volume")));
@@ -131,7 +127,7 @@ void SearchPage::remBook()
 {
     //the foreach loops over every column in each row so im using a counter to exit the loop when
     //it starts on the second column.
-    QModelIndexList removeUs = resultTable->selectionModel()->selectedIndexes();
+    QModelIndexList removeUs = resultTree->selectionModel()->selectedIndexes();
     //verify that we got at least one index... if the remove book command is called
     //without having anything selected we segfault :(
     if (removeUs.length() > 0) {
@@ -177,7 +173,7 @@ void SearchPage::openBook()
 
     //the foreach loops over every column in each row so im using a counter to exit the loop when
     //it starts on the second column.
-    QModelIndexList openUs = resultTable->selectionModel()->selectedIndexes();
+    QModelIndexList openUs = resultTree->selectionModel()->selectedIndexes();
     //verify that we got at least one index... if the remove book command is called
     //without having anything selected we segfault :(
     if (openUs.length() > 0) {
@@ -203,7 +199,7 @@ QModelIndex SearchPage::indexAt(const QPoint& pos)
 {
     //we have to map the position to the parent widget because the tableview gives
     //it relative to the viewport, while we care about the whole widget
-    return  resultTable->indexAt(mapToViewport(pos));
+    return  resultTree->indexAt(mapToViewport(pos));
 }
 
 //map the position to the viewport from from the Translates the widget
@@ -216,8 +212,8 @@ const QPoint SearchPage::mapToViewport(const QPoint& pos)
     //numbers
     int x;
     int y;
-    x = resultTable->pos().x() + resultTable->verticalHeader()->width();
-    y = resultTable->pos().y() + resultTable->horizontalHeader()->height();
+    x = resultTree->pos().x();
+    y = resultTree->pos().y() + resultTree->header()->height();
 
     //now that we have the offsets, convert the original point to a new viewport based one
     QPoint convertedpoint(pos - QPoint(x, y));
@@ -254,38 +250,31 @@ void SearchPage::resetQuery()
 
 void SearchPage::slotEditBooks()
 {
-    QModelIndexList editUs = resultTable->selectionModel()->selectedRows();
+    QModelIndexList editUs = resultTree->selectionModel()->selectedIndexes();
     
     //verify that we got at least one index... if the remove book command is called
     //without having anything selected we segfault :(
-//     if (editUs.length() > 0) {
-//         int index = editUs.at(0).row();
-//         
-//         foreach(const QModelIndex & editMe,  editUs) {
-//             int row = editMe.row();
-//             if (row < index) {
-//                 return;
-//             }
-//             //use the index to create a bookstruct with the existing info
-//             dbusBook curBook = getBook(editMe);
-//             
-//             //reuse the importdialog and createBook slots to edit the book
-//             
-//             m_import = new ImportDialog();
-//             m_import->setAttribute(Qt::WA_DeleteOnClose);
-//             m_import->setText(&curBook);
-//             connect(m_import, SIGNAL(signalNewBook(dbusBook)),
-//                     this, SLOT(createBook(dbusBook )));
-//             m_import->show();
-//             index += 1;
-//         }
-//     }
-    if (editUs.size() > 0) {
-        QPointer<ModifyDialog> modifyDialog = new ModifyDialog(editUs, m_model,
-                                                               this);
-        modifyDialog->exec();
+    if (editUs.length() > 0) {
+        int index = editUs.at(0).row();
         
-        delete modifyDialog;
+        foreach(const QModelIndex & editMe,  editUs) {
+            int row = editMe.row();
+            if (row < index) {
+                return;
+            }
+            //use the index to create a bookstruct with the existing info
+            dbusBook curBook = getBook(editMe);
+            
+            //reuse the importdialog and createBook slots to edit the book
+            
+            m_import = new ImportDialog();
+            m_import->setAttribute(Qt::WA_DeleteOnClose);
+            m_import->setText(&curBook);
+            connect(m_import, SIGNAL(signalNewBook(dbusBook)),
+                    this, SLOT(createBook(dbusBook )));
+            m_import->show();
+            index += 1;
+        }
     }
 }
 
