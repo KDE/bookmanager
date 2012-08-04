@@ -134,6 +134,7 @@ void CollectionTreeModel::attachCollectionModel()
         i18nc("A short summary of this book","Summary: ") % m_collectionModel->data(m_collectionModel->index(row,Summary)).toString() % QString("\n");
         QStandardItem *tempBook = new QStandardItem;
         tempBook->setData(tempDataString, Qt::DisplayRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row,Location)), UrlRole);
         tempAuthor->setChild(tempAuthor->rowCount(), tempBook);
     }
 }

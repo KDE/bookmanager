@@ -154,15 +154,11 @@ void SearchPage::updateModel()
 
 void SearchPage::openBook(QModelIndex index)
 {
-    //use the layout enum to recreate the index with the books url selected
-    //so that the model doesn't need to match the DB ordering...
-    QModelIndex urlIndex = m_model->index(index.row(), Location);
     //this bit has caused a lot of issues so i'm leaving a debug in...
-    kDebug() << m_model->data(urlIndex).toString();
-    KUrl bookUrl = KUrl(m_model->data(urlIndex).toString());
+    kDebug() << m_model->data(index, UrlRole);
+    KUrl bookUrl = KUrl(m_model->data(index, UrlRole).toString());
     //emit it as a qstring so we can send it easily over dbus :D
     emit loadBook(bookUrl.url());
-
 }
 
 void SearchPage::openBook()
