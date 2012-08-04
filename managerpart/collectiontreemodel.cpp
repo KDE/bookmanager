@@ -29,6 +29,11 @@ CollectionTreeModel::CollectionTreeModel(QObject* parent): QStandardItemModel(pa
     m_collectionModel = new CollectionModel();
     m_rootItem = 0;
     createMergedModel();
+
+    connect(this, SIGNAL(repeatQuery(QString*,QString*)),
+            m_collectionModel, SLOT(query(QString*,QString*)));
+    connect(m_collectionModel, SIGNAL(newFilter()),
+            this, SLOT(rebuildModel()));
 }
 CollectionTreeModel::~CollectionTreeModel()
 {
@@ -118,4 +123,27 @@ void CollectionTreeModel::attachCollectionModel()
         tempBook->setData(tempDataString, Qt::DisplayRole);
         tempAuthor->setChild(tempAuthor->rowCount(), tempBook);
     }
+}
+
+void CollectionTreeModel::query(QString* queryText, QString* columnName)
+{
+    /* this just re-emits the query after connecting the signal repeatQuery to the slot
+     * in the collectionmodel.I'm going through all this mainly to avoid doing a cast of
+     * m_collectionModel to collectionmodel and calling the slot directly. It may be slower but
+     * I don't like casting things often for some reason I can't remember right now.
+     */
+    emit repeatQuery(queryText, columnName);
+}
+
+void CollectionTreeModel::rebuildModel()
+{
+    /*
+     * this will call createMergedModel to recreate the model if anything changes in
+     * the underlying collectionmodel, be it a new filter(search)  or a change to the db.
+     * The docs say to emit beginResetModel, and endResetModel when the underlying
+     * model is altered, so do that here too...
+     */
+    emit beginResetModel();
+    createMergedModel();
+    emit endResetModel();
 }

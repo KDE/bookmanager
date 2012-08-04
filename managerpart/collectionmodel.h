@@ -34,6 +34,8 @@ public:
 
 public slots:
     void query(QString *queryText, QString *columnName);
+signals:
+    void newFilter();
 
 private:
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,

@@ -29,7 +29,15 @@ class CollectionTreeModel : public QStandardItemModel
 public:
     CollectionTreeModel(QObject* parent = 0);
     virtual ~CollectionTreeModel();
+    
+public slots:
+    void query(QString *queryText, QString *columnName);
 
+signals:
+    void repeatQuery(QString *query, QString *column);
+
+private slots:
+    void rebuildModel(); 
 private:
     
     QAbstractItemModel *m_collectionModel;

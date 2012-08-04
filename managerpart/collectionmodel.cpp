@@ -55,4 +55,5 @@ void CollectionModel::query(QString* queryText, QString* columnName)
 
     //run the filter
     setFilter(filterText);
+    emit newFilter();
 }
