@@ -46,9 +46,12 @@ void CollectionTreeModel::createAuthorModel()
 {
     //there may be an easier way to find dupes, but i'm just going to use a string list to remove them if they exist...
     QStringList* authorlist = new QStringList;
+    bool needUnknown = 0;
     for(int row = 0; row < m_collectionModel->rowCount(); row++){
         if(m_collectionModel->data(m_collectionModel->index(row, Author)).toString() != ""){
             authorlist->append(m_collectionModel->data(m_collectionModel->index(row, Author)).toString());
+        } else {
+            needUnknown = 1;
         }
     }
     authorlist->removeDuplicates();
@@ -61,9 +64,19 @@ void CollectionTreeModel::createAuthorModel()
      * it won't interfere with peoples collections, i hope. this will need to be translated somehow but I've
      * no idea how. FIXME
      */
-    QStandardItem *unknown = new QStandardItem;
-    unknown->setData("Unknown Author", Qt::DisplayRole);
-    m_rootItem->appendRow(unknown);
+    if(needUnknown){
+        QStandardItem *unknown = new QStandardItem;
+        unknown->setData("Unknown Author", Qt::DisplayRole);
+        m_rootItem->appendRow(unknown);
+    }
+    /*
+     * if there are no entries in the list then we need to make a "No Documents Found" entry
+     */
+    if(authorlist->isEmpty()){
+        QStandardItem *none = new QStandardItem;
+        none->setData(i18n("No Documents Found"), Qt::DisplayRole);
+        m_rootItem->appendRow(none);
+    }
 }
 
 void CollectionTreeModel::createMergedModel()
