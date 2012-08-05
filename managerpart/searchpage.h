@@ -77,7 +77,7 @@ private:
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,
                        Series, Volume, Location};
     //Qt::UserRole aliases
-    enum dataRole { UrlRole = Qt::UserRole+2, UnknownAuthorRole = Qt::UserRole+3};
+    enum dataRole { UrlRole = Qt::UserRole+2, UnknownAuthorRole = Qt::UserRole+3, KeyRole = Qt::UserRole + 4};
 };
 
 #endif // SEARCHPAGE_H

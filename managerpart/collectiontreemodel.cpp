@@ -16,6 +16,7 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include <kdebug.h>
 #include <klocalizedstring.h>
 #include <QStringBuilder>
 #include <QStandardItem>
@@ -135,6 +136,7 @@ void CollectionTreeModel::attachCollectionModel()
         QStandardItem *tempBook = new QStandardItem;
         tempBook->setData(tempDataString, Qt::DisplayRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row,Location)), UrlRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, ID)), KeyRole);
         tempAuthor->setChild(tempAuthor->rowCount(), tempBook);
     }
 }
@@ -160,4 +162,25 @@ void CollectionTreeModel::rebuildModel()
     emit beginResetModel();
     createMergedModel();
     emit endResetModel();
+}
+
+bool CollectionTreeModel::removeRow(QString key)
+{
+    /*
+     * Use the key from the db to map the entry back to its database entry and delete it.
+     * I'm going to use the filter functionality of qsqltablemodel rather than iterating over them
+     * entire list since it is likely faster for large lists and we need to recreate the model
+     * afterward anyway it shouldn't really add any extra overhead.
+     */
+    QString oldFilter = m_collectionModel->filter();
+    QString newFilter = "id = ";
+    newFilter.append(key);
+    m_collectionModel->setFilter(newFilter);
+    //since there should only be 1 row, we can just remove it without checking, I hope
+    bool success = m_collectionModel->removeRow(0);
+    //now that everything's deleted we just need to rebuild the model
+    m_collectionModel->setFilter(oldFilter);
+    rebuildModel();
+    // returning the status of the removal just to duplicated the removerow functionality we're replacing
+    return success;
 }

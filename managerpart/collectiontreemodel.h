@@ -22,6 +22,7 @@
 
 #include <QStandardItemModel>
 
+class CollectionModel;
 
 class CollectionTreeModel : public QStandardItemModel
 {
@@ -29,6 +30,8 @@ class CollectionTreeModel : public QStandardItemModel
 public:
     CollectionTreeModel(QObject* parent = 0);
     virtual ~CollectionTreeModel();
+
+    bool removeRow(QString key);
     
 public slots:
     void query(QString *queryText, QString *columnName);
@@ -40,7 +43,7 @@ private slots:
     void rebuildModel(); 
 private:
     
-    QAbstractItemModel *m_collectionModel;
+    CollectionModel *m_collectionModel;
     QStandardItem *m_rootItem;
     
     void createAuthorModel();
@@ -50,7 +53,7 @@ private:
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,
     Series, Volume, Location};
     //Qt::UserRole aliases
-    enum dataRole { UrlRole = Qt::UserRole+2, UnknownAuthorRole = Qt::UserRole+3};
+    enum dataRole { UrlRole = Qt::UserRole + 2, UnknownAuthorRole = Qt::UserRole + 3, KeyRole = Qt::UserRole + 4};
 };
 
 #endif // COLLECTIONTREEMODEL_H
