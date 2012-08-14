@@ -67,7 +67,8 @@ void CollectionTreeModel::createAuthorModel()
      */
     if(needUnknown){
         QStandardItem *unknown = new QStandardItem;
-        unknown->setData("Unknown Author", Qt::DisplayRole);
+        unknown->setData(i18nc("A placeholder entry for books with no known author", "Unknown Author"), Qt::DisplayRole);
+        unknown->setData(true, UnknownAuthorRole);
         m_rootItem->appendRow(unknown);
     }
     /*
@@ -96,7 +97,15 @@ void CollectionTreeModel::attachCollectionModel()
     
     QHash<QString, QStandardItem*> authorCache;
     for(int row = 0; row < m_rootItem->rowCount(); row++){
-        authorCache.insert(m_rootItem->child(row)->data(Qt::DisplayRole).toString(), m_rootItem->child(row));
+        /* in order to allow for the translation of the unknown author entry i believe i need to go
+         * through the extra check here, since we have no guarantee that the datastring is going to be
+         * "unknown author"
+         */
+        if(m_rootItem->child(row)->data(UnknownAuthorRole).toBool()){
+            authorCache.insert("Unknown Author", m_rootItem->child(row));
+        } else {
+            authorCache.insert(m_rootItem->child(row)->data(Qt::DisplayRole).toString(), m_rootItem->child(row));
+        }
     }
     for(int row = 0; row < m_collectionModel->rowCount(); row++){
         QString author = m_collectionModel->data(m_collectionModel->index(row,Author)).toString();
