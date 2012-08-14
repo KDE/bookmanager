@@ -23,13 +23,10 @@
 #include "importdialog.h"
 #include "collectiontreemodel.h"
 
-#include <QSqlTableModel>
 #include <kdebug.h>
 #include <QSqlError>
-#include <qheaderview.h>
 #include <klocale.h>
 #include <QStringList>
-#include <QScrollBar>
 
 
 SearchPage::SearchPage(QWidget *parent) :
@@ -46,10 +43,9 @@ SearchPage::SearchPage(QWidget *parent) :
     resultTree->setEditTriggers(QAbstractItemView::SelectedClicked);
     resultTree->setSelectionBehavior(QAbstractItemView::SelectRows);
     resultTree->setSortingEnabled(true);//enable sorting for the table
-    fixHeaders();
 
-    //resultTree->hideColumn(ID);
-    //resultTree->hideColumn(Location);
+    fixHeaders();
+    
     show();
 
     connect(this, SIGNAL(newBook(dbusBook)),
@@ -92,31 +88,10 @@ void SearchPage::fixHeaders()
     QHeaderView *head = resultTree->header();
     head->setResizeMode(QHeaderView::Stretch);
     head->setMovable(true);
-    m_model->setHeaderData(Title, Qt::Horizontal,
-                           QVariant(i18nc("This book's title", "Title")));
-    m_model->setHeaderData(Summary, Qt::Horizontal,
-                           QVariant(i18nc("A short summary of this book",
-                                          "Summary")));
-    m_model->setHeaderData(Author, Qt::Horizontal,
+    m_model->setHeaderData(0, Qt::Horizontal,
                            QVariant(i18nc("A person who writes books",
                                           "Author")));
-    m_model->setHeaderData(Release, Qt::Horizontal,
-                           QVariant(i18nc("A books edition or version number",
-                                          "Edition")));
-    m_model->setHeaderData(ReleaseDate, Qt::Horizontal,
-                           QVariant(i18nc("The date the book was released",
-                                          "Release Date")));
-    m_model->setHeaderData(Genre, Qt::Horizontal,
-                           QVariant(i18nc("The type or style of a book, "
-                                          "examples: Science Fiction, History",
-                                          "Genre")));
-    m_model->setHeaderData(Series, Qt::Horizontal,
-                           QVariant(i18nc("The series of a book ", "Series")));
-    m_model->setHeaderData(Volume, Qt::Horizontal,
-                           QVariant(i18nc("The volume number of a book",
-                                          "Volume")));
 }
-
 
 void SearchPage::createBook(dbusBook book)
 {
