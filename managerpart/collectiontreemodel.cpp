@@ -49,7 +49,8 @@ void CollectionTreeModel::createAuthorModel()
     QStringList* authorlist = new QStringList;
     bool needUnknown = 0;
     for(int row = 0; row < m_collectionModel->rowCount(); row++){
-        if(m_collectionModel->data(m_collectionModel->index(row, Author)).toString() != ""){
+        //check if the string isEmpty, then negate it so we can pass the Krazy test
+        if(!m_collectionModel->data(m_collectionModel->index(row, Author)).toString().isEmpty()){
             authorlist->append(m_collectionModel->data(m_collectionModel->index(row, Author)).toString());
         } else {
             needUnknown = 1;
@@ -109,7 +110,7 @@ void CollectionTreeModel::attachCollectionModel()
     for(int row = 0; row < m_collectionModel->rowCount(); row++){
         QString author = m_collectionModel->data(m_collectionModel->index(row,Author)).toString();
         QStandardItem *tempAuthor;
-        if(author == ""){
+        if(author.isEmpty()){
             tempAuthor = authorCache.value("Unknown Author");
         } else {
             tempAuthor = authorCache.value(author);
