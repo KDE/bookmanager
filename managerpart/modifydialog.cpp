@@ -22,20 +22,13 @@
 #include "collectionmodel.h"
 
 #include <QCheckBox>
-#include <QDataWidgetMapper>
-#include <QStyledItemDelegate>
-#include <QSqlError>
-#include <QSqlRecord>
 
-#include <KDebug>
-
-ModifyDialog::ModifyDialog(const QModelIndexList& indexList,
-                           CollectionModel *model,
+ModifyDialog::ModifyDialog(QLinkedList<dbusBook> booklist,
                            QWidget* parent)
 :KDialog(parent)
 {
-    this->indexList = indexList;
-    this->collectionModel = model;
+    m_booklist = booklist;
+    m_current = booklist.begin();
     
     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1 | KDialog::User2);
     setButtonText(KDialog::User2, i18n("< Previous"));
@@ -71,7 +64,7 @@ QWidget* ModifyDialog::createMainWidget()
     applyToAllCheckBox->setChecked(false);
     
     // disable "apply to all" check box if there is only one item
-    if (indexList.size() == 1) {
+    if (m_booklist.size() == 1) {
         applyToAllCheckBox->setEnabled(false);
     }
     
@@ -106,113 +99,74 @@ void ModifyDialog::applyToAllToggled(bool toggle)
 
 void ModifyDialog::setupMappings()
 {
-    // prepare widget mapper
-    mapper = new QDataWidgetMapper(this);
-    mapper->setModel(collectionModel);
-    mapper->setItemDelegate(new QStyledItemDelegate(this));
-    mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+    importWidget->titleEdit->setText(m_current->title);
+    importWidget->descEdit->setText(m_current->summary);
+    importWidget->authorEdit->setText(m_current->author);
+    importWidget->relNumEdit->setText(m_current->release);
+    importWidget->relDateEdit->setText(m_current->releaseDate);
+    importWidget->seriesEdit->setText(m_current->series);
+    importWidget->volumeEdit->setText(m_current->volume);
+    importWidget->genreEdit->setText(m_current->genre);
+    importWidget->locationUrlRequestor->setUrl(KUrl(m_current->url));
+
+    updateButtons();
     
-    // setup mappings
-    mapper->addMapping(importWidget->titleEdit,
-                       collectionModel->fieldIndex("title"));
-    mapper->addMapping(importWidget->authorEdit,
-                       collectionModel->fieldIndex("author"));
-    mapper->addMapping(importWidget->relNumEdit,
-                       collectionModel->fieldIndex("release"));
-    mapper->addMapping(importWidget->relDateEdit,
-                       collectionModel->fieldIndex("releaseDate"));
-    mapper->addMapping(importWidget->seriesEdit,
-                       collectionModel->fieldIndex("series"));
-    mapper->addMapping(importWidget->volumeEdit,
-                       collectionModel->fieldIndex("volume"));
-    mapper->addMapping(importWidget->genreEdit,
-                       collectionModel->fieldIndex("genre"));
-    mapper->addMapping(importWidget->locationUrlRequestor,
-                       collectionModel->fieldIndex("url"), "text");
-    mapper->addMapping(importWidget->descEdit,
-                       collectionModel->fieldIndex("summary"), "plainText");
-    
-    connect(mapper, SIGNAL(currentIndexChanged(int)), SLOT(updateButtons()));
-    
-    currentPosition = 0;
-    
-    mapper->setCurrentIndex(indexList.at(currentPosition).row());
-    
-    importWidget->locationUrlRequestor->
-    setUrl(importWidget->locationUrlRequestor->text());
 }
 
 
 void ModifyDialog::previous()
 {
     // submit all changes to current book before switching, otherwise they are
-    // lost forever.
-    if (!mapper->submit()) {
-        kError() << "Failed to submit data:" <<
-        collectionModel->lastError().text();
-    }
-    
-    mapper->setCurrentIndex(indexList.at(--currentPosition).row());
-    
-    importWidget->locationUrlRequestor->
-    setUrl(importWidget->locationUrlRequestor->text());
+    // lost forever. This also updates m_booklist
+    updateAndSubmit();
+    m_current--;
+    setupMappings();
 }
 
 
 void ModifyDialog::next()
 {
     // submit all changes to current book before switching, otherwise they are
-    // lost forever.
-    if (!mapper->submit()) {
-        kError() << "Failed to submit data:" <<
-        collectionModel->lastError().text();
-    }
-    
-    mapper->setCurrentIndex(indexList.at(++currentPosition).row());
-    
-    importWidget->locationUrlRequestor->
-    setUrl(importWidget->locationUrlRequestor->text());
+    // lost forever. This also updates m_booklist
+    updateAndSubmit();
+    m_current++;
+    setupMappings();
 }
+void ModifyDialog::updateAndSubmit()
+{
+    dbusBook current = *m_current;
+    //update the booklist entry and submit the new data to the underlying db
+    current.title = importWidget->titleEdit->text();
+    current.summary = importWidget->descEdit->toPlainText();
+    current.author = importWidget->authorEdit->text();
+    current.release = importWidget->relNumEdit->text();
+    current.releaseDate = importWidget->relDateEdit->text();
+    current.genre = importWidget->genreEdit->text();
+    current.series = importWidget->seriesEdit->text();
+    current.volume = importWidget->volumeEdit->text();
+    current.url = importWidget->locationUrlRequestor->url().url();
 
-
+    emit signalUpdateBook(*m_current);
+}
 void ModifyDialog::updateButtons()
 {
     // if we are at the first element, disable "Previous" button
-    enableButton(KDialog::User2, currentPosition > 0);
+    enableButton(KDialog::User2, m_current != m_booklist.begin());
     
     // if we are at the last element, disable "Next" button
-    enableButton(KDialog::User1, currentPosition < indexList.size() - 1);
+    enableButton(KDialog::User1, m_current != m_booklist.end());
 }
 
 
 void ModifyDialog::applyToAllPrivate()
 {
-    // save new data
-    QString newAuthor = importWidget->authorEdit->text();
-    QString newRelNum = importWidget->relNumEdit->text();
-    QString newRelDate = importWidget->relDateEdit->text();
-    QString newSeries = importWidget->seriesEdit->text();
-    QString newGenre = importWidget->genreEdit->text();
-    QString newDescription = importWidget->descEdit->toPlainText();
-    
-    // revert all previous changes not saved to this book
-    mapper->revert();
-    
     // iterate over items and modify data in the model
-    foreach (const QModelIndex & currentModelIndex, indexList) {
-        QSqlRecord currentRecord = collectionModel->record(currentModelIndex.row());
-        
-        // modify record data
-        currentRecord.setValue("author", newAuthor);
-        currentRecord.setValue("release", newRelNum);
-        currentRecord.setValue("releaseDate", newRelDate);
-        currentRecord.setValue("series", newSeries);
-        currentRecord.setValue("genre", newGenre);
-        currentRecord.setValue("summary", newDescription);
-        
-        // save changes to model
-        collectionModel->setRecord(currentModelIndex.row(), currentRecord);
+    QLinkedList<dbusBook>::iterator current = m_current;
+    m_current = m_booklist.begin();
+    while(m_current != m_booklist.end()){
+        updateAndSubmit();
     }
+    m_current = current;
 }
 
 
@@ -223,10 +177,7 @@ void ModifyDialog::accept()
         applyToAllPrivate();
     } else {
         // try to submit data to underlying model
-        if (!mapper->submit()) {
-            kError() << "Failed to submit data:" <<
-            collectionModel->lastError().text();
-        }
+        updateAndSubmit();
     }
     KDialog::accept();
 }
@@ -235,6 +186,5 @@ void ModifyDialog::accept()
 void ModifyDialog::reject()
 {
     // abort modifications
-    mapper->revert();
     KDialog::reject();
 }

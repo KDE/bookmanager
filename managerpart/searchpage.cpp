@@ -21,6 +21,7 @@
 #include "collectiondb.h"
 #include "bookstruct.h"
 #include "importdialog.h"
+#include "modifydialog.h"
 #include "collectiontreemodel.h"
 
 #include <kdebug.h>
@@ -213,23 +214,19 @@ void SearchPage::resetQuery()
 
 void SearchPage::slotEditBooks()
 {
+    QLinkedList<dbusBook> selected;
     QModelIndexList editUs = resultTree->selectionModel()->selectedIndexes();
     
     //verify that we got at least one index... if the remove book command is called
     //without having anything selected we segfault :(
-    if (editUs.length() > 0) {        
+    if (editUs.length() > 0) {
         foreach(const QModelIndex & editMe,  editUs) {
             //use the index to get the key, which we can use to create a bookstruct with the existing info
-            dbusBook curBook = m_model->getBook(m_model->data(editMe, KeyRole).toString());
-            
-            //reuse the importdialog and createBook slots to edit the book
-            
-            m_import = new ImportDialog();
-            m_import->setAttribute(Qt::WA_DeleteOnClose);
-            m_import->setText(&curBook);
-            connect(m_import, SIGNAL(signalNewBook(dbusBook)),
-                    this, SLOT(createBook(dbusBook )));
-            m_import->show();
+            selected.append(m_model->getBook(m_model->data(editMe, KeyRole).toString()));
         }
+        QPointer<ModifyDialog> modifyDialog = new ModifyDialog(selected, this);
+        modifyDialog->exec();
+        
+        delete modifyDialog;
     }
 }

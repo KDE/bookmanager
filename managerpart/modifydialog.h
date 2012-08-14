@@ -20,25 +20,28 @@
 #ifndef MODIFYDIALOG_H
 #define MODIFYDIALOG_H
 
-#include <QModelIndexList>
-
 #include <KDialog>
 
-class QDataWidgetMapper;
+#include "bookstruct.h"
+#include <QLinkedList>
+
 class QCheckBox;
-class CollectionModel;
 class ImportWidget;
 
 class ModifyDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ModifyDialog(const QModelIndexList &indexList, CollectionModel *model,
+    ModifyDialog(QLinkedList<dbusBook> booklist,
                  QWidget *parent = 0);
 
 public slots:
     virtual void accept();
     virtual void reject();
+
+signals:
+    //connect this to the collection to update books
+    void signalUpdateBook(dbusBook book);
     
 private slots:
     void applyToAllToggled(bool toggle);
@@ -52,16 +55,14 @@ private:
     QWidget *createMainWidget();
     void setupMappings();
     void applyToAllPrivate();
+    void updateAndSubmit();
     
     QWidget *mainWidget;
     ImportWidget *importWidget;
     QCheckBox *applyToAllCheckBox;
-    
-    QDataWidgetMapper *mapper;
-    QModelIndexList indexList;
-    int currentPosition;
-    
-    CollectionModel *collectionModel;
+
+    QLinkedList<dbusBook>::Iterator m_current;
+    QLinkedList<dbusBook> m_booklist;
 };
 
 #endif // MODIFYDIALOG_H
