@@ -199,7 +199,7 @@ void ModifyDialog::applyToAllPrivate()
     mapper->revert();
     
     // iterate over items and modify data in the model
-    foreach (QModelIndex currentModelIndex, indexList) {
+    foreach (const QModelIndex & currentModelIndex, indexList) {
         QSqlRecord currentRecord = collectionModel->record(currentModelIndex.row());
         
         // modify record data
