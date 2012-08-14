@@ -43,9 +43,6 @@ public:
     SearchPage(QWidget *parent = 0);
     virtual ~SearchPage();
 
-    //workaround for needing showcontextmenu in bookmanagerpart FIXME
-    //this exposes the indexAt function of the tableview so the context menu
-    //can be contextual...
     QModelIndex indexAt(const QPoint& pos);
 
 public slots:

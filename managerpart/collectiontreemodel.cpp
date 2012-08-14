@@ -62,8 +62,7 @@ void CollectionTreeModel::createAuthorModel()
         m_rootItem->appendRow(author);
     }
     /* now we create a special "unknown" item in the author model, Unknown Author should be unique enough that
-     * it won't interfere with peoples collections, i hope. this will need to be translated somehow but I've
-     * no idea how. FIXME
+     * it won't interfere with peoples collections, i hope.
      */
     if(needUnknown){
         QStandardItem *unknown = new QStandardItem;

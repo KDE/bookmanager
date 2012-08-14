@@ -156,7 +156,6 @@ void SearchPage::openBook()
 
 }
 
-//workaround for needing showcontextmenu in bookmanagerpart FIXME
 //this exposes the indexAt function of the tableview so the context menu
 //can be contextual...
 QModelIndex SearchPage::indexAt(const QPoint& pos)
