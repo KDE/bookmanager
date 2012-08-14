@@ -184,3 +184,30 @@ bool CollectionTreeModel::removeRow(QString key)
     // returning the status of the removal just to duplicated the removerow functionality we're replacing
     return success;
 }
+dbusBook CollectionTreeModel::getBook(QString key)
+{
+    /*
+     * much like in removeRow above, use the collectionmodel's filter method to filter out all but the
+     * desired book, create the dbusbook from it, then return the filter to its previous state.
+     */
+    QString oldFilter = m_collectionModel->filter();
+    QString newFilter = "id = ";
+    newFilter.append(key);
+    m_collectionModel->setFilter(newFilter);
+    
+    //create a dbusBook from the record so we can play with individual values
+    dbusBook book;
+    book.author = m_collectionModel->data(m_collectionModel->index(0, Author)).toString();
+    book.genre = m_collectionModel->data(m_collectionModel->index(0, Genre)).toString();
+    book.series = m_collectionModel->data(m_collectionModel->index(0, Series)).toString();
+    book.volume = m_collectionModel->data(m_collectionModel->index(0, Volume)).toString();
+    book.release = m_collectionModel->data(m_collectionModel->index(0, Release)).toString();
+    book.releaseDate = m_collectionModel->data(m_collectionModel->index(0, ReleaseDate)).toString();
+    book.summary = m_collectionModel->data(m_collectionModel->index(0, Summary)).toString();
+    book.title = m_collectionModel->data(m_collectionModel->index(0, Title)).toString();
+    book.url = m_collectionModel->data(m_collectionModel->index(0, Location)).toString();
+
+    m_collectionModel->setFilter(oldFilter);
+    return book;
+    
+}

@@ -21,6 +21,7 @@
 #define COLLECTIONTREEMODEL_H
 
 #include <QStandardItemModel>
+#include "bookstruct.h"
 
 class CollectionModel;
 
@@ -32,6 +33,7 @@ public:
     virtual ~CollectionTreeModel();
 
     bool removeRow(QString key);
+    dbusBook getBook(QString key);
     
 public slots:
     void query(QString *queryText, QString *columnName);

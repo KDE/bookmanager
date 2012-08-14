@@ -40,7 +40,7 @@ SearchPage::SearchPage(QWidget *parent) :
 
     //set up the view
     resultTree->setModel(m_model);
-    resultTree->setEditTriggers(QAbstractItemView::SelectedClicked);
+    resultTree->setEditTriggers(QAbstractItemView::NoEditTriggers);
     resultTree->setSelectionBehavior(QAbstractItemView::SelectRows);
     resultTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     resultTree->setSortingEnabled(true);//enable sorting for the table
@@ -218,16 +218,10 @@ void SearchPage::slotEditBooks()
     
     //verify that we got at least one index... if the remove book command is called
     //without having anything selected we segfault :(
-    if (editUs.length() > 0) {
-        int index = editUs.at(0).row();
-        
+    if (editUs.length() > 0) {        
         foreach(const QModelIndex & editMe,  editUs) {
-            int row = editMe.row();
-            if (row < index) {
-                return;
-            }
-            //use the index to create a bookstruct with the existing info
-            dbusBook curBook = getBook(editMe);
+            //use the index to get the key, which we can use to create a bookstruct with the existing info
+            dbusBook curBook = m_model->getBook(m_model->data(editMe, KeyRole).toString());
             
             //reuse the importdialog and createBook slots to edit the book
             
@@ -237,24 +231,6 @@ void SearchPage::slotEditBooks()
             connect(m_import, SIGNAL(signalNewBook(dbusBook)),
                     this, SLOT(createBook(dbusBook )));
             m_import->show();
-            index += 1;
         }
     }
-}
-
-dbusBook SearchPage::getBook(QModelIndex index)
-{
-    dbusBook book;
-    book.author = m_model->data(m_model->index(index.row(), Author)).toString();
-    book.genre = m_model->data(m_model->index(index.row(), Genre)).toString();
-    book.series = m_model->data(m_model->index(index.row(), Series)).toString();
-    book.volume = m_model->data(m_model->index(index.row(), Volume)).toString();
-    book.release = m_model->data(m_model->index(index.row(), Release)).toString();
-    book.releaseDate = m_model->data(m_model->index(index.row(), ReleaseDate)).toString();
-    book.summary = m_model->data(m_model->index(index.row(), Summary)).toString();
-    book.title = m_model->data(m_model->index(index.row(), Title)).toString();
-    book.url = m_model->data(m_model->index(index.row(), Location)).toString();
-
-    return book;
-
 }
