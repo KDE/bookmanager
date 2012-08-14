@@ -42,6 +42,7 @@ SearchPage::SearchPage(QWidget *parent) :
     resultTree->setModel(m_model);
     resultTree->setEditTriggers(QAbstractItemView::SelectedClicked);
     resultTree->setSelectionBehavior(QAbstractItemView::SelectRows);
+    resultTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     resultTree->setSortingEnabled(true);//enable sorting for the table
 
     fixHeaders();
