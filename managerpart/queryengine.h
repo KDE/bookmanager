@@ -48,7 +48,7 @@ namespace Query {
     {
         Q_OBJECT
     public:
-        QueryEngine(QueryType type, QObject *parent = 0);
+        explicit QueryEngine(QueryType type, QObject *parent = 0);
 
         void setType(QueryType type)
         {
@@ -80,7 +80,7 @@ namespace Query {
     {
         Q_OBJECT
     public:
-        QueryEngineInternal(QueryType type, QObject *parent = 0);
+        explicit QueryEngineInternal(QueryType type, QObject *parent = 0);
 
         void runQuery();
 
