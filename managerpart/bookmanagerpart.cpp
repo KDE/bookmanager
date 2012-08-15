@@ -140,10 +140,20 @@ void BookManagerPart::ShowContextMenu(const QPoint& pos)
 {
     //use indexat to get our index from the qpoint
     QModelIndex curIndex = m_searchpage->indexAt(pos);
-    if (!curIndex.isValid()) {
+    //not we use the curIndex to get the model, then ask the model if the current index
+    //has any children because we don't want to be opening, editing, etc the parent items
+    //since they're created programmatically...
+    bool hasKids = false;
+    if (curIndex.model()->hasChildren(curIndex)){
+        hasKids = true;
+    }
+    if (!curIndex.isValid() or hasKids) {
         //the user clicked in the whitespace so we need to disable open and remove
         openSelected->setEnabled(false);
         remove->setEnabled(false);
+        if(hasKids){
+            edit->setEnabled(false);
+        }
         m_contextMenu->exec(QCursor::pos());
         //after we close the menu, turn open and remove back on
         openSelected->setEnabled(true);
