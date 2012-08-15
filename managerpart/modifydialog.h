@@ -23,7 +23,7 @@
 #include <KDialog>
 
 #include "bookstruct.h"
-#include <QLinkedList>
+#include <QList>
 
 class QCheckBox;
 class ImportWidget;
@@ -32,7 +32,7 @@ class ModifyDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ModifyDialog(QLinkedList<dbusBook> booklist,
+    ModifyDialog(QList<dbusBook> booklist,
                  QWidget *parent = 0);
 
 public slots:
@@ -61,8 +61,10 @@ private:
     ImportWidget *importWidget;
     QCheckBox *applyToAllCheckBox;
 
-    QLinkedList<dbusBook>::Iterator m_current;
-    QLinkedList<dbusBook> m_booklist;
+    QList<dbusBook>::Iterator m_current;
+    QList<dbusBook> m_booklist;
+    int m_last;
+    int m_currentCount;
 };
 
 #endif // MODIFYDIALOG_H

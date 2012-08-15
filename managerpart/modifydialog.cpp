@@ -22,13 +22,18 @@
 #include "collectionmodel.h"
 
 #include <QCheckBox>
+#include <KDebug>
 
-ModifyDialog::ModifyDialog(QLinkedList<dbusBook> booklist,
+ModifyDialog::ModifyDialog(QList<dbusBook> booklist,
                            QWidget* parent)
 :KDialog(parent)
 {
     m_booklist = booklist;
     m_current = booklist.begin();
+    //i'd rather use iterators for everything, but for some reason they don't seem to want to work?
+    //probably because I'm playing with non-qt types
+    m_current = 0;
+    m_last = booklist.size();
     
     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1 | KDialog::User2);
     setButtonText(KDialog::User2, i18n("< Previous"));
@@ -99,15 +104,15 @@ void ModifyDialog::applyToAllToggled(bool toggle)
 
 void ModifyDialog::setupMappings()
 {
-    importWidget->titleEdit->setText(m_current->title);
-    importWidget->descEdit->setText(m_current->summary);
-    importWidget->authorEdit->setText(m_current->author);
-    importWidget->relNumEdit->setText(m_current->release);
-    importWidget->relDateEdit->setText(m_current->releaseDate);
-    importWidget->seriesEdit->setText(m_current->series);
-    importWidget->volumeEdit->setText(m_current->volume);
-    importWidget->genreEdit->setText(m_current->genre);
-    importWidget->locationUrlRequestor->setUrl(KUrl(m_current->url));
+    importWidget->titleEdit->setText(m_booklist.at(m_currentCount).title);
+    importWidget->descEdit->setText(m_booklist.at(m_currentCount).summary);
+    importWidget->authorEdit->setText(m_booklist.at(m_currentCount).author);
+    importWidget->relNumEdit->setText(m_booklist.at(m_currentCount).release);
+    importWidget->relDateEdit->setText(m_booklist.at(m_currentCount).releaseDate);
+    importWidget->seriesEdit->setText(m_booklist.at(m_currentCount).series);
+    importWidget->volumeEdit->setText(m_booklist.at(m_currentCount).volume);
+    importWidget->genreEdit->setText(m_booklist.at(m_currentCount).genre);
+    importWidget->locationUrlRequestor->setUrl(KUrl(m_booklist.at(m_currentCount).url));
 
     updateButtons();
     
@@ -119,7 +124,7 @@ void ModifyDialog::previous()
     // submit all changes to current book before switching, otherwise they are
     // lost forever. This also updates m_booklist
     updateAndSubmit();
-    m_current--;
+    m_currentCount--;
     setupMappings();
 }
 
@@ -129,44 +134,46 @@ void ModifyDialog::next()
     // submit all changes to current book before switching, otherwise they are
     // lost forever. This also updates m_booklist
     updateAndSubmit();
-    m_current++;
+    m_currentCount++;
     setupMappings();
 }
 void ModifyDialog::updateAndSubmit()
 {
-    dbusBook current = *m_current;
+    dbusBook updated;
     //update the booklist entry and submit the new data to the underlying db
-    current.title = importWidget->titleEdit->text();
-    current.summary = importWidget->descEdit->toPlainText();
-    current.author = importWidget->authorEdit->text();
-    current.release = importWidget->relNumEdit->text();
-    current.releaseDate = importWidget->relDateEdit->text();
-    current.genre = importWidget->genreEdit->text();
-    current.series = importWidget->seriesEdit->text();
-    current.volume = importWidget->volumeEdit->text();
-    current.url = importWidget->locationUrlRequestor->url().url();
+    updated.title = importWidget->titleEdit->text();
+    updated.summary = importWidget->descEdit->toPlainText();
+    updated.author = importWidget->authorEdit->text();
+    updated.release = importWidget->relNumEdit->text();
+    updated.releaseDate = importWidget->relDateEdit->text();
+    updated.genre = importWidget->genreEdit->text();
+    updated.series = importWidget->seriesEdit->text();
+    updated.volume = importWidget->volumeEdit->text();
+    updated.url = importWidget->locationUrlRequestor->url().url();
 
-    emit signalUpdateBook(*m_current);
+    emit signalUpdateBook(updated);
 }
 void ModifyDialog::updateButtons()
 {
     // if we are at the first element, disable "Previous" button
-    enableButton(KDialog::User2, m_current != m_booklist.begin());
+    enableButton(KDialog::User2, m_currentCount != 0);
     
     // if we are at the last element, disable "Next" button
-    enableButton(KDialog::User1, m_current != m_booklist.end());
+    //we need to subtract 1 from m_last, because we want to know if their is a next entry,
+    //not if we're the last entry
+    enableButton(KDialog::User1, m_currentCount != m_last - 1);
 }
 
 
 void ModifyDialog::applyToAllPrivate()
 {
     // iterate over items and modify data in the model
-    QLinkedList<dbusBook>::iterator current = m_current;
-    m_current = m_booklist.begin();
-    while(m_current != m_booklist.end()){
+    int saved = m_currentCount;
+    m_currentCount = 0;
+    while(m_currentCount != m_last){
         updateAndSubmit();
     }
-    m_current = current;
+    m_currentCount = saved;
 }
 
 

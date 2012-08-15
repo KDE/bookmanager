@@ -214,7 +214,7 @@ void SearchPage::resetQuery()
 
 void SearchPage::slotEditBooks()
 {
-    QLinkedList<dbusBook> selected;
+    QList<dbusBook> selected;
     QModelIndexList editUs = resultTree->selectionModel()->selectedIndexes();
     
     //verify that we got at least one index... if the remove book command is called
@@ -225,6 +225,8 @@ void SearchPage::slotEditBooks()
             selected.append(m_model->getBook(m_model->data(editMe, KeyRole).toString()));
         }
         QPointer<ModifyDialog> modifyDialog = new ModifyDialog(selected, this);
+        connect(modifyDialog, SIGNAL(signalUpdateBook(dbusBook)),
+                m_db, SLOT(addBook(dbusBook)));
         modifyDialog->exec();
         
         delete modifyDialog;
