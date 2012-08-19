@@ -61,7 +61,6 @@ private:
     ImportWidget *importWidget;
     QCheckBox *applyToAllCheckBox;
 
-    QList<dbusBook>::Iterator m_current;
     QList<dbusBook> m_booklist;
     int m_last;
     int m_currentCount;

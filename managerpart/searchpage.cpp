@@ -222,7 +222,11 @@ void SearchPage::slotEditBooks()
     if (editUs.length() > 0) {
         foreach(const QModelIndex & editMe,  editUs) {
             //use the index to get the key, which we can use to create a bookstruct with the existing info
-            selected.append(m_model->getBook(m_model->data(editMe, KeyRole).toString()));
+            //this also filters out the author index items
+            QString key = m_model->data(editMe, KeyRole).toString();
+            if(!key.isEmpty()){
+                selected.append(m_model->getBook(key));                
+            }
         }
         QPointer<ModifyDialog> modifyDialog = new ModifyDialog(selected, this);
         connect(modifyDialog, SIGNAL(signalUpdateBook(dbusBook)),

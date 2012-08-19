@@ -29,10 +29,9 @@ ModifyDialog::ModifyDialog(QList<dbusBook> booklist,
 :KDialog(parent)
 {
     m_booklist = booklist;
-    m_current = booklist.begin();
     //i'd rather use iterators for everything, but for some reason they don't seem to want to work?
     //probably because I'm playing with non-qt types
-    m_current = 0;
+    m_currentCount = 0;
     m_last = booklist.size();
     
     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1 | KDialog::User2);
