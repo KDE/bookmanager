@@ -35,8 +35,10 @@ ModifyDialog::ModifyDialog(QList<dbusBook> booklist,
     m_last = booklist.size();
     
     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1 | KDialog::User2);
-    setButtonText(KDialog::User2, i18n("< Previous"));
-    setButtonText(KDialog::User1, i18n("Next >"));
+    setButtonText(KDialog::User2, i18nc("go to the Previous entry", "Previous"));
+    setButtonGuiItem(KDialog::User2, KStandardGuiItem::back());
+    setButtonText(KDialog::User1, i18nc("go to the next entry", "Next"));
+    setButtonGuiItem(KDialog::User1, KStandardGuiItem::forward());
     
     mainWidget = createMainWidget();
     setMainWidget(mainWidget);
