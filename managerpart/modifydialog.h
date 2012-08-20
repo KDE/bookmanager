@@ -32,7 +32,7 @@ class ModifyDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ModifyDialog(QList<dbusBook> booklist,
+    explicit ModifyDialog(QList<dbusBook> booklist,
                  QWidget *parent = 0);
 
 public slots:
