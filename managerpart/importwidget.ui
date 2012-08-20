@@ -101,6 +101,9 @@
      </item>
      <item>
       <widget class="QLabel" name="volumeLabel">
+       <property name="accessibleName">
+        <string comment="The volume number of a book that is part of a series of books."/>
+       </property>
        <property name="text">
         <string>Volume</string>
        </property>
