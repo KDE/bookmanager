@@ -25,7 +25,9 @@
 #include <QStandardItem>
 #include <QStringList>
 
+#include <poppler/qt4/poppler-qt4.h>
 
+const float ScaleFactor = 0.16;
 
 CollectionTreeModel::CollectionTreeModel(QObject* parent): QStandardItemModel(parent)
 {
@@ -148,7 +150,25 @@ void CollectionTreeModel::attachCollectionModel()
         tempBook->setData(tempDataString, Qt::DisplayRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row,Location)), UrlRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, ID)), KeyRole);
+        
         tempAuthor->setChild(tempAuthor->rowCount(), tempBook);
+        
+        // get preview of the document (the first page of the pdf file)
+        QString locationString = tempBook->data(UrlRole).toString();
+        // necessary to decode correctly the path
+        KUrl locationUrl(locationString);
+        Poppler::Document *document = Poppler::Document::load(locationUrl.path());
+        QImage preview;
+        if (document) {
+            preview = document->page(0)->renderToImage(ScaleFactor * 72.0,
+                                                              ScaleFactor * 72.0);
+        }
+        
+        // FIXME this image should be stored in a cache, not in the model
+        // (just for temporary testing)
+        tempBook->setData(preview, PreviewRole);
+        
+        delete document;
     }
 }
 

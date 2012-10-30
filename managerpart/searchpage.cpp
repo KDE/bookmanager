@@ -23,6 +23,7 @@
 #include "importdialog.h"
 #include "modifydialog.h"
 #include "collectiontreemodel.h"
+#include "bookdelegate.h"
 
 #include <kdebug.h>
 #include <QSqlError>
@@ -45,6 +46,9 @@ SearchPage::SearchPage(QWidget *parent) :
     resultTree->setSelectionBehavior(QAbstractItemView::SelectRows);
     resultTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     resultTree->setSortingEnabled(true);//enable sorting for the table
+    
+    bookDelegate = new BookDelegate(this);
+    resultTree->setItemDelegate(bookDelegate);
 
     fixHeaders();
     

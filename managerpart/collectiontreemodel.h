@@ -35,6 +35,10 @@ public:
     bool removeRow(QString key);
     dbusBook getBook(QString key);
     
+    //Qt::UserRole aliases
+    enum dataRole { UrlRole = Qt::UserRole + 2, UnknownAuthorRole = Qt::UserRole + 3, KeyRole = Qt::UserRole + 4,
+    PreviewRole = Qt::UserRole + 5};
+    
 public slots:
     void query(QString *queryText, QString *columnName);
 
@@ -54,8 +58,6 @@ private:
     
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,
     Series, Volume, Location};
-    //Qt::UserRole aliases
-    enum dataRole { UrlRole = Qt::UserRole + 2, UnknownAuthorRole = Qt::UserRole + 3, KeyRole = Qt::UserRole + 4};
 };
 
 #endif // COLLECTIONTREEMODEL_H

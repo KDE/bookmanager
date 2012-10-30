@@ -32,6 +32,8 @@ class CollectionDB;
 class CollectionTreeModel;
 class QModelIndex;
 
+class BookDelegate;
+
 class SearchPage : public QWidget, public Ui_SearchPage
 {
     Q_OBJECT
@@ -67,6 +69,8 @@ private:
     ImportDialog *m_import;
     CollectionDB *m_db;
     CollectionTreeModel *m_model;
+    
+    BookDelegate *bookDelegate;
 
     const QPoint mapToViewport(const QPoint& pos);
     dbusBook getBook(QModelIndex index);
