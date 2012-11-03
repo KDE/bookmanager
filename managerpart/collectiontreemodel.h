@@ -55,6 +55,7 @@ private:
     void createAuthorModel();
     void attachCollectionModel();
     void createMergedModel();
+    QModelIndex findIndexByFilename(QString filename);
     
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,
     Series, Volume, Location};

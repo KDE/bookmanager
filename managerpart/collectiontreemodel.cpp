@@ -242,3 +242,13 @@ dbusBook CollectionTreeModel::getBook(QString key)
     return book;
     
 }
+QModelIndex CollectionTreeModel::findIndexByFilename(QString filename)
+{
+    // This is based on findItems, but searchs in the urlRole, rather than in the displayRole
+    //since there should only be one entry per file, return the first match (and stop looking after 1 match)
+    QModelIndexList indexes = match(index(0, 0, QModelIndex()),
+                                    
+                                    UrlRole, filename, 1, Qt::MatchRecursive);
+    
+  return indexes.first();
+}
