@@ -20,7 +20,9 @@
 
 #ifndef BOOKICONBUILDER_H
 #define BOOKICONBUILDER_H
+
 #include <qobject.h>
+#include <qstringlist.h>
 
 /*
  * To use this class:
@@ -56,7 +58,7 @@ class BookIconBuilder : public QObject
 public:
     explicit BookIconBuilder(KImageCache& cache, QObject* parent = 0);
 
-    void buildIcon(QString filename);
+    void buildIcons(const QStringList &books);
 
 private slots:
     void done(ThreadWeaver::Job *);
@@ -78,9 +80,9 @@ class IconBuilderInternal : public QObject
 {
     Q_OBJECT
 public:
-    explicit IconBuilderInternal(QString filename, KImageCache *cache, QObject *parent = 0);
+    explicit IconBuilderInternal(const QStringList &books, KImageCache *cache, QObject *parent = 0);
 
-    void buildIcon();
+    void buildIcons();
 
     //NOTE: This signal is only visible to the bookiconbuilder class.
 signals:
@@ -88,7 +90,7 @@ signals:
 
 private:
     KImageCache  *m_cache;
-    QString m_filename;
+    QStringList m_books;
 };
 
 }

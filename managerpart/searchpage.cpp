@@ -65,6 +65,10 @@ SearchPage::SearchPage(QWidget *parent) :
     //load the book on doubleclick anywhere in that row?
     connect(resultTree, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(openBook(QModelIndex)));
+    
+    // fetch preview images if an author node is expanded
+    connect(resultTree, SIGNAL(expanded(QModelIndex)),
+            SLOT(fetchIcons(QModelIndex)));
 
     //connect the ui signals to the query slots
     connect(searchButton, SIGNAL(clicked(bool)),
@@ -162,6 +166,12 @@ void SearchPage::openBook()
 
 }
 
+void SearchPage::fetchIcons(const QModelIndex& author)
+{
+    QStringList books = getAuthorBooks(author);
+}
+
+
 //this exposes the indexAt function of the tableview so the context menu
 //can be contextual...
 QModelIndex SearchPage::indexAt(const QPoint& pos)
@@ -240,4 +250,13 @@ void SearchPage::slotEditBooks()
         
         delete modifyDialog;
     }
+}
+
+QStringList SearchPage::getAuthorBooks(const QModelIndex& author)
+{
+    QStringList books;
+    
+    // TODO fill the list
+    
+    return books;
 }

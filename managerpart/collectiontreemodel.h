@@ -41,6 +41,7 @@ public:
     
 public slots:
     void query(QString *queryText, QString *columnName);
+    void bookIconReady(const QString &filename);
 
 signals:
     void repeatQuery(QString *query, QString *column);

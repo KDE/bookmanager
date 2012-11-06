@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2012  Brian k. <Bri.kor.21@gmail.com>
+    Copyright (C) 2012  Riccardo Bellini <ricky88ykcir@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +17,9 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 #include <kimagecache.h>
+#include <kurl.h>
+
+#include <qstring.h>
 #include <QImage>
 
 #include <poppler/qt4/poppler-qt4.h>
@@ -36,7 +40,7 @@ namespace Iconbuilder {
     protected:
         virtual void run()
         {
-            m_builder->buildIcon();
+            m_builder->buildIcons();
         }
     private:
         IconBuilderInternal *m_builder;
@@ -50,10 +54,10 @@ Iconbuilder::BookIconBuilder::BookIconBuilder(KImageCache &cache, QObject* paren
     m_cache = &cache;
 }
 
-void Iconbuilder::BookIconBuilder::buildIcon(QString filename)
+void Iconbuilder::BookIconBuilder::buildIcons(const QStringList &books)
 {
     //create the internal builder and job, then connect them up so the signals can propagate.
-    IconBuilderInternal *internal = new IconBuilderInternal(filename, m_cache, this);
+    IconBuilderInternal *internal = new IconBuilderInternal(books, m_cache, this);
 
     connect(internal, SIGNAL(iconReady(QString)), this,
         SIGNAL(iconReady(QString)), Qt::DirectConnection);
@@ -73,44 +77,53 @@ void Iconbuilder::BookIconBuilder::done(ThreadWeaver::Job *job )
     job->deleteLater();
 }
 
-Iconbuilder::IconBuilderInternal::IconBuilderInternal(QString filename, KImageCache *cache, QObject* parent)
+Iconbuilder::IconBuilderInternal::IconBuilderInternal(const QStringList &books, KImageCache *cache, QObject* parent)
     : QObject(parent)
 {
     m_cache = cache;
-    m_filename = filename;
+    m_books = books;
 }
 
-void Iconbuilder::IconBuilderInternal::buildIcon()
+void Iconbuilder::IconBuilderInternal::buildIcons()
 {
     //If the file doesnt exist, we'll simply return nothing.
     //if it does exist then we run the poppler code to get a qimage for the kimagecache,
     //after which we emit the qimage's id (the filename)
     //this part is taken pretty much verbatim from poppler-qt docs
 
-    //load the file
-    Poppler::Document* document = Poppler::Document::load(m_filename);
-    if(!document || document->isLocked()){
+    if (m_books.isEmpty()) {
         return;
-    }
-
-    //get the first page
-    Poppler::Page* pdfPage = document->page(0);
-    if(pdfPage == 0) {
-        return;
-    }
-
-    //get the image, and emit
-    //FIXME without a way to test this, i have no idea what a sane value is!
-    //Going with the defaults for now...
-    QImage image = pdfPage->renderToImage();
-    if(image.isNull()){
-        return;
-    }
-    if(m_cache->insertImage(m_filename, image)){
-        emit iconReady(m_filename);
     }
     
-    //cleanup
-    delete pdfPage;
-    delete document;    
+    foreach (QString book, m_books) {
+        KUrl locationUrl(book);
+        
+        //load the file
+        Poppler::Document* document = Poppler::Document::load(locationUrl.path());
+        if(!document || document->isLocked()){
+            return;
+        }
+        
+        //get the first page
+        Poppler::Page* pdfPage = document->page(0);
+        if(pdfPage == 0) {
+            return;
+        }
+        
+        //get the image, and emit
+        //FIXME without a way to test this, i have no idea what a sane value is!
+        //Going with the defaults for now...
+        QImage image = pdfPage->renderToImage();
+        if(image.isNull()){
+            return;
+        }
+        if(m_cache->insertImage(locationUrl.path(), image)){
+            // 
+            emit iconReady(book);
+        }
+        
+        //cleanup
+        delete pdfPage;
+        delete document; 
+    }
 }

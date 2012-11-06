@@ -59,6 +59,8 @@ public slots:
 private slots:
     void openBook(QModelIndex index);
     void openBook();
+    
+    void fetchIcons(const QModelIndex &author);
 
 signals:
     void query(QString *query, QString *column);
@@ -67,6 +69,7 @@ signals:
     Q_SCRIPTABLE void loadBook(QString url);
 private:
     void fixHeaders();
+    QStringList getAuthorBooks(const QModelIndex &author);
     ImportDialog *m_import;
     CollectionDB *m_db;
     CollectionTreeModel *m_model;

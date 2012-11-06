@@ -20,6 +20,7 @@
 
 #include <kdebug.h>
 #include <klocalizedstring.h>
+#include <kdemacros.h>
 
 #include <QStringBuilder>
 #include <QStandardItem>
@@ -151,24 +152,10 @@ void CollectionTreeModel::attachCollectionModel()
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row,Location)), UrlRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, ID)), KeyRole);
         
+        // set non valid data for PreviewRole
+        tempBook->setData(QString(), PreviewRole);
+        
         tempAuthor->setChild(tempAuthor->rowCount(), tempBook);
-        
-        // get preview of the document (the first page of the pdf file)
-        QString locationString = tempBook->data(UrlRole).toString();
-        // necessary to decode correctly the path
-        KUrl locationUrl(locationString);
-        Poppler::Document *document = Poppler::Document::load(locationUrl.path());
-        QImage preview;
-        if (document) {
-            preview = document->page(0)->renderToImage(ScaleFactor * 72.0,
-                                                              ScaleFactor * 72.0);
-        }
-        
-        // FIXME this image should be stored in a cache, not in the model
-        // (just for temporary testing)
-        tempBook->setData(preview, PreviewRole);
-        
-        delete document;
     }
 }
 
@@ -181,6 +168,26 @@ void CollectionTreeModel::query(QString* queryText, QString* columnName)
      */
     emit repeatQuery(queryText, columnName);
 }
+
+
+void CollectionTreeModel::bookIconReady(const QString& filename)
+{
+    if (KDE_ISUNLIKELY(filename.isNull() || filename.isEmpty())) {
+        return;
+    }
+    
+    QModelIndex book = findIndexByFilename(filename);
+    
+    // the key of the image in the cache could be different from filename,
+    // due to the encoding of the file. For this reason, you should fetch the image
+    // by creating a KUrl object and call path() member function, which returns
+    // the correct key. Therefore we store in the PreviewRole the encoded path
+    // of the image.
+    KUrl locationUrl(filename);
+    
+    setData(book, locationUrl.path(), PreviewRole);
+}
+
 
 void CollectionTreeModel::rebuildModel()
 {
@@ -244,10 +251,9 @@ dbusBook CollectionTreeModel::getBook(QString key)
 }
 QModelIndex CollectionTreeModel::findIndexByFilename(QString filename)
 {
-    // This is based on findItems, but searchs in the urlRole, rather than in the displayRole
-    //since there should only be one entry per file, return the first match (and stop looking after 1 match)
+    // This is based on findItems, but searches in the urlRole, rather than in the displayRole
+    // since there should only be one entry per file, return the first match (and stop looking after 1 match)
     QModelIndexList indexes = match(index(0, 0, QModelIndex()),
-                                    
                                     UrlRole, filename, 1, Qt::MatchRecursive);
     
   return indexes.first();
