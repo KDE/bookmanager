@@ -36,8 +36,18 @@ public:
     dbusBook getBook(QString key);
     
     //Qt::UserRole aliases
-    enum dataRole { UrlRole = Qt::UserRole + 2, UnknownAuthorRole = Qt::UserRole + 3, KeyRole = Qt::UserRole + 4,
-    PreviewRole = Qt::UserRole + 5};
+    enum dataRole { TitleRole = Qt::UserRole + 1,
+                    SummaryRole = Qt::UserRole + 2,
+                    AuthorRole = Qt::UserRole + 3,
+                    RelNumberRole = Qt::UserRole + 4,
+                    RelDateRole = Qt::UserRole + 5,
+                    GenreRole = Qt::UserRole + 6,
+                    SeriesRole = Qt::UserRole + 7,
+                    VolumeRole = Qt::UserRole + 8,
+                    UrlRole = Qt::UserRole + 9,
+                    UnknownAuthorRole = Qt::UserRole + 10,
+                    KeyRole = Qt::UserRole + 11,
+                    PreviewRole = Qt::UserRole + 12};
     
 public slots:
     void query(QString *queryText, QString *columnName);

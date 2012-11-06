@@ -137,18 +137,25 @@ void CollectionTreeModel::attachCollectionModel()
          * I'm going to be kind of arbitrary with the field widths for the 2 column rows since there's
          * no real standard that i know of saying how long a series name/number can be.
          */
-        QString tempDataString =
-        i18nc("This book's title", "Title: ") % m_collectionModel->data(m_collectionModel->index(row,Title)).toString() % QString("\n") %
-        i18nc("A person who writes books","Author: ") % m_collectionModel->data(m_collectionModel->index(row,Author)).toString() % QString("\n") %
-        i18nc("The books Edition or Release number", "Release Number: ") % m_collectionModel->data(m_collectionModel->index(row,Release)).toString() % QString(" ") %
-        i18nc("This book's Release Date", "Release Date: ") % m_collectionModel->data(m_collectionModel->index(row,ReleaseDate)).toString() % QString("\n") %
-        i18nc("The Series of a book", "Series: ") % m_collectionModel->data(m_collectionModel->index(row,Series)).toString() % QString(" ") %
-        i18nc("The Volume number of a book", "Volume: ") % m_collectionModel->data(m_collectionModel->index(row,Volume)).toString() % QString("\n") %
-        i18nc("The type or style of a book, examples: Science Fiction, History","Genre: ") %
-        m_collectionModel->data(m_collectionModel->index(row,Genre)).toString() % QString("\n") %
-        i18nc("A short summary of this book","Summary: ") % m_collectionModel->data(m_collectionModel->index(row,Summary)).toString() % QString("\n");
+//         QString tempDataString =
+//         i18nc("This book's title", "Title: ") % m_collectionModel->data(m_collectionModel->index(row,Title)).toString() % QString("\n") %
+//         i18nc("A person who writes books","Author: ") % m_collectionModel->data(m_collectionModel->index(row,Author)).toString() % QString("\n") %
+//         i18nc("The books Edition or Release number", "Release Number: ") % m_collectionModel->data(m_collectionModel->index(row,Release)).toString() % QString(" ") %
+//         i18nc("This book's Release Date", "Release Date: ") % m_collectionModel->data(m_collectionModel->index(row,ReleaseDate)).toString() % QString("\n") %
+//         i18nc("The Series of a book", "Series: ") % m_collectionModel->data(m_collectionModel->index(row,Series)).toString() % QString(" ") %
+//         i18nc("The Volume number of a book", "Volume: ") % m_collectionModel->data(m_collectionModel->index(row,Volume)).toString() % QString("\n") %
+//         i18nc("The type or style of a book, examples: Science Fiction, History","Genre: ") %
+//         m_collectionModel->data(m_collectionModel->index(row,Genre)).toString() % QString("\n") %
+//         i18nc("A short summary of this book","Summary: ") % m_collectionModel->data(m_collectionModel->index(row,Summary)).toString() % QString("\n");
         QStandardItem *tempBook = new QStandardItem;
-        tempBook->setData(tempDataString, Qt::DisplayRole);
+//         tempBook->setData(tempDataString, Qt::DisplayRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Title)), TitleRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Summary)), SummaryRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Author)), AuthorRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Release)), RelNumberRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, ReleaseDate)), RelDateRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Genre)), GenreRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Series)), SeriesRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row,Location)), UrlRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, ID)), KeyRole);
         
