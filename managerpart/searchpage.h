@@ -35,6 +35,13 @@ class QModelIndex;
 
 class BookDelegate;
 
+class KImageCache;
+
+namespace ThreadWeaver {
+    class Weaver;
+    class Job;
+}
+
 class SearchPage : public QWidget, public Ui_SearchPage
 {
     Q_OBJECT
@@ -61,6 +68,8 @@ private slots:
     void openBook();
     
     void fetchIcons(const QModelIndex &author);
+    
+    void deleteJob(ThreadWeaver::Job *previewJob);
 
 signals:
     void query(QString *query, QString *column);
@@ -75,6 +84,10 @@ private:
     CollectionTreeModel *m_model;
     
     BookDelegate *bookDelegate;
+    
+    KImageCache *m_image_cache;
+    
+    ThreadWeaver::Weaver *previewsFetchingQueue;
 
     const QPoint mapToViewport(const QPoint& pos);
     dbusBook getBook(QModelIndex index);

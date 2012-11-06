@@ -185,6 +185,8 @@ void CollectionTreeModel::bookIconReady(const QString& filename)
     // of the image.
     KUrl locationUrl(filename);
     
+    // this emits dataChanged signal, so the view should be automatically
+    // updated
     setData(book, locationUrl.path(), PreviewRole);
 }
 

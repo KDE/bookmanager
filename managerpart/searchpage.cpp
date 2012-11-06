@@ -25,12 +25,25 @@
 #include "modifydialog.h"
 #include "collectiontreemodel.h"
 #include "bookdelegate.h"
+#include "bookiconbuilder.h"
 
+#include <kdemacros.h>
 #include <kdebug.h>
 #include <QSqlError>
+#include <qsqlquery.h>
 #include <klocale.h>
-#include <QStringList>
+#include <threadweaver/ThreadWeaver.h>
+#include <qstringlist.h>
 
+#include <kimagecache.h>
+
+// remove this
+#include <qthread.h>
+
+
+
+// cache size of 20 MB
+const int CacheSize = 20 * 1000 * 1000;
 
 SearchPage::SearchPage(QWidget *parent) :
     QWidget(parent)
@@ -40,6 +53,16 @@ SearchPage::SearchPage(QWidget *parent) :
     m_db = new CollectionDB();
     m_model = new CollectionTreeModel();
     m_import = 0;
+    
+    // set up image cache
+    m_image_cache = new KImageCache("bookmanager_previews", CacheSize);
+    m_image_cache->setEvictionPolicy(KImageCache::EvictOldest);
+    
+    // set up the WeaverInterface used to queue the icon fetching jobs
+    previewsFetchingQueue = ThreadWeaver::Weaver::instance();
+    previewsFetchingQueue->setMaximumNumberOfThreads(1);
+    connect(previewsFetchingQueue, SIGNAL(jobDone(ThreadWeaver::Job*)),
+            SLOT(deleteJob(ThreadWeaver::Job*)));
 
     //set up the view
     resultTree->setModel(m_model);
@@ -89,8 +112,8 @@ SearchPage::~SearchPage()
     if(m_db){
         m_db->deleteLater();
     }
-        
     
+    delete m_image_cache;
 }
 
 void SearchPage::fixHeaders()
@@ -169,6 +192,21 @@ void SearchPage::openBook()
 void SearchPage::fetchIcons(const QModelIndex& author)
 {
     QStringList books = getAuthorBooks(author);
+        
+    // add the icon fetching to the job queue
+    Iconbuilder::IconBuilderJob *iconBuilder = new Iconbuilder::IconBuilderJob(books, m_image_cache);
+    
+    // connect signals
+    connect(iconBuilder, SIGNAL(iconReady(QString)), m_model, SLOT(bookIconReady(QString)));
+    
+    previewsFetchingQueue->enqueue(iconBuilder);
+}
+
+void SearchPage::deleteJob(ThreadWeaver::Job* previewJob)
+{
+    // here we free the memory of a preview fetching job
+    // that was enqueued in fetchIcons functions
+    previewJob->deleteLater();
 }
 
 
@@ -178,7 +216,7 @@ QModelIndex SearchPage::indexAt(const QPoint& pos)
 {
     //we have to map the position to the parent widget because the tableview gives
     //it relative to the viewport, while we care about the whole widget
-    return  resultTree->indexAt(mapToViewport(pos));
+    return resultTree->indexAt(mapToViewport(pos));
 }
 
 //map the position to the viewport from from the Translates the widget
@@ -256,7 +294,26 @@ QStringList SearchPage::getAuthorBooks(const QModelIndex& author)
 {
     QStringList books;
     
-    // TODO fill the list
+    QString authorName = author.data().toString();
+    
+    if (KDE_ISUNLIKELY(authorName.isNull() || authorName.isEmpty())) {
+        return QStringList();
+    }
+    
+    QSqlQuery queryBooks;
+    queryBooks.prepare("SELECT url "
+                       "FROM collection "
+                       "WHERE author = :name");
+    queryBooks.bindValue(0, authorName);
+    
+    queryBooks.exec();
+    if (!queryBooks.isActive()) {
+        return QStringList();
+    }
+    
+    while (queryBooks.next()) {
+        books.append(queryBooks.value(0).toString());
+    }
     
     return books;
 }

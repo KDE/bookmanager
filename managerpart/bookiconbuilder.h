@@ -23,6 +23,7 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
+#include <threadweaver/Job.h>
 
 /*
  * To use this class:
@@ -43,36 +44,33 @@
 
 class KImageCache;
 
-namespace ThreadWeaver {
-class Job;
-}
 
 namespace Iconbuilder {
 
-class IconBuilderInternal;
 
 // interface for the execution of select queries for autocompletion.
-class BookIconBuilder : public QObject
-{
-    Q_OBJECT
-public:
-    explicit BookIconBuilder(KImageCache& cache, QObject* parent = 0);
-
-    void buildIcons(const QStringList &books);
-
-private slots:
-    void done(ThreadWeaver::Job *);
-
-signals:
-    //new icon built and ready. This will return the "id" of the image in the KImageCache,
-    //which will be the same as the filename from the qstring.
-    //NOTE: It may be better to use a QStringlist of all the books that need icons for each expanded author,
-    //and then return each name asynchronously?
-    void iconReady(const QString &);
-
-private:
-    KImageCache  *m_cache;
-};
+// class BookIconBuilder : public QObject
+// {
+//     Q_OBJECT
+// public:
+//     explicit BookIconBuilder(KImageCache *cache, QObject* parent = 0);
+// 
+//     void buildIcons(const QStringList &books);
+// 
+// private slots:
+//     void done(ThreadWeaver::Job *);
+// 
+// signals:
+//     //new icon built and ready. This will return the "id" of the image in the KImageCache,
+//     //which will be the same as the filename from the qstring.
+//     //NOTE: It may be better to use a QStringlist of all the books that need icons for each expanded author,
+//     //and then return each name asynchronously?
+//     void iconReady(const QString &);
+//     void done();
+// 
+// private:
+//     KImageCache *m_cache;
+// };
 
 // Internal class to keep the signals asynchronous, see threadweavers class docs for details
 //or the queryengine class, for another example, since that's what all this is based off of...
@@ -84,13 +82,33 @@ public:
 
     void buildIcons();
 
-    //NOTE: This signal is only visible to the bookiconbuilder class.
+    //NOTE: This signal is only visible to the iconbuilderjob class.
 signals:
     void iconReady(const QString &);
 
 private:
     KImageCache  *m_cache;
     QStringList m_books;
+};
+
+
+
+class IconBuilderJob : public ThreadWeaver::Job
+{
+    Q_OBJECT
+public:
+    explicit IconBuilderJob(const QStringList &books, KImageCache *cache, QObject *parent = 0);
+    
+signals:
+    void iconReady(const QString &);
+    
+protected:
+    virtual void run();
+    
+private:
+    IconBuilderInternal *m_builder;
+    KImageCache *cache;
+    QStringList books;
 };
 
 }
