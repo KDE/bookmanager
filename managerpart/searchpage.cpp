@@ -26,6 +26,7 @@
 #include "collectiontreemodel.h"
 #include "bookdelegate.h"
 #include "bookiconbuilder.h"
+#include "constants.h"
 
 #include <kdemacros.h>
 #include <kdebug.h>
@@ -37,13 +38,7 @@
 
 #include <kimagecache.h>
 
-// remove this
-#include <qthread.h>
 
-
-
-// cache size of 20 MB
-const int CacheSize = 20 * 1000 * 1000;
 
 SearchPage::SearchPage(QWidget *parent) :
     QWidget(parent)
@@ -57,6 +52,7 @@ SearchPage::SearchPage(QWidget *parent) :
     // set up image cache
     m_image_cache = new KImageCache("bookmanager_previews", CacheSize);
     m_image_cache->setEvictionPolicy(KImageCache::EvictOldest);
+    m_image_cache->setPixmapCaching(true);
     
     // set up the WeaverInterface used to queue the icon fetching jobs
     previewsFetchingQueue = ThreadWeaver::Weaver::instance();
@@ -71,7 +67,7 @@ SearchPage::SearchPage(QWidget *parent) :
     resultTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     resultTree->setSortingEnabled(true);//enable sorting for the table
     
-    bookDelegate = new BookDelegate(this);
+    bookDelegate = new BookDelegate(m_image_cache, this);
     resultTree->setItemDelegate(bookDelegate);
 
     fixHeaders();

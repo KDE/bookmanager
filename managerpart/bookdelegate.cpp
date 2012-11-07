@@ -19,25 +19,67 @@
 
 #include "bookdelegate.h"
 #include "collectiontreemodel.h"
+#include "constants.h"
 
-#include <QPainter>
+#include <qpainter.h>
+#include <qimage.h>
 
 #include <KDebug>
+#include <kimagecache.h>
+#include <kiconloader.h>
 
-BookDelegate::BookDelegate(QWidget* parent)
+BookDelegate::BookDelegate(KImageCache *cache, QWidget* parent)
 :QStyledItemDelegate(parent)
 {
+    this->m_cache = cache;
     
+    m_iconLoader = KIconLoader::global();
+    QPixmap placeHolderPixmap;
+    placeHolderPixmap = m_iconLoader->loadMimeTypeIcon("application-pdf",
+                                                       KIconLoader::NoGroup,
+                                                       KIconLoader::SizeLarge);
+    placeHolderImage = placeHolderPixmap.toImage().scaled(ThumbnailSize,
+                                                          Qt::KeepAspectRatio,
+                                                          Qt::SmoothTransformation);
+    xOffsetForPreview = 15;
+    yOffsetForPreview = 15;
 }
 
 
 void BookDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
+    if (index.parent().isValid()) {
+        // book
+        QImage preview;
+        QString key = index.data(CollectionTreeModel::PreviewRole).toString();
+        
+        if (!key.isNull()) {
+            m_cache->findImage(key, &preview);
+        } else {
+            preview = placeHolderImage;
+        }
+        
+        // draw the image
+        painter->drawImage(option.rect.x() + xOffsetForPreview,
+                           option.rect.y() + yOffsetForPreview,
+                           preview);
+        
+        // TODO paint book's information
+    } else {
+        // author
+        // TODO paint author's information
+    }
+    
     QStyledItemDelegate::paint(painter, option, index);
 }
 
 
 QSize BookDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
+    if (index.parent().isValid()) {
+        // book
+        return QSize(option.rect.width(), ThumbnailSize.height() + 30);
+    }
+    
     return QStyledItemDelegate::sizeHint(option, index);
 }

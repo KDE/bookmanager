@@ -28,8 +28,6 @@
 
 #include <poppler/qt4/poppler-qt4.h>
 
-const float ScaleFactor = 0.16;
-
 CollectionTreeModel::CollectionTreeModel(QObject* parent): QStandardItemModel(parent)
 {
     m_collectionModel = new CollectionModel();
@@ -190,11 +188,11 @@ void CollectionTreeModel::bookIconReady(const QString& filename)
     // by creating a KUrl object and call path() member function, which returns
     // the correct key. Therefore we store in the PreviewRole the encoded path
     // of the image.
-    KUrl locationUrl(filename);
+//     KUrl locationUrl(filename);
     
     // this emits dataChanged signal, so the view should be automatically
     // updated
-    setData(book, locationUrl.path(), PreviewRole);
+    setData(book, filename, PreviewRole);
 }
 
 

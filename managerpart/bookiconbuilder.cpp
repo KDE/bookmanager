@@ -29,7 +29,7 @@
 #include <threadweaver/ThreadWeaver.h>
 
 #include "bookiconbuilder.h"
-
+#include "constants.h"
 
 
 Iconbuilder::IconBuilderJob::IconBuilderJob(const QStringList &books, KImageCache *cache, QObject *parent)
@@ -129,11 +129,13 @@ void Iconbuilder::IconBuilderInternal::buildIcons()
         //get the image, and emit
         //FIXME without a way to test this, i have no idea what a sane value is!
         //Going with the defaults for now...
-        QImage image = pdfPage->renderToImage();
+        QImage image = pdfPage->renderToImage().scaled(ThumbnailSize,
+                                                       Qt::IgnoreAspectRatio,
+                                                       Qt::SmoothTransformation);
         if(image.isNull()){
             return;
         }
-        if(m_cache->insertImage(locationPath, image)){
+        if(m_cache->insertImage(book, image)){
             emit iconReady(book);
         }
         
