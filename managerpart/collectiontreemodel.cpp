@@ -154,7 +154,8 @@ void CollectionTreeModel::attachCollectionModel()
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, ReleaseDate)), RelDateRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Genre)), GenreRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Series)), SeriesRole);
-        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row,Location)), UrlRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Volume)), VolumeRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Location)), UrlRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, ID)), KeyRole);
         
         // set non valid data for PreviewRole
@@ -182,13 +183,6 @@ void CollectionTreeModel::bookIconReady(const QString& filename)
     }
     
     QModelIndex book = findIndexByFilename(filename);
-    
-    // the key of the image in the cache could be different from filename,
-    // due to the encoding of the file. For this reason, you should fetch the image
-    // by creating a KUrl object and call path() member function, which returns
-    // the correct key. Therefore we store in the PreviewRole the encoded path
-    // of the image.
-//     KUrl locationUrl(filename);
     
     // this emits dataChanged signal, so the view should be automatically
     // updated

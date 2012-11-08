@@ -52,7 +52,7 @@ SearchPage::SearchPage(QWidget *parent) :
     // set up image cache
     m_image_cache = new KImageCache("bookmanager_previews", CacheSize);
     m_image_cache->setEvictionPolicy(KImageCache::EvictOldest);
-    m_image_cache->setPixmapCaching(true);
+//     m_image_cache->setPixmapCaching(true);
     
     // set up the WeaverInterface used to queue the icon fetching jobs
     previewsFetchingQueue = ThreadWeaver::Weaver::instance();
