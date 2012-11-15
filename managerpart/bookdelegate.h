@@ -45,6 +45,8 @@ private:
     
     int xOffsetForPreview;
     int yOffsetForPreview;
+    int xOffsetForText;
+    int yOffsetForText;
 };
 
 #endif // BOOKDELEGATE_H
