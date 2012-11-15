@@ -47,7 +47,7 @@ BookDelegate::BookDelegate(KImageCache *cache, QWidget* parent)
     xOffsetForPreview = 15;
     yOffsetForPreview = 15;
     
-    xOffsetForText = 50;
+    xOffsetForText = 30;
     yOffsetForText = 15;
 }
 
@@ -150,8 +150,26 @@ void BookDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
         painter->drawText(genreOffset, genre);        
     } else {
         // author
-        // TODO paint author's information
-        QStyledItemDelegate::paint(painter, option, index);
+        if (option.state & QStyle::State_Selected) {
+            painter->fillRect(option.rect, option.palette.highlight());
+        }
+        
+        QFont previousFont = painter->font();
+        QFont authorFont = previousFont;
+        authorFont.setBold(true);
+        authorFont.setItalic(true);
+        QFontMetrics metrics(authorFont);
+//         authorFont.setPointSize(authorFont.pointSize() + 4);
+        
+        int xOffset = option.rect.x();
+        int yOffset = option.rect.y() + (option.rect.height() - metrics.lineSpacing()) / 2;
+        yOffset += metrics.lineSpacing();
+        QPoint mainOffset(xOffset, yOffset);
+        
+        painter->setFont(authorFont);
+        painter->drawText(mainOffset, index.data().toString());
+        
+        painter->setFont(previousFont);
     }
 }
 
@@ -162,6 +180,9 @@ QSize BookDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelInd
         // book
         return QSize(option.rect.width(), ThumbnailSize.height() + 30);
     }
+    
+    // author
+    return QSize(option.rect.width(), option.rect.height() + 30);
     
     return QStyledItemDelegate::sizeHint(option, index);
 }
