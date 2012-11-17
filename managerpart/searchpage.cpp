@@ -136,7 +136,7 @@ void SearchPage::remBook()
     if (removeUs.length() > 0) {
 
         foreach(const QModelIndex & removeMe,  removeUs) {
-            m_model->removeRow(m_model->data(removeMe, KeyRole).toString());
+            m_model->removeRow(m_model->data(removeMe, CollectionTreeModel::KeyRole).toString());
         }
     }
 }
@@ -152,8 +152,8 @@ void SearchPage::updateModel()
 void SearchPage::openBook(QModelIndex index)
 {
     //this bit has caused a lot of issues so i'm leaving a debug in...
-    kDebug() << m_model->data(index, UrlRole);
-    KUrl bookUrl = KUrl(m_model->data(index, UrlRole).toString());
+    kDebug() << m_model->data(index, CollectionTreeModel::UrlRole).toString();
+    KUrl bookUrl = KUrl(m_model->data(index, CollectionTreeModel::UrlRole).toString());
     //emit it as a qstring so we can send it easily over dbus :D
     emit loadBook(bookUrl.url());
 }
@@ -272,7 +272,7 @@ void SearchPage::slotEditBooks()
         foreach(const QModelIndex & editMe,  editUs) {
             //use the index to get the key, which we can use to create a bookstruct with the existing info
             //this also filters out the author index items
-            QString key = m_model->data(editMe, KeyRole).toString();
+            QString key = m_model->data(editMe, CollectionTreeModel::KeyRole).toString();
             if(!key.isEmpty()){
                 selected.append(m_model->getBook(key));                
             }
