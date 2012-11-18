@@ -151,6 +151,11 @@ void SearchPage::updateModel()
 
 void SearchPage::openBook(QModelIndex index)
 {
+    //verify that the index has a urlRole defined, there is no reason to bother with the rest of loading if we're emiting an empty string,
+    //especially since the user probably is sending the empty string by doubleclicking to expand an author entry, and doesn't want anything opened anyway...
+    if(index.data(CollectionTreeModel::UrlRole).toString().isEmpty()){
+        return;
+    }
     //this bit has caused a lot of issues so i'm leaving a debug in...
     kDebug() << m_model->data(index, CollectionTreeModel::UrlRole).toString();
     KUrl bookUrl = KUrl(m_model->data(index, CollectionTreeModel::UrlRole).toString());
