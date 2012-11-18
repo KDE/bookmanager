@@ -160,7 +160,15 @@ void CollectionTreeModel::attachCollectionModel()
         
         // set non valid data for PreviewRole
         tempBook->setData(QString(), PreviewRole);
+
+        //set/increment the bookcount for the author
+        if(tempAuthor->data(AuthorBookCountRole).isNull()){
+            tempAuthor->setData(1, AuthorBookCountRole);
+        } else {
+            tempAuthor->setData(tempAuthor->data(AuthorBookCountRole).toInt() + 1, AuthorBookCountRole);
+        }
         
+        //finally, add the new book
         tempAuthor->setChild(tempAuthor->rowCount(), tempBook);
     }
 }

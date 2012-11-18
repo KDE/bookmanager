@@ -47,7 +47,9 @@ public:
                     UrlRole = Qt::UserRole + 9,
                     UnknownAuthorRole = Qt::UserRole + 10,
                     KeyRole = Qt::UserRole + 11,
-                    PreviewRole = Qt::UserRole + 12};
+                    PreviewRole = Qt::UserRole + 12,
+                    AuthorBookCountRole = Qt::UserRole + 12
+    };
     
 public slots:
     void query(QString *queryText, QString *columnName);
