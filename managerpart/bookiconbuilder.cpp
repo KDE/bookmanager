@@ -50,41 +50,8 @@ void Iconbuilder::IconBuilderJob::run()
     m_builder->buildIcons();
     
     delete m_builder;
-    
-//     emit done(this);
 }
 
-
-// Iconbuilder::BookIconBuilder::BookIconBuilder(KImageCache *cache, QObject* parent)
-//     : QObject(parent)
-// {
-//     m_cache = cache;
-// }
-// 
-// void Iconbuilder::BookIconBuilder::buildIcons(const QStringList &books)
-// {
-//     //create the internal builder and job, then connect them up so the signals can propagate.
-//     IconBuilderInternal *internal = new IconBuilderInternal(books, m_cache, this);
-// 
-//     connect(internal, SIGNAL(iconReady(QString)), this,
-//         SIGNAL(iconReady(QString)), Qt::DirectConnection);
-// 
-//     IconBuilderJob *job = new IconBuilderJob(internal);
-// 
-//     connect(job, SIGNAL(done(ThreadWeaver::Job*)),
-//             SLOT(done(ThreadWeaver::Job*)));
-//     //now that everything is set up, enqueue the job
-//     ThreadWeaver::Weaver::instance()->enqueue(job);    
-// }
-// 
-// void Iconbuilder::BookIconBuilder::done(ThreadWeaver::Job *job )
-// {
-//     //Clean up (this is effectively the destructor)
-//     ThreadWeaver::Weaver::instance()->dequeue(job);
-//     job->deleteLater();
-//     
-//     emit done();
-// }
 
 Iconbuilder::IconBuilderInternal::IconBuilderInternal(const QStringList &books, KImageCache *cache, QObject* parent)
     : QObject(parent)
@@ -127,8 +94,6 @@ void Iconbuilder::IconBuilderInternal::buildIcons()
         }
         
         //get the image, and emit
-        //FIXME without a way to test this, i have no idea what a sane value is!
-        //Going with the defaults for now...
         QImage image = pdfPage->renderToImage().scaled(ThumbnailSize,
                                                        Qt::IgnoreAspectRatio,
                                                        Qt::SmoothTransformation);

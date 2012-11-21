@@ -47,33 +47,8 @@ class KImageCache;
 
 namespace Iconbuilder {
 
-
-// interface for the execution of select queries for autocompletion.
-// class BookIconBuilder : public QObject
-// {
-//     Q_OBJECT
-// public:
-//     explicit BookIconBuilder(KImageCache *cache, QObject* parent = 0);
-// 
-//     void buildIcons(const QStringList &books);
-// 
-// private slots:
-//     void done(ThreadWeaver::Job *);
-// 
-// signals:
-//     //new icon built and ready. This will return the "id" of the image in the KImageCache,
-//     //which will be the same as the filename from the qstring.
-//     //NOTE: It may be better to use a QStringlist of all the books that need icons for each expanded author,
-//     //and then return each name asynchronously?
-//     void iconReady(const QString &);
-//     void done();
-// 
-// private:
-//     KImageCache *m_cache;
-// };
-
 // Internal class to keep the signals asynchronous, see threadweavers class docs for details
-//or the queryengine class, for another example, since that's what all this is based off of...
+// or the queryengine class, for another example, since that's what all this is based off of...
 class IconBuilderInternal : public QObject
 {
     Q_OBJECT

@@ -159,7 +159,6 @@ void BookDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
         authorFont.setBold(true);
         authorFont.setItalic(true);
         QFontMetrics metrics(authorFont);
-//         authorFont.setPointSize(authorFont.pointSize() + 4);
         
         int xOffset = option.rect.x();
         int yOffset = option.rect.y() + (option.rect.height() - metrics.lineSpacing()) / 2;

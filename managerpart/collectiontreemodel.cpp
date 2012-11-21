@@ -118,35 +118,8 @@ void CollectionTreeModel::attachCollectionModel()
         } else {
             tempAuthor = authorCache.value(author);
         }
-        /*
-         * In the following I'm going to create a copy of the data from the collectionmodel in a single
-         * long string with the header info embedded. The idea being to prepend things like "author:" or
-         * "title:" to that information so that it can all be displayed in a more catalog entry like
-         * fashion. This will probably need a delegate to get it to look right.
-         * The finished output should look like:
-         *
-         * Title:
-         * Author:
-         * Release Number:         Release Date:
-         * Series:                 Volume:
-         * Genre:
-         * Summary:
-         *
-         * I'm going to be kind of arbitrary with the field widths for the 2 column rows since there's
-         * no real standard that i know of saying how long a series name/number can be.
-         */
-//         QString tempDataString =
-//         i18nc("This book's title", "Title: ") % m_collectionModel->data(m_collectionModel->index(row,Title)).toString() % QString("\n") %
-//         i18nc("A person who writes books","Author: ") % m_collectionModel->data(m_collectionModel->index(row,Author)).toString() % QString("\n") %
-//         i18nc("The books Edition or Release number", "Release Number: ") % m_collectionModel->data(m_collectionModel->index(row,Release)).toString() % QString(" ") %
-//         i18nc("This book's Release Date", "Release Date: ") % m_collectionModel->data(m_collectionModel->index(row,ReleaseDate)).toString() % QString("\n") %
-//         i18nc("The Series of a book", "Series: ") % m_collectionModel->data(m_collectionModel->index(row,Series)).toString() % QString(" ") %
-//         i18nc("The Volume number of a book", "Volume: ") % m_collectionModel->data(m_collectionModel->index(row,Volume)).toString() % QString("\n") %
-//         i18nc("The type or style of a book, examples: Science Fiction, History","Genre: ") %
-//         m_collectionModel->data(m_collectionModel->index(row,Genre)).toString() % QString("\n") %
-//         i18nc("A short summary of this book","Summary: ") % m_collectionModel->data(m_collectionModel->index(row,Summary)).toString() % QString("\n");
+
         QStandardItem *tempBook = new QStandardItem;
-//         tempBook->setData(tempDataString, Qt::DisplayRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Title)), TitleRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Summary)), SummaryRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Author)), AuthorRole);
