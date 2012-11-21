@@ -1,6 +1,6 @@
 /*
     Copyright (C) <2011>  Brian Korbein <bri.kor.21@gmail.com>
-    Copyright (C) 2011  Riccardo Bellini <ricky88ykcir@gmail.com>
+    Copyright (C) 2011-2012  Riccardo Bellini <ricky88ykcir@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
 #define SEARCHPAGE_H
 
 #include <QWidget>
+#include <QModelIndex>
 
-#include "ui_searchpage.h"
 #include "bookstruct.h"
 
 class ImportDialog;
@@ -31,18 +31,26 @@ class ImportDialog;
 
 class CollectionDB;
 class CollectionTreeModel;
-class QModelIndex;
 
 class BookDelegate;
 
 class KImageCache;
+
+class KLineEdit;
+class KComboBox;
+class KPushButton;
+
+class QHBoxLayout;
+class QVBoxLayout;
+
+class BookTreeView;
 
 namespace ThreadWeaver {
     class Weaver;
     class Job;
 }
 
-class SearchPage : public QWidget, public Ui_SearchPage
+class SearchPage : public QWidget
 {
     Q_OBJECT
     //I'm pretty sure this is correct? I'd make it org.kde but
@@ -86,6 +94,15 @@ private:
     BookDelegate *bookDelegate;
     
     KImageCache *m_image_cache;
+    
+    KLineEdit *queryEdit;
+    KComboBox *searchTypeBox;
+    KPushButton *searchButton;
+    KPushButton *resetButton;
+    BookTreeView *resultTree;
+    
+    QHBoxLayout *searchLayout;
+    QVBoxLayout *mainLayout;
     
     ThreadWeaver::Weaver *previewsFetchingQueue;
 

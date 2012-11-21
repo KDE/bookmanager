@@ -1,6 +1,6 @@
 /*
     Copyright (C) <2011>  Brian Korbein <bri.kor.21@gmail.com>
-    Copyright (C) 2011  Riccardo Bellini <ricky88ykcir@gmail.com>
+    Copyright (C) 2011-2012  Riccardo Bellini <ricky88ykcir@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,9 +27,11 @@
 #include "bookdelegate.h"
 #include "bookiconbuilder.h"
 #include "constants.h"
+#include "booktreeview.h"
 
 #include <kdemacros.h>
 #include <kdebug.h>
+#include <kcombobox.h>
 #include <QSqlError>
 #include <qsqlquery.h>
 #include <klocale.h>
@@ -43,7 +45,7 @@
 SearchPage::SearchPage(QWidget *parent) :
     QWidget(parent)
 {
-    setupUi(this); setFocusPolicy(Qt::ClickFocus);
+    setFocusPolicy(Qt::ClickFocus);
 
     m_db = new CollectionDB();
     m_model = new CollectionTreeModel();
@@ -60,16 +62,43 @@ SearchPage::SearchPage(QWidget *parent) :
             SLOT(deleteJob(ThreadWeaver::Job*)));
 
     //set up the view
+    resultTree = new BookTreeView(this);
     resultTree->setModel(m_model);
     resultTree->setEditTriggers(QAbstractItemView::NoEditTriggers);
     resultTree->setSelectionBehavior(QAbstractItemView::SelectRows);
     resultTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     resultTree->setSortingEnabled(true);//enable sorting for the table
     
+    // set up the query line edit
+    queryEdit = new KLineEdit;
+    
+    // set up the buttons
+    searchButton = new KPushButton(i18n("Search"));
+    resetButton = new KPushButton(i18n("Reset"));
+    
+    // set up the combo box
+    searchTypeBox = new KComboBox;
+    searchTypeBox->addItem(i18n("Title"));
+    searchTypeBox->addItem(i18n("Author"));
+    searchTypeBox->addItem(i18n("Genre"));
+    
+    // set up layouts
+    searchLayout = new QHBoxLayout;
+    searchLayout->addWidget(queryEdit);
+    searchLayout->addWidget(searchTypeBox);
+    searchLayout->addWidget(searchButton);
+    searchLayout->addWidget(resetButton);
+    
+    mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(searchLayout);
+    mainLayout->addWidget(resultTree);
+    
     bookDelegate = new BookDelegate(m_image_cache, this);
     resultTree->setItemDelegate(bookDelegate);
 
     fixHeaders();
+    
+    setLayout(mainLayout);
     
     show();
 
