@@ -165,8 +165,20 @@ void BookDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
         yOffset += metrics.lineSpacing();
         QPoint mainOffset(xOffset, yOffset);
         
+        QString name = index.data().toString();
+        
         painter->setFont(authorFont);
-        painter->drawText(mainOffset, index.data().toString());
+        painter->drawText(mainOffset, name);
+        
+        authorFont.setBold(false);
+        painter->setFont(authorFont);
+        
+        int nameOffset = xOffset + metrics.width(name % QString(" "));
+        QPoint bookCountOffset(nameOffset, yOffset);
+        
+        int bookCount = index.data(CollectionTreeModel::AuthorBookCountRole).toInt();
+        
+        painter->drawText(bookCountOffset, i18np("(1 book)", "(%1 books)", bookCount));
         
         painter->setFont(previousFont);
     }

@@ -48,7 +48,7 @@ public:
                     UnknownAuthorRole = Qt::UserRole + 10,
                     KeyRole = Qt::UserRole + 11,
                     PreviewRole = Qt::UserRole + 12,
-                    AuthorBookCountRole = Qt::UserRole + 12
+                    AuthorBookCountRole = Qt::UserRole + 13
     };
     
 public slots:
