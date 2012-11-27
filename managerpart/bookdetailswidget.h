@@ -17,25 +17,36 @@
 */
 
 
-#ifndef BOOKTREEVIEW_H
-#define BOOKTREEVIEW_H
+#ifndef BOOKDETAILSWIDGET_H
+#define BOOKDETAILSWIDGET_H
 
-#include <QTreeView>
+#include <qwidget.h>
 
+class QLabel;
+class QTextEdit;
 
-class BookTreeView : public QTreeView
+// FIXME use the image cache also to store large thumbnails!
+
+class BookDetailsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit BookTreeView(QWidget* parent = 0);
+    explicit BookDetailsWidget(QWidget* parent = 0);
     
-signals:
-    void dataRequested(const QString &location, const QString &summary);
-    void hideDetails();
-
-protected:
-    virtual bool viewportEvent(QEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
+    QSize sizeHint() const;
+    
+public slots:
+    void displayBookData(const QString &location, const QString &summary);
+    
+private:
+    void handlePreviewError();
+    static const QSize thumbnailSize;
+    
+    QLabel *m_previewLabel;
+    QTextEdit *m_summaryTextEdit;
+        
+    QString m_summary;
+    QString m_location;
 };
 
-#endif // BOOKTREEVIEW_H
+#endif // BOOKDETAILSWIDGET_H

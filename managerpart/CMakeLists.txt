@@ -14,6 +14,7 @@ set(bookmanager_manager_PART_SRCS
     bookdelegate.cpp
     bookiconbuilder.cpp
     booktreeview.cpp
+    bookdetailswidget.cpp
 )
 qt4_add_dbus_adaptor(bookmanager_manager_PART_SRCS org.bookmanager.BookManagerPart.xml
                     bookmanagerpart.h BookManagerPart)

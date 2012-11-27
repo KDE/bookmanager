@@ -144,10 +144,12 @@ void BookManagerPart::ShowContextMenu(const QPoint& pos)
     //has any children because we don't want to be opening, editing, etc the parent items
     //since they're created programmatically...
     bool hasKids = false;
-    if (curIndex.model()->hasChildren(curIndex)){
-        hasKids = true;
-    }
-    if (!curIndex.isValid() or hasKids) {
+    bool valid = curIndex.isValid();
+    if (valid) {
+        if (curIndex.model()->hasChildren(curIndex)){
+            hasKids = true;
+        }
+    } else if (!valid or hasKids) {
         //the user clicked in the whitespace so we need to disable open and remove
         openSelected->setEnabled(false);
         remove->setEnabled(false);

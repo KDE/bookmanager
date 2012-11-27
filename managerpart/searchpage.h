@@ -45,6 +45,8 @@ class QVBoxLayout;
 
 class BookTreeView;
 
+class BookDetailsWidget;
+
 namespace ThreadWeaver {
     class Weaver;
     class Job;
@@ -102,7 +104,10 @@ private:
     BookTreeView *resultTree;
     
     QHBoxLayout *searchLayout;
+    QHBoxLayout *collectionLayout;
     QVBoxLayout *mainLayout;
+    
+    BookDetailsWidget *bookDetails;
     
     ThreadWeaver::Weaver *previewsFetchingQueue;
 

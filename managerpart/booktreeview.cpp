@@ -1,5 +1,4 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
     Copyright (C) 2012  Riccardo Bellini <ricky88ykcir@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
@@ -19,16 +18,47 @@
 
 
 #include "booktreeview.h"
+#include "collectiontreemodel.h"
+
+#include <kdebug.h>
+
+#include <qevent.h>
 
 BookTreeView::BookTreeView(QWidget* parent)
 :QTreeView(parent)
 {
-    setMouseTracking(true);
+    
 }
 
 
-void BookTreeView::mouseMoveEvent(QMouseEvent* event)
+bool BookTreeView::viewportEvent(QEvent* event)
 {
-    QTreeView::mouseMoveEvent(event);
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = (QHelpEvent *) event;
+        QModelIndex book = indexAt(helpEvent->pos());
+        
+        // if it's not a book don't show anything
+        if (book.data(CollectionTreeModel::UrlRole).isNull()) {
+           return  QTreeView::viewportEvent(event);
+        }
+        
+        QString location = book.data(CollectionTreeModel::UrlRole).toString();
+        QString summary = book.data(CollectionTreeModel::SummaryRole).toString();
+        
+        emit dataRequested(location, summary);
+        
+        return true;
+    } else {
+        return QTreeView::viewportEvent(event);
+    }
 }
 
+
+void BookTreeView::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Escape) {
+        emit hideDetails();
+    }
+    
+    QTreeView::keyPressEvent(event);
+}

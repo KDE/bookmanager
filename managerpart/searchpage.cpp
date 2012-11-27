@@ -28,6 +28,7 @@
 #include "bookiconbuilder.h"
 #include "constants.h"
 #include "booktreeview.h"
+#include "bookdetailswidget.h"
 
 #include <kdemacros.h>
 #include <kdebug.h>
@@ -82,6 +83,10 @@ SearchPage::SearchPage(QWidget *parent) :
     searchTypeBox->addItem(i18n("Author"));
     searchTypeBox->addItem(i18n("Genre"));
     
+    // set up the details widget
+    bookDetails = new BookDetailsWidget;
+    bookDetails->hide();
+    
     // set up layouts
     searchLayout = new QHBoxLayout;
     searchLayout->addWidget(queryEdit);
@@ -89,9 +94,13 @@ SearchPage::SearchPage(QWidget *parent) :
     searchLayout->addWidget(searchButton);
     searchLayout->addWidget(resetButton);
     
+    collectionLayout = new QHBoxLayout;
+    collectionLayout->addWidget(resultTree);
+    collectionLayout->addWidget(bookDetails);
+    
     mainLayout = new QVBoxLayout;
     mainLayout->addLayout(searchLayout);
-    mainLayout->addWidget(resultTree);
+    mainLayout->addLayout(collectionLayout);
     
     bookDelegate = new BookDelegate(m_image_cache, this);
     resultTree->setItemDelegate(bookDelegate);
@@ -99,7 +108,7 @@ SearchPage::SearchPage(QWidget *parent) :
     fixHeaders();
     
     setLayout(mainLayout);
-    
+        
     show();
 
     connect(this, SIGNAL(newBook(dbusBook)),
@@ -125,7 +134,10 @@ SearchPage::SearchPage(QWidget *parent) :
             this, SLOT(resetQuery()));
     connect(this, SIGNAL(query(QString*, QString*)),
             m_model, SLOT(query(QString*, QString*)));
-
+    
+    connect(resultTree, SIGNAL(dataRequested(QString,QString)), bookDetails, SLOT(displayBookData(QString,QString)));
+    
+    connect(resultTree, SIGNAL(hideDetails()), bookDetails, SLOT(hide()));
 }
 
 SearchPage::~SearchPage()
@@ -163,6 +175,8 @@ void SearchPage::remBook()
     //without having anything selected we segfault :(
     if (removeUs.length() > 0) {
 
+        bookDetails->hide();
+        
         foreach(const QModelIndex & removeMe,  removeUs) {
             m_model->removeRow(m_model->data(removeMe, CollectionTreeModel::KeyRole).toString());
         }
@@ -171,7 +185,7 @@ void SearchPage::remBook()
 
 
 void SearchPage::updateModel()
-{
+{    
     //reset the query instead of just reselecting because the filter may not show our
     //newly added book
     resetQuery();
@@ -272,6 +286,8 @@ const QPoint SearchPage::mapToViewport(const QPoint& pos)
 //and emit the newQuery signal.
 void SearchPage::newQuery()
 {
+    bookDetails->hide();
+    
     QString querytext;
     QString columnName;
 
@@ -286,6 +302,8 @@ void SearchPage::newQuery()
 
 void SearchPage::resetQuery()
 {
+    bookDetails->hide();
+    
     //clear the lineedit
     queryEdit->clear();
     //reset the query to the default by emiting a defaulted query
@@ -302,6 +320,8 @@ void SearchPage::slotEditBooks()
     //verify that we got at least one index... if the remove book command is called
     //without having anything selected we segfault :(
     if (editUs.length() > 0) {
+        bookDetails->hide();
+        
         foreach(const QModelIndex & editMe,  editUs) {
             //use the index to get the key, which we can use to create a bookstruct with the existing info
             //this also filters out the author index items
