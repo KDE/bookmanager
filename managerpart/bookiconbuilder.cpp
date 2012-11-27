@@ -74,9 +74,9 @@ void Iconbuilder::IconBuilderInternal::buildIcons()
     foreach (QString book, m_books) {
         KUrl locationUrl(book);
         QString locationPath = locationUrl.path();
-                
+        
         // if there is already a cached image for that book skip this part
-        if (m_cache->contains(locationPath)) {
+        if (m_cache->contains(book)) {
             emit iconReady(book);
             continue;
         }
@@ -99,7 +99,7 @@ void Iconbuilder::IconBuilderInternal::buildIcons()
                                                        Qt::SmoothTransformation);
         if(image.isNull()){
             return;
-        }
+        }        
         if(m_cache->insertImage(book, image)){
             emit iconReady(book);
         }
