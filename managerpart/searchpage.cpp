@@ -137,6 +137,9 @@ SearchPage::SearchPage(QWidget *parent) :
     
     connect(resultTree, SIGNAL(dataRequested(QString,QString)), bookDetails, SLOT(displayBookData(QString,QString)));
     
+    // show details also when clicked
+    connect(resultTree, SIGNAL(clicked(QModelIndex)), SLOT(showDetails(QModelIndex)));
+    
     connect(resultTree, SIGNAL(hideDetails()), bookDetails, SLOT(hide()));
 }
 
@@ -175,7 +178,7 @@ void SearchPage::remBook()
     //without having anything selected we segfault :(
     if (removeUs.length() > 0) {
 
-        bookDetails->hide();
+//         bookDetails->hide();
         
         foreach(const QModelIndex & removeMe,  removeUs) {
             m_model->removeRow(m_model->data(removeMe, CollectionTreeModel::KeyRole).toString());
@@ -232,6 +235,23 @@ void SearchPage::openBook()
 
 }
 
+void SearchPage::showDetails(const QModelIndex& index)
+{
+    if (!index.isValid()) {
+        return;
+    }
+    
+    if (!index.parent().isValid()) {
+        return;
+    }
+    
+    QString location = index.data(CollectionTreeModel::UrlRole).toString();
+    QString summary = index.data(CollectionTreeModel::SummaryRole).toString();
+    
+    bookDetails->displayBookData(location, summary);
+}
+
+
 void SearchPage::fetchIcons(const QModelIndex& author)
 {
     QStringList books = getAuthorBooks(author);
@@ -286,7 +306,7 @@ const QPoint SearchPage::mapToViewport(const QPoint& pos)
 //and emit the newQuery signal.
 void SearchPage::newQuery()
 {
-    bookDetails->hide();
+//     bookDetails->hide();
     
     QString querytext;
     QString columnName;
@@ -302,7 +322,7 @@ void SearchPage::newQuery()
 
 void SearchPage::resetQuery()
 {
-    bookDetails->hide();
+//     bookDetails->hide();
     
     //clear the lineedit
     queryEdit->clear();
@@ -320,7 +340,7 @@ void SearchPage::slotEditBooks()
     //verify that we got at least one index... if the remove book command is called
     //without having anything selected we segfault :(
     if (editUs.length() > 0) {
-        bookDetails->hide();
+//         bookDetails->hide();
         
         foreach(const QModelIndex & editMe,  editUs) {
             //use the index to get the key, which we can use to create a bookstruct with the existing info

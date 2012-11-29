@@ -77,6 +77,8 @@ private slots:
     void openBook(QModelIndex index);
     void openBook();
     
+    void showDetails(const QModelIndex &index);
+    
     void fetchIcons(const QModelIndex &author);
     
     void deleteJob(ThreadWeaver::Job *previewJob);

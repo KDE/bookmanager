@@ -24,6 +24,7 @@
 
 class QLabel;
 class QTextEdit;
+class QVBoxLayout;
 
 // FIXME use the image cache also to store large thumbnails!
 
@@ -44,6 +45,8 @@ private:
     
     QLabel *m_previewLabel;
     QTextEdit *m_summaryTextEdit;
+    
+    QVBoxLayout *thumbnailLayout;
         
     QString m_summary;
     QString m_location;

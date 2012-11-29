@@ -43,9 +43,13 @@ BookDetailsWidget::BookDetailsWidget(QWidget* parent)
     m_summaryTextEdit->setReadOnly(true);
     m_summaryTextEdit->setAcceptRichText(true);
     m_summaryTextEdit->setFrameShadow(QFrame::Sunken);
-        
+    
+    thumbnailLayout = new QVBoxLayout;
+    thumbnailLayout->addWidget(m_previewLabel);
+    thumbnailLayout->setAlignment(m_previewLabel, Qt::AlignHCenter | Qt::AlignVCenter);
+    
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(m_previewLabel);
+    mainLayout->addLayout(thumbnailLayout);
     mainLayout->addWidget(m_summaryTextEdit);
     
     setLayout(mainLayout);
@@ -55,6 +59,12 @@ BookDetailsWidget::BookDetailsWidget(QWidget* parent)
 
 void BookDetailsWidget::displayBookData(const QString& location, const QString& summary)
 {
+    // if location is already set do not display everything again
+    if (m_location == location) {
+        show();
+        return;
+    }
+    
     m_location = location;
     
     m_summary = i18n("<i>Summary:</i>") % QString(" ") % summary;
@@ -102,7 +112,7 @@ void BookDetailsWidget::displayBookData(const QString& location, const QString& 
 
 void BookDetailsWidget::handlePreviewError()
 {
-    m_previewLabel->setFixedSize(QSize(200, 200));
+    m_previewLabel->setFixedSize(thumbnailSize);
     m_previewLabel->setText(i18n("<i>No preview available</i>"));
     
     show();
