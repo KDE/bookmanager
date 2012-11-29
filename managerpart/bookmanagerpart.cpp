@@ -149,20 +149,29 @@ void BookManagerPart::ShowContextMenu(const QPoint& pos)
         if (curIndex.model()->hasChildren(curIndex)){
             hasKids = true;
         }
-    } else if (!valid or hasKids) {
+        if (hasKids) {
+            edit->setEnabled(false);
+            openSelected->setEnabled(false);
+            remove->setEnabled(false);
+        }
+        
+        m_contextMenu->exec(QCursor::pos());
+        
+        if (hasKids) {
+            edit->setEnabled(true);
+            openSelected->setEnabled(true);
+            remove->setEnabled(true);
+        }
+    } else {
         //the user clicked in the whitespace so we need to disable open and remove
         openSelected->setEnabled(false);
         remove->setEnabled(false);
-        if(hasKids){
-            edit->setEnabled(false);
-        }
+        edit->setEnabled(false);
         m_contextMenu->exec(QCursor::pos());
         //after we close the menu, turn open and remove back on
         openSelected->setEnabled(true);
         remove->setEnabled(true);
         edit->setEnabled(true);
-    } else {
-        m_contextMenu->exec(QCursor::pos());
     }
 }
 
