@@ -35,6 +35,8 @@ public:
     bool removeRow(QString key);
     dbusBook getBook(QString key);
     
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    
     //Qt::UserRole aliases
     enum dataRole { TitleRole = Qt::UserRole + 1,
                     SummaryRole = Qt::UserRole + 2,

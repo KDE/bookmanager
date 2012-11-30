@@ -240,3 +240,13 @@ QModelIndex CollectionTreeModel::findIndexByFilename(QString filename)
     
   return indexes.first();
 }
+
+
+Qt::ItemFlags CollectionTreeModel::flags(const QModelIndex& index) const
+{
+    if (!index.parent().isValid()) {
+        return Qt::ItemIsEnabled;
+    }
+    
+    return QStandardItemModel::flags(index);
+}
