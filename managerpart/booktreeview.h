@@ -30,7 +30,7 @@ public:
     explicit BookTreeView(QWidget* parent = 0);
     
 signals:
-    void dataRequested(const QString &location, const QString &summary);
+    void dataRequested(const QString &location, const QString &summary, const QString &cacheKey);
     void hideDetails();
 
 protected:

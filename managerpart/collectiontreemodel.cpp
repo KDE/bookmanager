@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2012  Brian k. <Bri.kor.21@gmail.com>
+    Copyright (C) 2012  Riccardo Bellini <ricky88ykcir@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -133,6 +134,9 @@ void CollectionTreeModel::attachCollectionModel()
         
         // set non valid data for PreviewRole
         tempBook->setData(QString(), PreviewRole);
+        
+        // set non valid data for LargePreviewRole
+        tempBook->setData(QString(), LargePreviewRole);
 
         //set/increment the bookcount for the author
         if(tempAuthor->data(AuthorBookCountRole).isNull()){
@@ -157,7 +161,7 @@ void CollectionTreeModel::query(QString* queryText, QString* columnName)
 }
 
 
-void CollectionTreeModel::bookIconReady(const QString& filename)
+void CollectionTreeModel::bookIconReady(const QString& filename, const QString &key)
 {
     if (KDE_ISUNLIKELY(filename.isNull() || filename.isEmpty())) {
         return;
@@ -165,9 +169,31 @@ void CollectionTreeModel::bookIconReady(const QString& filename)
     
     QModelIndex book = findIndexByFilename(filename);
     
+    // update only if the key is different
+    if (book.data(PreviewRole).toString() == key) {
+        return;
+    }
+    
     // this emits dataChanged signal, so the view should be automatically
     // updated
-    setData(book, filename, PreviewRole);
+    setData(book, key, PreviewRole);
+}
+
+
+void CollectionTreeModel::updateLargePreview(const QString& filename, const QString& key)
+{
+    if (KDE_ISUNLIKELY(filename.isNull() || filename.isEmpty())) {
+        return;
+    }
+    
+    QModelIndex book = findIndexByFilename(filename);
+    
+    // update only if the key is different
+    if (book.data(LargePreviewRole).toString() == key) {
+        return;
+    }
+    
+    setData(book, key, LargePreviewRole);
 }
 
 
@@ -238,14 +264,14 @@ QModelIndex CollectionTreeModel::findIndexByFilename(QString filename)
     QModelIndexList indexes = match(index(0, 0, QModelIndex()),
                                     UrlRole, filename, 1, Qt::MatchRecursive);
     
-  return indexes.first();
+    return indexes.first();
 }
 
 
 Qt::ItemFlags CollectionTreeModel::flags(const QModelIndex& index) const
 {
     if (!index.parent().isValid()) {
-        return Qt::ItemIsEnabled;
+        return Qt::NoItemFlags;
     }
     
     return QStandardItemModel::flags(index);

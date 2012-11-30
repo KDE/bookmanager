@@ -23,6 +23,7 @@
 #include <qstring.h>
 #include <qthread.h>
 #include <QImage>
+#include <qstringbuilder.h>
 
 #include <poppler/qt4/poppler-qt4.h>
 #include <threadweaver/Job.h>
@@ -32,7 +33,7 @@
 #include "constants.h"
 
 
-Iconbuilder::IconBuilderJob::IconBuilderJob(const QStringList &books, KImageCache *cache, QObject *parent)
+Iconbuilder::IconBuilderJob::IconBuilderJob(const QMap<QString, QString> &books, KImageCache *cache, QObject *parent)
 :ThreadWeaver::Job(parent)
 {
     this->books = books;
@@ -44,8 +45,8 @@ void Iconbuilder::IconBuilderJob::run()
     m_builder = new Iconbuilder::IconBuilderInternal(books, cache);
     
     // I think this is a queued connection
-    connect(m_builder, SIGNAL(iconReady(QString)), this,
-            SIGNAL(iconReady(QString)));
+    connect(m_builder, SIGNAL(iconReady(QString, QString)), this,
+            SIGNAL(iconReady(QString, QString)));
         
     m_builder->buildIcons();
     
@@ -53,7 +54,7 @@ void Iconbuilder::IconBuilderJob::run()
 }
 
 
-Iconbuilder::IconBuilderInternal::IconBuilderInternal(const QStringList &books, KImageCache *cache, QObject* parent)
+Iconbuilder::IconBuilderInternal::IconBuilderInternal(const QMap<QString, QString> &books, KImageCache *cache, QObject* parent)
     : QObject(parent)
 {
     m_cache = cache;
@@ -71,13 +72,19 @@ void Iconbuilder::IconBuilderInternal::buildIcons()
         return;
     }
     
-    foreach (QString book, m_books) {
+    QMap<QString, QString>::const_iterator it(m_books.constBegin());
+    QMap<QString, QString>::const_iterator end(m_books.constEnd());
+    
+    for (; it != end; ++it) {
+        QString book = it.key();
+        QString key = it.value();
+        
         KUrl locationUrl(book);
         QString locationPath = locationUrl.path();
         
         // if there is already a cached image for that book skip this part
-        if (m_cache->contains(book)) {
-            emit iconReady(book);
+        if (m_cache->contains(key)) {
+            emit iconReady(book, key);
             continue;
         }
         
@@ -97,11 +104,14 @@ void Iconbuilder::IconBuilderInternal::buildIcons()
         QImage image = pdfPage->renderToImage().scaled(ThumbnailSize,
                                                        Qt::IgnoreAspectRatio,
                                                        Qt::SmoothTransformation);
+        
+        key = QString::number(image.cacheKey());
+        
         if(image.isNull()){
             return;
         }        
-        if(m_cache->insertImage(book, image)){
-            emit iconReady(book);
+        if(m_cache->insertImage(key, image)){
+            emit iconReady(book, key);
         }
         
         //cleanup

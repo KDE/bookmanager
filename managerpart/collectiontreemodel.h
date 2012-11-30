@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2012  Brian k. <Bri.kor.21@gmail.com>
+    Copyright (C) 2012  Riccardo Bellini <ricky88ykcir@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -50,12 +51,14 @@ public:
                     UnknownAuthorRole = Qt::UserRole + 10,
                     KeyRole = Qt::UserRole + 11,
                     PreviewRole = Qt::UserRole + 12,
-                    AuthorBookCountRole = Qt::UserRole + 13
+                    LargePreviewRole = Qt::UserRole + 13,
+                    AuthorBookCountRole = Qt::UserRole + 14
     };
     
 public slots:
     void query(QString *queryText, QString *columnName);
-    void bookIconReady(const QString &filename);
+    void bookIconReady(const QString &filename, const QString &key);
+    void updateLargePreview(const QString &filename, const QString &key);
 
 signals:
     void repeatQuery(QString *query, QString *column);

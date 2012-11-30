@@ -44,8 +44,9 @@ bool BookTreeView::viewportEvent(QEvent* event)
         
         QString location = book.data(CollectionTreeModel::UrlRole).toString();
         QString summary = book.data(CollectionTreeModel::SummaryRole).toString();
+        QString cacheKey = book.data(CollectionTreeModel::LargePreviewRole).toString();
         
-        emit dataRequested(location, summary);
+        emit dataRequested(location, summary, cacheKey);
         
         return true;
     } else {

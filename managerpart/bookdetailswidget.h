@@ -26,30 +26,38 @@ class QLabel;
 class QTextEdit;
 class QVBoxLayout;
 
+class KImageCache;
+
 // FIXME use the image cache also to store large thumbnails!
 
 class BookDetailsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit BookDetailsWidget(QWidget* parent = 0);
+    explicit BookDetailsWidget(KImageCache *cache, QWidget* parent = 0);
     
     QSize sizeHint() const;
     
 public slots:
-    void displayBookData(const QString &location, const QString &summary);
+    void displayBookData(const QString &location, const QString &summary, const QString &cacheKey);
+    
+signals:
+    void previewDisplayed(const QString &location, const QString &cacheKey);
     
 private:
     void handlePreviewError();
-    static const QSize thumbnailSize;
+    void displayPreview(const QPixmap &preview);
     
     QLabel *m_previewLabel;
     QTextEdit *m_summaryTextEdit;
     
     QVBoxLayout *thumbnailLayout;
+    
+    KImageCache *m_cache;
         
     QString m_summary;
     QString m_location;
+    QString m_cacheKey;
 };
 
 #endif // BOOKDETAILSWIDGET_H

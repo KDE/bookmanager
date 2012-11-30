@@ -22,7 +22,7 @@
 #define BOOKICONBUILDER_H
 
 #include <qobject.h>
-#include <qstringlist.h>
+#include <qmap.h>
 #include <threadweaver/Job.h>
 
 /*
@@ -53,17 +53,17 @@ class IconBuilderInternal : public QObject
 {
     Q_OBJECT
 public:
-    explicit IconBuilderInternal(const QStringList &books, KImageCache *cache, QObject *parent = 0);
+    explicit IconBuilderInternal(const QMap<QString, QString> &books, KImageCache *cache, QObject *parent = 0);
 
     void buildIcons();
 
     //NOTE: This signal is only visible to the iconbuilderjob class.
 signals:
-    void iconReady(const QString &);
+    void iconReady(const QString &, const QString &);
 
 private:
     KImageCache  *m_cache;
-    QStringList m_books;
+    QMap<QString, QString> m_books;
 };
 
 
@@ -72,10 +72,10 @@ class IconBuilderJob : public ThreadWeaver::Job
 {
     Q_OBJECT
 public:
-    explicit IconBuilderJob(const QStringList &books, KImageCache *cache, QObject *parent = 0);
+    explicit IconBuilderJob(const QMap<QString, QString> &books, KImageCache *cache, QObject *parent = 0);
     
 signals:
-    void iconReady(const QString &);
+    void iconReady(const QString &, const QString &);
     
 protected:
     virtual void run();
@@ -83,7 +83,7 @@ protected:
 private:
     IconBuilderInternal *m_builder;
     KImageCache *cache;
-    QStringList books;
+    QMap<QString, QString> books;
 };
 
 }

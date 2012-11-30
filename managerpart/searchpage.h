@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include <QModelIndex>
+#include <QItemSelection>
 
 #include "bookstruct.h"
 
@@ -77,7 +78,7 @@ private slots:
     void openBook(QModelIndex index);
     void openBook();
     
-    void showDetails(const QModelIndex &index);
+    void showDetails(const QItemSelection &selected, const QItemSelection &deselected);
     
     void fetchIcons(const QModelIndex &author);
     
@@ -90,7 +91,7 @@ signals:
     Q_SCRIPTABLE void loadBook(QString url);
 private:
     void fixHeaders();
-    QStringList getAuthorBooks(const QModelIndex &author);
+    QMap<QString, QString> getAuthorBooks(const QModelIndex &author);
     ImportDialog *m_import;
     CollectionDB *m_db;
     CollectionTreeModel *m_model;

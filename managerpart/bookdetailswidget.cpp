@@ -18,9 +18,11 @@
 
 
 #include "bookdetailswidget.h"
+#include "constants.h"
 
 #include <kurl.h>
 #include <klocalizedstring.h>
+#include <kimagecache.h>
 
 #include <qscrollarea.h>
 #include <QVBoxLayout>
@@ -30,11 +32,11 @@
 
 #include <poppler/qt4/poppler-qt4.h>
 
-const QSize BookDetailsWidget::thumbnailSize(300, 350);
-
-BookDetailsWidget::BookDetailsWidget(QWidget* parent)
+BookDetailsWidget::BookDetailsWidget(KImageCache *cache, QWidget* parent)
 :QWidget(parent)
 {
+    m_cache = cache;
+    
     m_previewLabel = new QLabel;
     m_summaryTextEdit = new QTextEdit;
     
@@ -57,7 +59,7 @@ BookDetailsWidget::BookDetailsWidget(QWidget* parent)
 }
 
 
-void BookDetailsWidget::displayBookData(const QString& location, const QString& summary)
+void BookDetailsWidget::displayBookData(const QString& location, const QString& summary, const QString &cacheKey)
 {
     // if location is already set do not display everything again
     if (m_location == location) {
@@ -68,6 +70,7 @@ void BookDetailsWidget::displayBookData(const QString& location, const QString& 
     m_location = location;
     
     m_summary = i18n("<i>Summary:</i>") % QString(" ") % summary;
+    m_cacheKey = cacheKey;
     
     m_previewLabel->clear();
     m_summaryTextEdit->clear();
@@ -75,6 +78,13 @@ void BookDetailsWidget::displayBookData(const QString& location, const QString& 
     KUrl locationUrl(m_location);
     
     m_summaryTextEdit->setText(m_summary);
+    
+    if (m_cache->contains(m_cacheKey)) {
+        QPixmap preview;
+        m_cache->findPixmap(m_cacheKey, &preview);
+        displayPreview(preview);
+        return;
+    }
     
     bool error = false;
     
@@ -84,10 +94,15 @@ void BookDetailsWidget::displayBookData(const QString& location, const QString& 
         page = document->page(0);
         
         if (page) {
-            QImage image = page->renderToImage().scaled(thumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            QImage image = page->renderToImage().scaled(LargeThumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             
             if (!image.isNull()) {
-                m_previewLabel->setPixmap(QPixmap::fromImage(image));
+                QPixmap preview(QPixmap::fromImage(image));
+                m_cacheKey = QString::number(preview.cacheKey());
+                displayPreview(preview);
+                if (m_cache->insertPixmap(m_cacheKey, preview)) {
+                    emit previewDisplayed(m_location, m_cacheKey);
+                }
             } else {
                 error = true;
             }
@@ -110,9 +125,15 @@ void BookDetailsWidget::displayBookData(const QString& location, const QString& 
 }
 
 
+void BookDetailsWidget::displayPreview(const QPixmap& preview)
+{
+    m_previewLabel->setPixmap(preview);
+}
+
+
 void BookDetailsWidget::handlePreviewError()
 {
-    m_previewLabel->setFixedSize(thumbnailSize);
+    m_previewLabel->setFixedSize(LargeThumbnailSize);
     m_previewLabel->setText(i18n("<i>No preview available</i>"));
     
     show();

@@ -55,6 +55,7 @@ SearchPage::SearchPage(QWidget *parent) :
     // set up image cache
     m_image_cache = new KImageCache("bookmanager_previews", CacheSize);
     m_image_cache->setEvictionPolicy(KImageCache::EvictOldest);
+    m_image_cache->setPixmapCaching(true);
     
     // set up the WeaverInterface used to queue the icon fetching jobs
     previewsFetchingQueue = ThreadWeaver::Weaver::instance();
@@ -84,7 +85,7 @@ SearchPage::SearchPage(QWidget *parent) :
     searchTypeBox->addItem(i18n("Genre"));
     
     // set up the details widget
-    bookDetails = new BookDetailsWidget;
+    bookDetails = new BookDetailsWidget(m_image_cache);
     bookDetails->hide();
     
     // set up layouts
@@ -135,10 +136,16 @@ SearchPage::SearchPage(QWidget *parent) :
     connect(this, SIGNAL(query(QString*, QString*)),
             m_model, SLOT(query(QString*, QString*)));
     
-    connect(resultTree, SIGNAL(dataRequested(QString,QString)), bookDetails, SLOT(displayBookData(QString,QString)));
+    connect(resultTree, SIGNAL(dataRequested(QString, QString, QString)),
+            bookDetails, SLOT(displayBookData(QString, QString, QString)));
     
     // show details also when clicked
-    connect(resultTree, SIGNAL(clicked(QModelIndex)), SLOT(showDetails(QModelIndex)));
+//     connect(resultTree, SIGNAL(clicked(QModelIndex)), SLOT(showDetails(QModelIndex)));
+    
+    connect(resultTree->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            SLOT(showDetails(QItemSelection, QItemSelection)));
+    
+    connect(bookDetails, SIGNAL(previewDisplayed(QString,QString)), m_model, SLOT(updateLargePreview(QString,QString)));
     
     connect(resultTree, SIGNAL(hideDetails()), bookDetails, SLOT(hide()));
 }
@@ -235,8 +242,14 @@ void SearchPage::openBook()
 
 }
 
-void SearchPage::showDetails(const QModelIndex& index)
+void SearchPage::showDetails(const QItemSelection &selected, const QItemSelection &deselected)
 {
+    if (selected.isEmpty()) {
+        return;
+    }
+    
+    QModelIndex index = selected.first().topLeft();
+    
     if (!index.isValid()) {
         return;
     }
@@ -247,20 +260,21 @@ void SearchPage::showDetails(const QModelIndex& index)
     
     QString location = index.data(CollectionTreeModel::UrlRole).toString();
     QString summary = index.data(CollectionTreeModel::SummaryRole).toString();
+    QString cacheKey = index.data(CollectionTreeModel::LargePreviewRole).toString();
     
-    bookDetails->displayBookData(location, summary);
+    bookDetails->displayBookData(location, summary, cacheKey);
 }
 
 
 void SearchPage::fetchIcons(const QModelIndex& author)
 {
-    QStringList books = getAuthorBooks(author);
+    QMap<QString, QString> books = getAuthorBooks(author);
         
     // add the icon fetching to the job queue
     Iconbuilder::IconBuilderJob *iconBuilder = new Iconbuilder::IconBuilderJob(books, m_image_cache);
     
     // connect signals
-    connect(iconBuilder, SIGNAL(iconReady(QString)), m_model, SLOT(bookIconReady(QString)));
+    connect(iconBuilder, SIGNAL(iconReady(QString, QString)), m_model, SLOT(bookIconReady(QString, QString)));
     
     previewsFetchingQueue->enqueue(iconBuilder);
 }
@@ -359,29 +373,24 @@ void SearchPage::slotEditBooks()
     }
 }
 
-QStringList SearchPage::getAuthorBooks(const QModelIndex& author)
+QMap<QString, QString> SearchPage::getAuthorBooks(const QModelIndex& author)
 {
-    QStringList books;
+    QMap<QString, QString> books;
     
     QString authorName = author.data().toString();
     
     if (KDE_ISUNLIKELY(authorName.isNull() || authorName.isEmpty())) {
-        return QStringList();
+        return QMap<QString, QString>();
     }
     
-    QSqlQuery queryBooks;
-    queryBooks.prepare("SELECT url "
-                       "FROM collection "
-                       "WHERE author = :name");
-    queryBooks.bindValue(0, authorName);
+    int numBooks = m_model->rowCount(author);
     
-    queryBooks.exec();
-    if (!queryBooks.isActive()) {
-        return QStringList();
-    }
-    
-    while (queryBooks.next()) {
-        books.append(queryBooks.value(0).toString());
+    for (int i = 0; i < numBooks; ++i) {
+        QModelIndex book = author.child(i, 0);
+        QString location = book.data(CollectionTreeModel::UrlRole).toString();
+        QString cacheKey = book.data(CollectionTreeModel::PreviewRole).toString();
+        
+        books.insert(location, cacheKey);
     }
     
     return books;
