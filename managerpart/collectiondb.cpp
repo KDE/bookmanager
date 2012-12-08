@@ -66,10 +66,10 @@ CollectionDB::CollectionDB()
             // the db structure needs to be migrated from previous version
             // inform the user that a newer version is available
             KMessageBox::information(this, i18n("Your collection will now be "
-            "migrated to the latest version, with support for book series and "
-            "volume numbers. There will not be any data loss, however, you might "
-            "be willing to edit some information after the process completes."),
-            i18n("New version available"));
+                                                "migrated to the latest version, with support for book series and "
+                                                "volume numbers. There will not be any data loss, however, you might "
+                                                "be willing to edit some information after the process completes."),
+                                     i18n("New version available"));
 
             // TODO maybe it would be nicer to show a progress dialog, since
             // the operation may take a lot of time for large databases.
@@ -79,13 +79,13 @@ CollectionDB::CollectionDB()
             float version = 0.1;
             // create temporary table to copy data into
             copyTableQuery.prepare("CREATE TABLE collection_copy ("
-            "title TEXT, "
-            "summary TEXT, "
-            "author TEXT, "
-            "release TEXT, "
-            "releaseDate TEXT, "
-            "genre TEXT, "
-            "url TEXT)");
+                                   "title TEXT, "
+                                   "summary TEXT, "
+                                   "author TEXT, "
+                                   "release TEXT, "
+                                   "releaseDate TEXT, "
+                                   "genre TEXT, "
+                                   "url TEXT)");
             copyTableQuery.exec();
             if (!copyTableQuery.isActive()) {
                 // error while creating table, print debug and return
@@ -94,16 +94,16 @@ CollectionDB::CollectionDB()
             }
 
             copyTableQuery.prepare("SELECT title, summary, author, release, "
-            "releaseDate, genre, url FROM collection");
+                                   "releaseDate, genre, url FROM collection");
             copyTableQuery.exec();
             if (copyTableQuery.isActive()) {
                 QSqlQuery addToCopyQuery;
                 while (copyTableQuery.next()) {
                     // insert into the backup table the current tuple
                     addToCopyQuery.prepare("INSERT INTO collection_copy ("
-                    "title, summary, author, release, releaseDate, genre, "
-                    "url) VALUES (:title, :summary, :author, :release, "
-                    ":releaseDate, :genre, :url)");
+                                           "title, summary, author, release, releaseDate, genre, "
+                                           "url) VALUES (:title, :summary, :author, :release, "
+                                           ":releaseDate, :genre, :url)");
                     addToCopyQuery.bindValue(0, copyTableQuery.value(0));
                     addToCopyQuery.bindValue(1, copyTableQuery.value(1));
                     addToCopyQuery.bindValue(2, copyTableQuery.value(2));
@@ -125,15 +125,15 @@ CollectionDB::CollectionDB()
             // copy data back into the collection table, restoring from
             // the backup
             restoreQuery.prepare("SELECT title, summary, author, release, "
-            "releaseDate, genre, url FROM collection_copy");
+                                 "releaseDate, genre, url FROM collection_copy");
             restoreQuery.exec();
             if (restoreQuery.isActive()) {
                 QSqlQuery addToOriginalQuery;
                 while (restoreQuery.next()) {
                     addToOriginalQuery.prepare("INSERT INTO collection ("
-                    "title, summary, author, release, releaseDate, genre, url) "
-                    "VALUES (:title, :summary, :author, :release, "
-                    ":releaseDate, :genre, :url)");
+                                               "title, summary, author, release, releaseDate, genre, url) "
+                                               "VALUES (:title, :summary, :author, :release, "
+                                               ":releaseDate, :genre, :url)");
                     addToOriginalQuery.bindValue(0, restoreQuery.value(0));
                     addToOriginalQuery.bindValue(1, restoreQuery.value(1));
                     addToOriginalQuery.bindValue(2, restoreQuery.value(2));
@@ -169,30 +169,23 @@ void CollectionDB::addBook(dbusBook book)
     int id;
     QSqlQuery query;
     if (checkdupe(&book, id)) {
-        //this is a dupe, check with the user to see if we want to overwrite or cancel
-        if (KMessageBox::warningContinueCancel
-                (this, i18n("Would you like to overwrite the existing entry for this file?"))
-                == 2) { //2 is the buttoncode for cancel
-            return;//if the user hit cancel, return without doing anything
-        } else {
-            //if the user didn't cancel then we have some work to do :P
-            query.prepare
-            ("UPDATE collection SET title = :title, summary = :summary,"
-             " author = :author, release = :release, releaseDate = :releaseDate,"
-             " genre = :genre, series = :series, volume = :volume, url = :url "
-             " WHERE id = :id");
-            query.bindValue(0, book.title);
-            query.bindValue(1, book.summary);
-            query.bindValue(2, book.author);
-            query.bindValue(3, book.release);
-            query.bindValue(4, book.releaseDate);
-            query.bindValue(5, book.genre);
-            query.bindValue(6, book.series);
-            query.bindValue(7, book.volume);
-            query.bindValue(8, book.url);
-            query.bindValue(9, id);
-            query.exec();
-        }
+        //this is a dupe, which means we're editing rather than creating, so use update
+        query.prepare
+        ("UPDATE collection SET title = :title, summary = :summary,"
+         " author = :author, release = :release, releaseDate = :releaseDate,"
+         " genre = :genre, series = :series, volume = :volume, url = :url "
+         " WHERE id = :id");
+        query.bindValue(0, book.title);
+        query.bindValue(1, book.summary);
+        query.bindValue(2, book.author);
+        query.bindValue(3, book.release);
+        query.bindValue(4, book.releaseDate);
+        query.bindValue(5, book.genre);
+        query.bindValue(6, book.series);
+        query.bindValue(7, book.volume);
+        query.bindValue(8, book.url);
+        query.bindValue(9, id);
+        query.exec();
     } else {
         //set id to NULL for sqlite to autoincrement the id, we don't care about the id's so...
         query.prepare("INSERT INTO collection (title, summary, author, release, releaseDate, genre, "
@@ -237,7 +230,7 @@ bool CollectionDB::initDB()
                          "volume text, "
                          "url text)");
         query.finish();
-        
+
         // create an index on author attribute, to make lookup for
         // auto-completion faster.
         ret2 = query.exec("create index authorIdx on collection(author)");
