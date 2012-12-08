@@ -60,20 +60,6 @@ QWidget* ModifyDialog::createMainWidget()
     // reuse import widget
     layout->addWidget(importWidget);
     
-    applyToAllCheckBox = new QCheckBox(i18n("Apply to all"));
-    // add a checkbox
-    layout->addWidget(applyToAllCheckBox);
-    
-    connect(applyToAllCheckBox, SIGNAL(toggled(bool)),
-            SLOT(applyToAllToggled(bool)));
-    
-    applyToAllCheckBox->setChecked(false);
-    
-    // disable "apply to all" check box if there is only one item
-    if (m_booklist.size() == 1) {
-        applyToAllCheckBox->setEnabled(false);
-    }
-    
     return result;
 }
 
