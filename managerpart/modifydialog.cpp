@@ -78,31 +78,6 @@ QWidget* ModifyDialog::createMainWidget()
 }
 
 
-void ModifyDialog::applyToAllToggled(bool toggle)
-{    
-    // we can't give the same title to many books
-    importWidget->titleLabel->setEnabled(!toggle);
-    importWidget->titleEdit->setEnabled(!toggle);
-    
-    // we can't assign the same URL to many books
-    importWidget->locationLabel->setEnabled(!toggle);
-    importWidget->locationUrlRequestor->setEnabled(!toggle);
-    
-    // we can't give the same volume number to many books
-    importWidget->volumeLabel->setEnabled(!toggle);
-    importWidget->volumeEdit->setEnabled(!toggle);
-    
-    // disable "Previous" and "Next" buttons
-    enableButton(KDialog::User2, !toggle);
-    enableButton(KDialog::User1, !toggle);
-    
-    // if unchecked, restore buttons to the correct state
-    if (!toggle) {
-        updateButtons();
-    }
-}
-
-
 void ModifyDialog::setupMappings()
 {
     importWidget->titleEdit->setText(m_booklist.at(m_currentCount).title);
@@ -124,7 +99,7 @@ void ModifyDialog::previous()
 {
     // submit all changes to current book before switching, otherwise they are
     // lost forever. This also updates m_booklist
-    updateAndSubmit();
+    updateBooklist();
     m_currentCount--;
     setupMappings();
 }
@@ -134,25 +109,31 @@ void ModifyDialog::next()
 {
     // submit all changes to current book before switching, otherwise they are
     // lost forever. This also updates m_booklist
-    updateAndSubmit();
+    updateBooklist();
     m_currentCount++;
     setupMappings();
 }
+
+void ModifyDialog::updateBooklist()
+{
+    //update the booklist entry, but _DO NOT_ update the underlying db
+    m_booklist[m_currentCount].title = importWidget->titleEdit->text();
+    m_booklist[m_currentCount].summary = importWidget->descEdit->toPlainText();
+    m_booklist[m_currentCount].author = importWidget->authorEdit->text();
+    m_booklist[m_currentCount].release = importWidget->relNumEdit->text();
+    m_booklist[m_currentCount].releaseDate = importWidget->relDateEdit->text();
+    m_booklist[m_currentCount].genre = importWidget->genreEdit->text();
+    m_booklist[m_currentCount].series = importWidget->seriesEdit->text();
+    m_booklist[m_currentCount].volume = importWidget->volumeEdit->text();
+    m_booklist[m_currentCount].url = importWidget->locationUrlRequestor->url().url();
+}
+
 void ModifyDialog::updateAndSubmit()
 {
-    dbusBook updated;
-    //update the booklist entry and submit the new data to the underlying db
-    updated.title = importWidget->titleEdit->text();
-    updated.summary = importWidget->descEdit->toPlainText();
-    updated.author = importWidget->authorEdit->text();
-    updated.release = importWidget->relNumEdit->text();
-    updated.releaseDate = importWidget->relDateEdit->text();
-    updated.genre = importWidget->genreEdit->text();
-    updated.series = importWidget->seriesEdit->text();
-    updated.volume = importWidget->volumeEdit->text();
-    updated.url = importWidget->locationUrlRequestor->url().url();
-
-    emit signalUpdateBook(updated);
+    //submit all the modified books to the db
+    foreach (dbusBook curBook, m_booklist){
+        emit signalUpdateBook(curBook);
+    }
 }
 void ModifyDialog::updateButtons()
 {
@@ -165,28 +146,9 @@ void ModifyDialog::updateButtons()
     enableButton(KDialog::User1, m_currentCount != m_last - 1);
 }
 
-
-void ModifyDialog::applyToAllPrivate()
-{
-    // iterate over items and modify data in the model
-    int saved = m_currentCount;
-    m_currentCount = 0;
-    while(m_currentCount != m_last){
-        updateAndSubmit();
-    }
-    m_currentCount = saved;
-}
-
-
 void ModifyDialog::accept()
 {
-    // if apply to all is toggled, apply to all books
-    if (applyToAllCheckBox->isChecked()) {
-        applyToAllPrivate();
-    } else {
-        // try to submit data to underlying model
-        updateAndSubmit();
-    }
+    updateAndSubmit();
     KDialog::accept();
 }
 

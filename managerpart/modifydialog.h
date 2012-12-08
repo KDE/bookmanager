@@ -43,9 +43,7 @@ signals:
     //connect this to the collection to update books
     void signalUpdateBook(dbusBook book);
     
-private slots:
-    void applyToAllToggled(bool toggle);
-    
+private slots:  
     void previous();
     void next();
     
@@ -54,7 +52,7 @@ private slots:
 private:
     QWidget *createMainWidget();
     void setupMappings();
-    void applyToAllPrivate();
+    void updateBooklist();
     void updateAndSubmit();
     
     QWidget *mainWidget;
