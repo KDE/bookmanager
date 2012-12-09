@@ -1,3 +1,10 @@
+This is a list of Features that would be nice to have, but may never actually be developed...
+
 - Import books from folder.
 - "Search in all opened files/entire collection" feature (is it possible?).
-- Add cover picture for the books.
+- Split view (like kdevelop)
+- Drag-able tabs (like firefox/chrome)
+- session manager
+- auto-import via isbn
+- export collection
+- nepomuk?
