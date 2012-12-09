@@ -1,3 +1,3 @@
 #! /usr/bin/env bash
 $EXTRACTRC `find -name '*.rc' -o -name '*.ui' -o -name '*.kcfg'` >> rc.cpp
-$XGETTEXT `find . -name '*.cpp' -o -name '*.h' -o -name '*.c'` -o $podir/bookmanager.pot
+$XGETTEXT `find . -name '*.cpp'` -o $podir/bookmanager.pot
