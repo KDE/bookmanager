@@ -7,7 +7,7 @@
   <group name="bookmanager">
     <entry name="collection" type="Bool">
       <label>Show or hide the Collection Manager</label>
-      <default code="true">true</default>
+      <default>true</default>
     </entry>
   </group>
 </kcfg>
