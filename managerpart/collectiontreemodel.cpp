@@ -33,8 +33,8 @@ CollectionTreeModel::CollectionTreeModel(QObject* parent): QStandardItemModel(pa
     m_rootItem = 0;
     createMergedModel();
 
-    connect(this, SIGNAL(repeatQuery(QString*,QString*)),
-            m_collectionModel, SLOT(query(QString*,QString*)));
+    connect(this, SIGNAL(repeatQuery(QString*, QString*)),
+            m_collectionModel, SLOT(query(QString*, QString*)));
     connect(m_collectionModel, SIGNAL(newFilter()),
             this, SLOT(rebuildModel()));
 }
@@ -50,16 +50,16 @@ void CollectionTreeModel::createAuthorModel()
     //there may be an easier way to find dupes, but i'm just going to use a string list to remove them if they exist...
     QStringList* authorlist = new QStringList;
     bool needUnknown = 0;
-    for(int row = 0; row < m_collectionModel->rowCount(); row++){
+    for (int row = 0; row < m_collectionModel->rowCount(); row++) {
         //check if the string isEmpty, then negate it so we can pass the Krazy test
-        if(!m_collectionModel->data(m_collectionModel->index(row, Author)).toString().isEmpty()){
+        if (!m_collectionModel->data(m_collectionModel->index(row, Author)).toString().isEmpty()) {
             authorlist->append(m_collectionModel->data(m_collectionModel->index(row, Author)).toString());
         } else {
             needUnknown = 1;
         }
     }
     authorlist->removeDuplicates();
-    for(int i = 0; i < authorlist->size();i++){
+    for (int i = 0; i < authorlist->size(); i++) {
         QStandardItem *author = new QStandardItem;
         author->setData(authorlist->at(i), Qt::DisplayRole);
         m_rootItem->appendRow(author);
@@ -67,7 +67,7 @@ void CollectionTreeModel::createAuthorModel()
     /* now we create a special "unknown" item in the author model, Unknown Author should be unique enough that
      * it won't interfere with peoples collections, i hope.
      */
-    if(needUnknown){
+    if (needUnknown) {
         QStandardItem *unknown = new QStandardItem;
         unknown->setData(i18nc("A placeholder entry for books with no known author", "Unknown Author"), Qt::DisplayRole);
         unknown->setData(true, UnknownAuthorRole);
@@ -76,7 +76,7 @@ void CollectionTreeModel::createAuthorModel()
     /*
      * if there are no entries in the list then we need to make a "No Documents Found" entry
      */
-    if(authorlist->isEmpty()){
+    if (authorlist->isEmpty()) {
         QStandardItem *none = new QStandardItem;
         none->setData(i18n("No Documents Found"), Qt::DisplayRole);
         m_rootItem->appendRow(none);
@@ -85,7 +85,7 @@ void CollectionTreeModel::createAuthorModel()
 
 void CollectionTreeModel::createMergedModel()
 {
-    if(m_rootItem){
+    if (m_rootItem) {
         m_rootItem->removeRows(0, m_rootItem->rowCount());
     }
     m_rootItem = invisibleRootItem();
@@ -96,23 +96,23 @@ void CollectionTreeModel::createMergedModel()
 void CollectionTreeModel::attachCollectionModel()
 {
     //create a qhash cache of authors, with pointers to them as the value, so we can add children
-    
+
     QHash<QString, QStandardItem*> authorCache;
-    for(int row = 0; row < m_rootItem->rowCount(); row++){
+    for (int row = 0; row < m_rootItem->rowCount(); row++) {
         /* in order to allow for the translation of the unknown author entry i believe i need to go
          * through the extra check here, since we have no guarantee that the datastring is going to be
          * "unknown author"
          */
-        if(m_rootItem->child(row)->data(UnknownAuthorRole).toBool()){
+        if (m_rootItem->child(row)->data(UnknownAuthorRole).toBool()) {
             authorCache.insert("Unknown Author", m_rootItem->child(row));
         } else {
             authorCache.insert(m_rootItem->child(row)->data(Qt::DisplayRole).toString(), m_rootItem->child(row));
         }
     }
-    for(int row = 0; row < m_collectionModel->rowCount(); row++){
-        QString author = m_collectionModel->data(m_collectionModel->index(row,Author)).toString();
+    for (int row = 0; row < m_collectionModel->rowCount(); row++) {
+        QString author = m_collectionModel->data(m_collectionModel->index(row, Author)).toString();
         QStandardItem *tempAuthor;
-        if(author.isEmpty()){
+        if (author.isEmpty()) {
             tempAuthor = authorCache.value("Unknown Author");
         } else {
             tempAuthor = authorCache.value(author);
@@ -129,20 +129,20 @@ void CollectionTreeModel::attachCollectionModel()
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Volume)), VolumeRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Location)), UrlRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, ID)), KeyRole);
-        
+
         // set non valid data for PreviewRole
         tempBook->setData(QString(), PreviewRole);
-        
+
         // set non valid data for LargePreviewRole
         tempBook->setData(QString(), LargePreviewRole);
 
         //set/increment the bookcount for the author
-        if(tempAuthor->data(AuthorBookCountRole).isNull()){
+        if (tempAuthor->data(AuthorBookCountRole).isNull()) {
             tempAuthor->setData(1, AuthorBookCountRole);
         } else {
             tempAuthor->setData(tempAuthor->data(AuthorBookCountRole).toInt() + 1, AuthorBookCountRole);
         }
-        
+
         //finally, add the new book
         tempAuthor->setChild(tempAuthor->rowCount(), tempBook);
     }
@@ -164,14 +164,14 @@ void CollectionTreeModel::bookIconReady(const QString& filename, const QString &
     if (KDE_ISUNLIKELY(filename.isNull() || filename.isEmpty())) {
         return;
     }
-    
+
     QModelIndex book = findIndexByFilename(filename);
-    
+
     // update only if the key is different
     if (book.data(PreviewRole).toString() == key) {
         return;
     }
-    
+
     // this emits dataChanged signal, so the view should be automatically
     // updated
     setData(book, key, PreviewRole);
@@ -183,14 +183,14 @@ void CollectionTreeModel::updateLargePreview(const QString& filename, const QStr
     if (KDE_ISUNLIKELY(filename.isNull() || filename.isEmpty())) {
         return;
     }
-    
+
     QModelIndex book = findIndexByFilename(filename);
-    
+
     // update only if the key is different
     if (book.data(LargePreviewRole).toString() == key) {
         return;
     }
-    
+
     setData(book, key, LargePreviewRole);
 }
 
@@ -238,7 +238,7 @@ dbusBook CollectionTreeModel::getBook(QString key)
     QString newFilter = "id = ";
     newFilter.append(key);
     m_collectionModel->setFilter(newFilter);
-    
+
     //create a dbusBook from the record so we can play with individual values
     dbusBook book;
     book.author = m_collectionModel->data(m_collectionModel->index(0, Author)).toString();
@@ -253,7 +253,7 @@ dbusBook CollectionTreeModel::getBook(QString key)
 
     m_collectionModel->setFilter(oldFilter);
     return book;
-    
+
 }
 QModelIndex CollectionTreeModel::findIndexByFilename(QString filename)
 {
@@ -261,7 +261,7 @@ QModelIndex CollectionTreeModel::findIndexByFilename(QString filename)
     // since there should only be one entry per file, return the first match (and stop looking after 1 match)
     QModelIndexList indexes = match(index(0, 0, QModelIndex()),
                                     UrlRole, filename, 1, Qt::MatchRecursive);
-    
+
     return indexes.first();
 }
 
@@ -271,6 +271,6 @@ Qt::ItemFlags CollectionTreeModel::flags(const QModelIndex& index) const
     if (!index.parent().isValid()) {
         return Qt::NoItemFlags;
     }
-    
+
     return QStandardItemModel::flags(index);
 }

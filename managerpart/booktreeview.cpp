@@ -25,9 +25,9 @@
 #include <qevent.h>
 
 BookTreeView::BookTreeView(QWidget* parent)
-:QTreeView(parent)
+    : QTreeView(parent)
 {
-    
+
 }
 
 
@@ -36,18 +36,18 @@ bool BookTreeView::viewportEvent(QEvent* event)
     if (event->type() == QEvent::ToolTip) {
         QHelpEvent *helpEvent = (QHelpEvent *) event;
         QModelIndex book = indexAt(helpEvent->pos());
-        
+
         // if it's not a book don't show anything
         if (book.data(CollectionTreeModel::UrlRole).isNull()) {
-           return  QTreeView::viewportEvent(event);
+            return  QTreeView::viewportEvent(event);
         }
-        
+
         QString location = book.data(CollectionTreeModel::UrlRole).toString();
         QString summary = book.data(CollectionTreeModel::SummaryRole).toString();
         QString cacheKey = book.data(CollectionTreeModel::LargePreviewRole).toString();
-        
+
         emit dataRequested(location, summary, cacheKey);
-        
+
         return true;
     } else {
         return QTreeView::viewportEvent(event);
@@ -60,6 +60,6 @@ void BookTreeView::keyPressEvent(QKeyEvent* event)
     if (event->key() == Qt::Key_Escape) {
         emit hideDetails();
     }
-    
+
     QTreeView::keyPressEvent(event);
 }

@@ -26,27 +26,27 @@
 
 ModifyDialog::ModifyDialog(QList<dbusBook> booklist,
                            QWidget* parent)
-:KDialog(parent)
+    : KDialog(parent)
 {
     m_booklist = booklist;
     //i'd rather use iterators for everything, but for some reason they don't seem to want to work?
     //probably because I'm playing with non-qt types
     m_currentCount = 0;
     m_last = booklist.size();
-    
+
     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1 | KDialog::User2);
     setButtonText(KDialog::User2, i18nc("go to the Previous entry", "Previous"));
     setButtonGuiItem(KDialog::User2, KStandardGuiItem::back());
     setButtonText(KDialog::User1, i18nc("go to the next entry", "Next"));
     setButtonGuiItem(KDialog::User1, KStandardGuiItem::forward());
-    
+
     mainWidget = createMainWidget();
     setMainWidget(mainWidget);
     setCaption(i18n("Edit Books"));
-    
+
     connect(this, SIGNAL(user1Clicked()), SLOT(next()));
     connect(this, SIGNAL(user2Clicked()), SLOT(previous()));
-    
+
     setupMappings();
 }
 
@@ -55,11 +55,11 @@ QWidget* ModifyDialog::createMainWidget()
 {
     QWidget *result = new QWidget(this);
     importWidget = new ImportWidget(this);
-    
+
     QVBoxLayout *layout = new QVBoxLayout(result);
     // reuse import widget
     layout->addWidget(importWidget);
-    
+
     return result;
 }
 
@@ -77,7 +77,7 @@ void ModifyDialog::setupMappings()
     importWidget->locationUrlRequestor->setUrl(KUrl(m_booklist.at(m_currentCount).url));
 
     updateButtons();
-    
+
 }
 
 
@@ -117,7 +117,7 @@ void ModifyDialog::updateBooklist()
 void ModifyDialog::updateAndSubmit()
 {
     //submit all the modified books to the db
-    foreach (dbusBook curBook, m_booklist){
+    foreach(dbusBook curBook, m_booklist) {
         emit signalUpdateBook(curBook);
     }
 }
@@ -125,7 +125,7 @@ void ModifyDialog::updateButtons()
 {
     // if we are at the first element, disable "Previous" button
     enableButton(KDialog::User2, m_currentCount != 0);
-    
+
     // if we are at the last element, disable "Next" button
     //we need to subtract 1 from m_last, because we want to know if their is a next entry,
     //not if we're the last entry

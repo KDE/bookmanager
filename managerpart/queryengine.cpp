@@ -27,31 +27,30 @@
 #include "threadweaver/ThreadWeaver.h"
 #include <kdebug.h>
 
-namespace Query {
+namespace Query
+{
 
-    class QueryProcesserPrivate : public ThreadWeaver::Job
-    {
-    public:
-        QueryProcesserPrivate(QueryEngineInternal *engine)
-        :m_engine(engine)
-        {
+class QueryProcesserPrivate : public ThreadWeaver::Job
+{
+public:
+    QueryProcesserPrivate(QueryEngineInternal *engine)
+        : m_engine(engine) {
 
-        }
+    }
 
-    protected:
-        virtual void run()
-        {
-            m_engine->runQuery();
-        }
+protected:
+    virtual void run() {
+        m_engine->runQuery();
+    }
 
-    private:
-        QueryEngineInternal *m_engine;
-    };
+private:
+    QueryEngineInternal *m_engine;
+};
 
 }
 
 Query::QueryEngine::QueryEngine(Query::QueryType type, QObject* parent)
-:QObject(parent)
+    : QObject(parent)
 {
     m_type = type;
 }
@@ -87,8 +86,8 @@ void Query::QueryEngine::done(ThreadWeaver::Job *job)
 
 
 Query::QueryEngineInternal::QueryEngineInternal(Query::QueryType type,
-                                                QObject *parent)
-: QObject(parent)
+        QObject *parent)
+    : QObject(parent)
 {
     m_type = type;
 
@@ -101,15 +100,15 @@ void Query::QueryEngineInternal::buildQuery()
 
     m_query += "SELECT ";
 
-    switch(m_type) {
-        case Query::Author:
-            m_query += "author";
-            break;
-        case Query::Genre:
-            m_query += "genre";
-            break;
-        default:
-            break;
+    switch (m_type) {
+    case Query::Author:
+        m_query += "author";
+        break;
+    case Query::Genre:
+        m_query += "genre";
+        break;
+    default:
+        break;
     }
 
     m_query += " FROM collection";
@@ -127,14 +126,14 @@ void Query::QueryEngineInternal::runQuery()
         while (new_query.next()) {
             QString value = new_query.value(0).toString();
             switch (m_type) {
-                case Query::Author:
-                    emit authorAvailable(value);
-                    break;
-                case Query::Genre:
-                    emit genreAvailable(value);
-                    break;
-                default:
-                    break;
+            case Query::Author:
+                emit authorAvailable(value);
+                break;
+            case Query::Genre:
+                emit genreAvailable(value);
+                break;
+            default:
+                break;
             }
         }
     }

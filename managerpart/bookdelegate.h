@@ -31,18 +31,18 @@ class BookDelegate : public QStyledItemDelegate
 {
 public:
     explicit BookDelegate(KImageCache *cache, QWidget* parent = 0);
-    
+
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
-               
+                       const QModelIndex &index) const;
+
     virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    
+
 private:
     KImageCache *m_cache;
     KIconLoader *m_iconLoader;
-    
+
     QImage placeHolderImage;
-    
+
     int xOffsetForPreview;
     int yOffsetForPreview;
     int xOffsetForText;

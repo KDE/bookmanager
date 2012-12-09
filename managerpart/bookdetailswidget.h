@@ -35,26 +35,26 @@ class BookDetailsWidget : public QWidget
     Q_OBJECT
 public:
     explicit BookDetailsWidget(KImageCache *cache, QWidget* parent = 0);
-    
+
     QSize sizeHint() const;
-    
+
 public slots:
     void displayBookData(const QString &location, const QString &summary, const QString &cacheKey);
-    
+
 signals:
     void previewDisplayed(const QString &location, const QString &cacheKey);
-    
+
 private:
     void handlePreviewError();
     void displayPreview(const QPixmap &preview);
-    
+
     QLabel *m_previewLabel;
     QTextEdit *m_summaryTextEdit;
-    
+
     QVBoxLayout *thumbnailLayout;
-    
+
     KImageCache *m_cache;
-        
+
     QString m_summary;
     QString m_location;
     QString m_cacheKey;

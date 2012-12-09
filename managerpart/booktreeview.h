@@ -28,7 +28,7 @@ class BookTreeView : public QTreeView
     Q_OBJECT
 public:
     explicit BookTreeView(QWidget* parent = 0);
-    
+
 signals:
     void dataRequested(const QString &location, const QString &summary, const QString &cacheKey);
     void hideDetails();

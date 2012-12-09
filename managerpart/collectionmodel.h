@@ -40,7 +40,8 @@ signals:
 
 private:
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,
-                       Series, Volume, Location};
+                       Series, Volume, Location
+                      };
 };
 
 #endif // COLLECTIONMODEL_H

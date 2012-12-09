@@ -35,9 +35,9 @@ public:
 
     bool removeRow(QString key);
     dbusBook getBook(QString key);
-    
+
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    
+
     //Qt::UserRole aliases
     enum dataRole { TitleRole = Qt::UserRole + 1,
                     SummaryRole = Qt::UserRole + 2,
@@ -53,8 +53,8 @@ public:
                     PreviewRole = Qt::UserRole + 12,
                     LargePreviewRole = Qt::UserRole + 13,
                     AuthorBookCountRole = Qt::UserRole + 14
-    };
-    
+                  };
+
 public slots:
     void query(QString *queryText, QString *columnName);
     void bookIconReady(const QString &filename, const QString &key);
@@ -64,19 +64,20 @@ signals:
     void repeatQuery(QString *query, QString *column);
 
 private slots:
-    void rebuildModel(); 
+    void rebuildModel();
 private:
-    
+
     CollectionModel *m_collectionModel;
     QStandardItem *m_rootItem;
-    
+
     void createAuthorModel();
     void attachCollectionModel();
     void createMergedModel();
     QModelIndex findIndexByFilename(QString filename);
-    
+
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,
-    Series, Volume, Location};
+                       Series, Volume, Location
+                      };
 };
 
 #endif // COLLECTIONTREEMODEL_H

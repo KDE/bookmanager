@@ -48,9 +48,10 @@ class BookTreeView;
 
 class BookDetailsWidget;
 
-namespace ThreadWeaver {
-    class Weaver;
-    class Job;
+namespace ThreadWeaver
+{
+class Weaver;
+class Job;
 }
 
 class SearchPage : public QWidget
@@ -77,11 +78,11 @@ public slots:
 private slots:
     void openBook(QModelIndex index);
     void openBook();
-    
+
     void showDetails(const QItemSelection &selected, const QItemSelection &deselected);
-    
+
     void fetchIcons(const QModelIndex &author);
-    
+
     void deleteJob(ThreadWeaver::Job *previewJob);
 
 signals:
@@ -95,30 +96,31 @@ private:
     ImportDialog *m_import;
     CollectionDB *m_db;
     CollectionTreeModel *m_model;
-    
+
     BookDelegate *bookDelegate;
-    
+
     KImageCache *m_image_cache;
-    
+
     KLineEdit *queryEdit;
     KComboBox *searchTypeBox;
     KPushButton *searchButton;
     KPushButton *resetButton;
     BookTreeView *resultTree;
-    
+
     QHBoxLayout *searchLayout;
     QHBoxLayout *collectionLayout;
     QVBoxLayout *mainLayout;
-    
+
     BookDetailsWidget *bookDetails;
-    
+
     ThreadWeaver::Weaver *previewsFetchingQueue;
 
     const QPoint mapToViewport(const QPoint& pos);
     dbusBook getBook(QModelIndex index);
 
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,
-                       Series, Volume, Location};
+                       Series, Volume, Location
+                      };
 };
 
 #endif // SEARCHPAGE_H

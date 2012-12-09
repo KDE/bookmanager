@@ -74,7 +74,7 @@ BookManagerPart::BookManagerPart(QWidget *, QObject * parent, const QVariantList
 BookManagerPart::~BookManagerPart()
 {
     m_searchpage->deleteLater();
-    if(m_import){
+    if (m_import) {
         m_import->deleteLater();
     }
 }
@@ -146,7 +146,7 @@ void BookManagerPart::ShowContextMenu(const QPoint& pos)
     bool hasKids = false;
     bool valid = curIndex.isValid();
     if (valid) {
-        if (curIndex.model()->hasChildren(curIndex)){
+        if (curIndex.model()->hasChildren(curIndex)) {
             hasKids = true;
         }
         if (hasKids) {
@@ -154,9 +154,9 @@ void BookManagerPart::ShowContextMenu(const QPoint& pos)
             openSelected->setEnabled(false);
             remove->setEnabled(false);
         }
-        
+
         m_contextMenu->exec(QCursor::pos());
-        
+
         if (hasKids) {
             edit->setEnabled(true);
             openSelected->setEnabled(true);

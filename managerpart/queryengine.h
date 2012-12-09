@@ -30,72 +30,73 @@
 // and even if they are run in different threads, they have to fetch all the
 // authors/genres in the database. Behaviour is undefined with huge db!
 
-namespace ThreadWeaver {
-    class Job;
+namespace ThreadWeaver
+{
+class Job;
 }
 
 // keep in a separate namespace to avoid name conflict.
 
-namespace Query {
+namespace Query
+{
 
-    // the field to be selected and passed to the view.
-    enum QueryType { Author = 0, Genre };
+// the field to be selected and passed to the view.
+enum QueryType { Author = 0, Genre };
 
-    class QueryEngineInternal;
+class QueryEngineInternal;
 
-    // interface for the execution of select queries for autocompletion.
-    class QueryEngine : public QObject
-    {
-        Q_OBJECT
-    public:
-        explicit QueryEngine(QueryType type, QObject *parent = 0);
+// interface for the execution of select queries for autocompletion.
+class QueryEngine : public QObject
+{
+    Q_OBJECT
+public:
+    explicit QueryEngine(QueryType type, QObject *parent = 0);
 
-        void setType(QueryType type)
-        {
-            m_type = type;
-        }
+    void setType(QueryType type) {
+        m_type = type;
+    }
 
-        void runQuery();
+    void runQuery();
 
-    private slots:
-        void done(ThreadWeaver::Job *);
+private slots:
+    void done(ThreadWeaver::Job *);
 
-        // these signals are visible from outside the class.
-    signals:
-        // new author fetched.
-        void authorAvailable(const QString &);
-        // new genre fetched.
-        void genreAvailable(const QString &);
+    // these signals are visible from outside the class.
+signals:
+    // new author fetched.
+    void authorAvailable(const QString &);
+    // new genre fetched.
+    void genreAvailable(const QString &);
 
-        // all stuff finished!
-        void finished();
+    // all stuff finished!
+    void finished();
 
-    private:
-        QueryType m_type;
-    };
+private:
+    QueryType m_type;
+};
 
-    // middle-level class, necessary to receive signals from worker thread
-    // asynchronously. See ThreadWeaver docs for more info,
-    class QueryEngineInternal : public QObject
-    {
-        Q_OBJECT
-    public:
-        explicit QueryEngineInternal(QueryType type, QObject *parent = 0);
+// middle-level class, necessary to receive signals from worker thread
+// asynchronously. See ThreadWeaver docs for more info,
+class QueryEngineInternal : public QObject
+{
+    Q_OBJECT
+public:
+    explicit QueryEngineInternal(QueryType type, QObject *parent = 0);
 
-        void runQuery();
+    void runQuery();
 
-        // these signals are only propagated to the QueryEngine interface class,
-        // thus are not visible from outside.
-    signals:
-        void authorAvailable(const QString &);
-        void genreAvailable(const QString &);
+    // these signals are only propagated to the QueryEngine interface class,
+    // thus are not visible from outside.
+signals:
+    void authorAvailable(const QString &);
+    void genreAvailable(const QString &);
 
-    private:
-        void buildQuery();
+private:
+    void buildQuery();
 
-        QString m_query;
-        QueryType m_type;
-    };
+    QString m_query;
+    QueryType m_type;
+};
 
 }
 

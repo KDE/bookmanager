@@ -45,7 +45,8 @@
 class KImageCache;
 
 
-namespace Iconbuilder {
+namespace Iconbuilder
+{
 
 // Internal class to keep the signals asynchronous, see threadweavers class docs for details
 // or the queryengine class, for another example, since that's what all this is based off of...
@@ -73,13 +74,13 @@ class IconBuilderJob : public ThreadWeaver::Job
     Q_OBJECT
 public:
     explicit IconBuilderJob(const QMap<QString, QString> &books, KImageCache *cache, QObject *parent = 0);
-    
+
 signals:
     void iconReady(const QString &, const QString &);
-    
+
 protected:
     virtual void run();
-    
+
 private:
     IconBuilderInternal *m_builder;
     KImageCache *cache;

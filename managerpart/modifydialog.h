@@ -33,7 +33,7 @@ class ModifyDialog : public KDialog
     Q_OBJECT
 public:
     explicit ModifyDialog(QList<dbusBook> booklist,
-                 QWidget *parent = 0);
+                          QWidget *parent = 0);
 
 public slots:
     virtual void accept();
@@ -42,19 +42,19 @@ public slots:
 signals:
     //connect this to the collection to update books
     void signalUpdateBook(dbusBook book);
-    
-private slots:  
+
+private slots:
     void previous();
     void next();
-    
+
     void updateButtons();
-    
+
 private:
     QWidget *createMainWidget();
     void setupMappings();
     void updateBooklist();
     void updateAndSubmit();
-    
+
     QWidget *mainWidget;
     ImportWidget *importWidget;
     QCheckBox *applyToAllCheckBox;

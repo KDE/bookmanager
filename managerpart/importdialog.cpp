@@ -92,7 +92,7 @@ void ImportDialog::checkUrl(QString url)
 }
 
 ImportWidget::ImportWidget(QWidget* parent)
-:QWidget(parent)
+    : QWidget(parent)
 {
     setupUi(this);
 

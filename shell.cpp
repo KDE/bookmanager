@@ -80,10 +80,10 @@ Shell::Shell(QWidget *parent)
 }
 Shell::~Shell()
 {
-    if(m_collection){
+    if (m_collection) {
         m_collection->deleteLater();
     }
-    if(m_manager){
+    if (m_manager) {
         m_manager->deleteLater();
     }
     mainView->deleteLater();
@@ -92,7 +92,7 @@ Shell::~Shell()
 
 QSize Shell::sizeHint() const
 {
-    return QApplication::desktop()->availableGeometry( this ).size() * 0.75;
+    return QApplication::desktop()->availableGeometry(this).size() * 0.75;
 }
 
 // PRIVATE SLOTS
@@ -298,7 +298,7 @@ void Shell::slotUpdateMenu(int index)
         m_manager->setActivePart(m_collection);
     } else {
         ReaderPage *curPage = qobject_cast<ReaderPage *>(mainView->widget(index));
-        if(curPage){
+        if (curPage) {
             KParts::ReadOnlyPart *curpart = curPage->getPart();
             setupGUI(Keys | ToolBar | Save);
             m_manager->setActivePart(curpart);
