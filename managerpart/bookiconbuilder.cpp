@@ -25,7 +25,7 @@
 #include <QImage>
 #include <qstringbuilder.h>
 
-#include <poppler/qt4/poppler-qt4.h>
+#include <poppler-qt4.h>
 #include <threadweaver/Job.h>
 #include <threadweaver/ThreadWeaver.h>
 

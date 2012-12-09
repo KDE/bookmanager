@@ -1,5 +1,5 @@
 #based off the kontact plugin tutorial on techbase
-include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} )
+include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${POPPLER_QT4_INCLUDE_DIR} )
 
 set(bookmanager_manager_PART_SRCS
 	searchpage.cpp
@@ -26,7 +26,7 @@ kde4_add_plugin(bookmanagerpart ${bookmanager_manager_PART_SRCS})
 
 
 target_link_libraries(bookmanagerpart ${KDE4_KDEUI_LIBS}  ${KDE4_KPARTS_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${QT_QTSQL_LIBRARIES}
-    ${POPPLER_LIBRARIES})
+    ${POPPLER_QT4_LIBRARIES})
 
 
 install( TARGETS bookmanagerpart DESTINATION ${PLUGIN_INSTALL_DIR})

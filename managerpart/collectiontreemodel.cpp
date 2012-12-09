@@ -27,8 +27,6 @@
 #include <QStandardItem>
 #include <QStringList>
 
-#include <poppler/qt4/poppler-qt4.h>
-
 CollectionTreeModel::CollectionTreeModel(QObject* parent): QStandardItemModel(parent)
 {
     m_collectionModel = new CollectionModel();

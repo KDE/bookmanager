@@ -30,7 +30,7 @@
 #include <qlabel.h>
 #include <qtextedit.h>
 
-#include <poppler/qt4/poppler-qt4.h>
+#include <poppler-qt4.h>
 
 BookDetailsWidget::BookDetailsWidget(KImageCache *cache, QWidget* parent)
 :QWidget(parent)
