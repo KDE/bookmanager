@@ -30,7 +30,7 @@ ImportDialog::ImportDialog(QWidget *parent)
     : KDialog(parent)
 {
     widget = new ImportWidget(this);
-    setCaption(i18n("Import a new book"));
+    setCaption(i18n("Import a New Book"));
     setButtons(KDialog::Ok | KDialog::Cancel);
     setButtonText(KDialog::Ok, i18n("Import"));
     setMainWidget(widget);

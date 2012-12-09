@@ -49,7 +49,7 @@ CollectionDB::CollectionDB()
     m_db.setDatabaseName(dbPath);
     bool ok =  m_db.open();
     if (!ok) {
-        KMessageBox::error(this, "Unable to open or create a collection",
+        KMessageBox::error(this, i18n("Unable to open or create a collection"),
                            m_db.lastError().text());
         return; //if we don't have a database connection we can't do anything useful so... bye :)
     }

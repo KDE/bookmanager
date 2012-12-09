@@ -86,7 +86,7 @@ void BookManagerPart::setupActions()
 
     //setup the actions
     import = new KAction(this);
-    import->setText(i18n("&Import a new Book"));
+    import->setText(i18n("&Import a New Book"));
     import->setShortcut(Qt::Key_I);
     actionCollection()->addAction("import", import);
     m_contextMenu->addAction(import);
@@ -94,14 +94,14 @@ void BookManagerPart::setupActions()
             this, SLOT(slotImport()));
 
     remove = new KAction(this);
-    remove->setText(i18n("&Remove a book"));
+    remove->setText(i18n("&Remove a Book"));
     actionCollection()->addAction("remove", remove);
     m_contextMenu->addAction(remove);
     connect(remove, SIGNAL(triggered()),
             m_searchpage, SLOT(remBook()));
 
     search = new KAction(this);
-    search->setText(i18n("Start a new &Search"));
+    search->setText(i18n("Start a New &Search"));
     actionCollection()->addAction("search", search);
     m_contextMenu->addAction(search);
     connect(search, SIGNAL(triggered()),
@@ -109,13 +109,13 @@ void BookManagerPart::setupActions()
 
     //for use in the context menu
     openSelected = new KAction(this);
-    openSelected->setText(i18n("&Open this book"));
+    openSelected->setText(i18n("&Open This Book"));
     m_contextMenu->addAction(openSelected);
     connect(openSelected, SIGNAL(triggered()),
             m_searchpage, SLOT(openBook()));
 
     edit = new KAction(this);
-    edit->setText(i18n("&Edit this book's entry"));
+    edit->setText(i18n("&Edit This Book's Entry"));
     m_contextMenu->addAction(edit);
     connect(edit, SIGNAL(triggered()),
             m_searchpage, SLOT(slotEditBooks()));

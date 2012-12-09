@@ -69,7 +69,7 @@ void BookDetailsWidget::displayBookData(const QString& location, const QString& 
     
     m_location = location;
     
-    m_summary = i18n("<i>Summary:</i>") % QString(" ") % summary;
+    m_summary = i18n("<i>Summary:</i> %1", summary);
     m_cacheKey = cacheKey;
     
     m_previewLabel->clear();
