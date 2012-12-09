@@ -133,19 +133,19 @@ SearchPage::SearchPage(QWidget *parent) :
 
     connect(resetButton, SIGNAL(clicked(bool)),
             this, SLOT(resetQuery()));
-    connect(this, SIGNAL(query(QString*, QString*)),
-            m_model, SLOT(query(QString*, QString*)));
+    connect(this, SIGNAL(query(QString*,QString*)),
+            m_model, SLOT(query(QString*,QString*)));
 
-    connect(resultTree, SIGNAL(dataRequested(QString, QString, QString)),
-            bookDetails, SLOT(displayBookData(QString, QString, QString)));
+    connect(resultTree, SIGNAL(dataRequested(QString,QString,QString)),
+            bookDetails, SLOT(displayBookData(QString,QString,QString)));
 
     // show details also when clicked
 //     connect(resultTree, SIGNAL(clicked(QModelIndex)), SLOT(showDetails(QModelIndex)));
 
-    connect(resultTree->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-            SLOT(showDetails(QItemSelection, QItemSelection)));
+    connect(resultTree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            SLOT(showDetails(QItemSelection,QItemSelection)));
 
-    connect(bookDetails, SIGNAL(previewDisplayed(QString, QString)), m_model, SLOT(updateLargePreview(QString, QString)));
+    connect(bookDetails, SIGNAL(previewDisplayed(QString,QString)), m_model, SLOT(updateLargePreview(QString,QString)));
 
     connect(resultTree, SIGNAL(hideDetails()), bookDetails, SLOT(hide()));
 }
@@ -274,7 +274,7 @@ void SearchPage::fetchIcons(const QModelIndex& author)
     Iconbuilder::IconBuilderJob *iconBuilder = new Iconbuilder::IconBuilderJob(books, m_image_cache);
 
     // connect signals
-    connect(iconBuilder, SIGNAL(iconReady(QString, QString)), m_model, SLOT(bookIconReady(QString, QString)));
+    connect(iconBuilder, SIGNAL(iconReady(QString,QString)), m_model, SLOT(bookIconReady(QString,QString)));
 
     previewsFetchingQueue->enqueue(iconBuilder);
 }
