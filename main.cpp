@@ -32,11 +32,10 @@ int main(int argc, char *argv[])
                          KAboutData::License_GPL,
                          ki18n("Copyright (c) 2010 Brian Korbein"),
                          KLocalizedString(),
-                         "http://gitorious.org/book-manager/book-manager/"
+                         "https://projects.kde.org/projects/playground/graphics/bookmanager"
                         );
-    aboutData.addCredit(ki18n("Riccardo Bellini"),
-                        ki18n("Patches and suggestions"),
-                        "ricky88ykcir@gmail.com");
+    aboutData.addAuthor(ki18n("Brian Korbein"), ki18n("Creator & Developer"), "bri.kor.21@gmail.com");
+    aboutData.addAuthor(ki18n("Riccardo Bellini"), ki18n("Developer"), "ricky88ykcir@gmail.com");
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
 
