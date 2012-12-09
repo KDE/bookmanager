@@ -23,12 +23,13 @@
 #include <kurl.h>
 #include <klocalizedstring.h>
 #include <kimagecache.h>
+#include <KTextEdit>
 
 #include <qscrollarea.h>
 #include <QVBoxLayout>
 #include <qstringbuilder.h>
 #include <qlabel.h>
-#include <qtextedit.h>
+
 
 #include <poppler-qt4.h>
 
@@ -38,7 +39,7 @@ BookDetailsWidget::BookDetailsWidget(KImageCache *cache, QWidget* parent)
     m_cache = cache;
 
     m_previewLabel = new QLabel;
-    m_summaryTextEdit = new QTextEdit;
+    m_summaryTextEdit = new KTextEdit;
 
     m_previewLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
