@@ -16,21 +16,24 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-#include <kimagecache.h>
-#include <kurl.h>
-#include <kdebug.h>
 
-#include <qstring.h>
-#include <qthread.h>
+#include "bookiconbuilder.h"
+#include "constants.h"
+
+#include <KImageCache>
+#include <KUrl>
+#include <KDebug>
+
+#include <QString>
+#include <QThread>
 #include <QImage>
-#include <qstringbuilder.h>
+#include <QStringBuilder>
 
 #include <poppler-qt4.h>
 #include <threadweaver/Job.h>
 #include <threadweaver/ThreadWeaver.h>
 
-#include "bookiconbuilder.h"
-#include "constants.h"
+
 
 
 Iconbuilder::IconBuilderJob::IconBuilderJob(const QMap<QString, QString> &books, KImageCache *cache, QObject *parent)
