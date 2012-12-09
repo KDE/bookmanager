@@ -39,7 +39,7 @@
 K_PLUGIN_FACTORY(BookManagerPartFactory, registerPlugin<BookManagerPart>();)
 //I think this is right? my component is named "bookmanagerpart" and i think the
 //catalog would be the factory? that looks like how gwenview does it?
-K_EXPORT_PLUGIN(BookManagerPartFactory("bookmanagerpart", "BookManager"))
+K_EXPORT_PLUGIN(BookManagerPartFactory("bookmanagerpart", "bookmanager"))
 
 //qwidget and qvariant are added here even though we don't use them
 //otherwise it doesn't build :(
