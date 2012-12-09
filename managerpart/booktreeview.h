@@ -1,6 +1,5 @@
 /*
-    Copyright (C) <2010>  Brian Korbein <bri.kor.21@gmail.com>
-    Copyright (C) 2011  Riccardo Bellini <ricky88ykcir@gmail.com>
+    Copyright (C) 2012  Riccardo Bellini <ricky88ykcir@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,32 +14,28 @@
     You should have received a copy of the GNU General Public License along
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
 */
 
-#ifndef COLLECTIONMODEL_H
-#define COLLECTIONMODEL_H
 
-#include <qsqltablemodel.h>
-#include "collectiondb.h"
+#ifndef BOOKTREEVIEW_H
+#define BOOKTREEVIEW_H
 
-class QString;
+#include <QTreeView>
 
-class CollectionModel : public QSqlTableModel
+
+class BookTreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    CollectionModel();
-    ~CollectionModel();
-
-public slots:
-    void query(QString *queryText, QString *columnName);
+    explicit BookTreeView(QWidget* parent = 0);
+    
 signals:
-    void newFilter();
+    void dataRequested(const QString &location, const QString &summary, const QString &cacheKey);
+    void hideDetails();
 
-private:
-    enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,
-                       Series, Volume, Location};
+protected:
+    virtual bool viewportEvent(QEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
 };
 
-#endif // COLLECTIONMODEL_H
+#endif // BOOKTREEVIEW_H

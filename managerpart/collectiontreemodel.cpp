@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2012  Brian k. <Bri.kor.21@gmail.com>
+    Copyright (C) 2012  Riccardo Bellini <ricky88ykcir@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,12 +21,13 @@
 
 #include <kdebug.h>
 #include <klocalizedstring.h>
+#include <kdemacros.h>
 
 #include <QStringBuilder>
 #include <QStandardItem>
 #include <QStringList>
 
-
+#include <poppler/qt4/poppler-qt4.h>
 
 CollectionTreeModel::CollectionTreeModel(QObject* parent): QStandardItemModel(parent)
 {
@@ -117,37 +119,33 @@ void CollectionTreeModel::attachCollectionModel()
         } else {
             tempAuthor = authorCache.value(author);
         }
-        /*
-         * In the following I'm going to create a copy of the data from the collectionmodel in a single
-         * long string with the header info embedded. The idea being to prepend things like "author:" or
-         * "title:" to that information so that it can all be displayed in a more catalog entry like
-         * fashion. This will probably need a delegate to get it to look right.
-         * The finished output should look like:
-         *
-         * Title:
-         * Author:
-         * Release Number:         Release Date:
-         * Series:                 Volume:
-         * Genre:
-         * Summary:
-         *
-         * I'm going to be kind of arbitrary with the field widths for the 2 column rows since there's
-         * no real standard that i know of saying how long a series name/number can be.
-         */
-        QString tempDataString =
-        i18nc("This book's title", "Title: ") % m_collectionModel->data(m_collectionModel->index(row,Title)).toString() % QString("\n") %
-        i18nc("A person who writes books","Author: ") % m_collectionModel->data(m_collectionModel->index(row,Author)).toString() % QString("\n") %
-        i18nc("The books Edition or Release number", "Release Number: ") % m_collectionModel->data(m_collectionModel->index(row,Release)).toString() % QString(" ") %
-        i18nc("This book's Release Date", "Release Date: ") % m_collectionModel->data(m_collectionModel->index(row,ReleaseDate)).toString() % QString("\n") %
-        i18nc("The Series of a book", "Series: ") % m_collectionModel->data(m_collectionModel->index(row,Series)).toString() % QString(" ") %
-        i18nc("The Volume number of a book", "Volume: ") % m_collectionModel->data(m_collectionModel->index(row,Volume)).toString() % QString("\n") %
-        i18nc("The type or style of a book, examples: Science Fiction, History","Genre: ") %
-        m_collectionModel->data(m_collectionModel->index(row,Genre)).toString() % QString("\n") %
-        i18nc("A short summary of this book","Summary: ") % m_collectionModel->data(m_collectionModel->index(row,Summary)).toString() % QString("\n");
+
         QStandardItem *tempBook = new QStandardItem;
-        tempBook->setData(tempDataString, Qt::DisplayRole);
-        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row,Location)), UrlRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Title)), TitleRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Summary)), SummaryRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Author)), AuthorRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Release)), RelNumberRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, ReleaseDate)), RelDateRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Genre)), GenreRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Series)), SeriesRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Volume)), VolumeRole);
+        tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, Location)), UrlRole);
         tempBook->setData(m_collectionModel->data(m_collectionModel->index(row, ID)), KeyRole);
+        
+        // set non valid data for PreviewRole
+        tempBook->setData(QString(), PreviewRole);
+        
+        // set non valid data for LargePreviewRole
+        tempBook->setData(QString(), LargePreviewRole);
+
+        //set/increment the bookcount for the author
+        if(tempAuthor->data(AuthorBookCountRole).isNull()){
+            tempAuthor->setData(1, AuthorBookCountRole);
+        } else {
+            tempAuthor->setData(tempAuthor->data(AuthorBookCountRole).toInt() + 1, AuthorBookCountRole);
+        }
+        
+        //finally, add the new book
         tempAuthor->setChild(tempAuthor->rowCount(), tempBook);
     }
 }
@@ -161,6 +159,43 @@ void CollectionTreeModel::query(QString* queryText, QString* columnName)
      */
     emit repeatQuery(queryText, columnName);
 }
+
+
+void CollectionTreeModel::bookIconReady(const QString& filename, const QString &key)
+{
+    if (KDE_ISUNLIKELY(filename.isNull() || filename.isEmpty())) {
+        return;
+    }
+    
+    QModelIndex book = findIndexByFilename(filename);
+    
+    // update only if the key is different
+    if (book.data(PreviewRole).toString() == key) {
+        return;
+    }
+    
+    // this emits dataChanged signal, so the view should be automatically
+    // updated
+    setData(book, key, PreviewRole);
+}
+
+
+void CollectionTreeModel::updateLargePreview(const QString& filename, const QString& key)
+{
+    if (KDE_ISUNLIKELY(filename.isNull() || filename.isEmpty())) {
+        return;
+    }
+    
+    QModelIndex book = findIndexByFilename(filename);
+    
+    // update only if the key is different
+    if (book.data(LargePreviewRole).toString() == key) {
+        return;
+    }
+    
+    setData(book, key, LargePreviewRole);
+}
+
 
 void CollectionTreeModel::rebuildModel()
 {
@@ -221,4 +256,23 @@ dbusBook CollectionTreeModel::getBook(QString key)
     m_collectionModel->setFilter(oldFilter);
     return book;
     
+}
+QModelIndex CollectionTreeModel::findIndexByFilename(QString filename)
+{
+    // This is based on findItems, but searches in the urlRole, rather than in the displayRole
+    // since there should only be one entry per file, return the first match (and stop looking after 1 match)
+    QModelIndexList indexes = match(index(0, 0, QModelIndex()),
+                                    UrlRole, filename, 1, Qt::MatchRecursive);
+    
+    return indexes.first();
+}
+
+
+Qt::ItemFlags CollectionTreeModel::flags(const QModelIndex& index) const
+{
+    if (!index.parent().isValid()) {
+        return Qt::NoItemFlags;
+    }
+    
+    return QStandardItemModel::flags(index);
 }

@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2012  Brian k. <Bri.kor.21@gmail.com>
+    Copyright (C) 2012  Riccardo Bellini <ricky88ykcir@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,8 +36,29 @@ public:
     bool removeRow(QString key);
     dbusBook getBook(QString key);
     
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    
+    //Qt::UserRole aliases
+    enum dataRole { TitleRole = Qt::UserRole + 1,
+                    SummaryRole = Qt::UserRole + 2,
+                    AuthorRole = Qt::UserRole + 3,
+                    RelNumberRole = Qt::UserRole + 4,
+                    RelDateRole = Qt::UserRole + 5,
+                    GenreRole = Qt::UserRole + 6,
+                    SeriesRole = Qt::UserRole + 7,
+                    VolumeRole = Qt::UserRole + 8,
+                    UrlRole = Qt::UserRole + 9,
+                    UnknownAuthorRole = Qt::UserRole + 10,
+                    KeyRole = Qt::UserRole + 11,
+                    PreviewRole = Qt::UserRole + 12,
+                    LargePreviewRole = Qt::UserRole + 13,
+                    AuthorBookCountRole = Qt::UserRole + 14
+    };
+    
 public slots:
     void query(QString *queryText, QString *columnName);
+    void bookIconReady(const QString &filename, const QString &key);
+    void updateLargePreview(const QString &filename, const QString &key);
 
 signals:
     void repeatQuery(QString *query, QString *column);
@@ -51,11 +73,10 @@ private:
     void createAuthorModel();
     void attachCollectionModel();
     void createMergedModel();
+    QModelIndex findIndexByFilename(QString filename);
     
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,
     Series, Volume, Location};
-    //Qt::UserRole aliases
-    enum dataRole { UrlRole = Qt::UserRole + 2, UnknownAuthorRole = Qt::UserRole + 3, KeyRole = Qt::UserRole + 4};
 };
 
 #endif // COLLECTIONTREEMODEL_H

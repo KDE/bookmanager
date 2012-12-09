@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2011  Riccardo Bellini <ricky88ykcir@gmail.com>
+    Copyright (C) 2011-2012  Riccardo Bellini <ricky88ykcir@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -43,9 +43,7 @@ signals:
     //connect this to the collection to update books
     void signalUpdateBook(dbusBook book);
     
-private slots:
-    void applyToAllToggled(bool toggle);
-    
+private slots:  
     void previous();
     void next();
     
@@ -54,7 +52,7 @@ private slots:
 private:
     QWidget *createMainWidget();
     void setupMappings();
-    void applyToAllPrivate();
+    void updateBooklist();
     void updateAndSubmit();
     
     QWidget *mainWidget;

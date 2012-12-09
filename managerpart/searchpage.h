@@ -1,5 +1,6 @@
 /*
     Copyright (C) <2011>  Brian Korbein <bri.kor.21@gmail.com>
+    Copyright (C) 2011-2012  Riccardo Bellini <ricky88ykcir@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,8 +22,9 @@
 #define SEARCHPAGE_H
 
 #include <QWidget>
+#include <QModelIndex>
+#include <QItemSelection>
 
-#include "ui_searchpage.h"
 #include "bookstruct.h"
 
 class ImportDialog;
@@ -30,9 +32,28 @@ class ImportDialog;
 
 class CollectionDB;
 class CollectionTreeModel;
-class QModelIndex;
 
-class SearchPage : public QWidget, public Ui_SearchPage
+class BookDelegate;
+
+class KImageCache;
+
+class KLineEdit;
+class KComboBox;
+class KPushButton;
+
+class QHBoxLayout;
+class QVBoxLayout;
+
+class BookTreeView;
+
+class BookDetailsWidget;
+
+namespace ThreadWeaver {
+    class Weaver;
+    class Job;
+}
+
+class SearchPage : public QWidget
 {
     Q_OBJECT
     //I'm pretty sure this is correct? I'd make it org.kde but
@@ -56,6 +77,12 @@ public slots:
 private slots:
     void openBook(QModelIndex index);
     void openBook();
+    
+    void showDetails(const QItemSelection &selected, const QItemSelection &deselected);
+    
+    void fetchIcons(const QModelIndex &author);
+    
+    void deleteJob(ThreadWeaver::Job *previewJob);
 
 signals:
     void query(QString *query, QString *column);
@@ -64,17 +91,34 @@ signals:
     Q_SCRIPTABLE void loadBook(QString url);
 private:
     void fixHeaders();
+    QMap<QString, QString> getAuthorBooks(const QModelIndex &author);
     ImportDialog *m_import;
     CollectionDB *m_db;
     CollectionTreeModel *m_model;
+    
+    BookDelegate *bookDelegate;
+    
+    KImageCache *m_image_cache;
+    
+    KLineEdit *queryEdit;
+    KComboBox *searchTypeBox;
+    KPushButton *searchButton;
+    KPushButton *resetButton;
+    BookTreeView *resultTree;
+    
+    QHBoxLayout *searchLayout;
+    QHBoxLayout *collectionLayout;
+    QVBoxLayout *mainLayout;
+    
+    BookDetailsWidget *bookDetails;
+    
+    ThreadWeaver::Weaver *previewsFetchingQueue;
 
     const QPoint mapToViewport(const QPoint& pos);
     dbusBook getBook(QModelIndex index);
 
     enum columnLayout {ID, Title, Summary, Author, Release, ReleaseDate, Genre,
                        Series, Volume, Location};
-    //Qt::UserRole aliases
-    enum dataRole { UrlRole = Qt::UserRole+2, UnknownAuthorRole = Qt::UserRole+3, KeyRole = Qt::UserRole + 4};
 };
 
 #endif // SEARCHPAGE_H
