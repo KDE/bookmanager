@@ -66,7 +66,7 @@ Iconbuilder::IconBuilderInternal::IconBuilderInternal(const QMap<QString, QStrin
 
 void Iconbuilder::IconBuilderInternal::buildIcons()
 {
-    //If the file doesnt exist, we'll simply return nothing.
+    //If the file doesn't exist, we'll simply return nothing.
     //if it does exist then we run the poppler code to get a qimage for the kimagecache,
     //after which we emit the qimage's id (the filename)
     //this part is taken pretty much verbatim from poppler-qt docs

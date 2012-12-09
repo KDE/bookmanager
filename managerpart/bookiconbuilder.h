@@ -36,7 +36,7 @@
  * USE
  * 1) check to see if your file is a pdf, since this only supports pdfs, for now
  * 2) check the KImageCache to see if an icon already exists (you may have created on already)
- * 3) if it doesnt exist, fill the spot with a placeholder(or not)
+ * 3) if it doesn't exist, fill the spot with a placeholder(or not)
  * 4) call buildIcon with the filename to create an icon
  * 5) when IconReady triggers, replace the placeholder with your new icon
  *
