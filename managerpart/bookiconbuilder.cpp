@@ -48,8 +48,8 @@ void Iconbuilder::IconBuilderJob::run()
     m_builder = new Iconbuilder::IconBuilderInternal(books, cache);
 
     // I think this is a queued connection
-    connect(m_builder, SIGNAL(iconReady(QString, QString)), this,
-            SIGNAL(iconReady(QString, QString)));
+    connect(m_builder, SIGNAL(iconReady(QString,QString)), this,
+            SIGNAL(iconReady(QString,QString)));
 
     m_builder->buildIcons();
 
