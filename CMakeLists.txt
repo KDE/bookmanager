@@ -1,29 +1,34 @@
 project(bookmanager)
-#add the kpart directory
 
 find_package(KDE4 REQUIRED)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 find_package(PopplerQt4 REQUIRED)
-include (KDE4Defaults)
+include(KDE4Defaults)
 
 add_subdirectory(doc)
-add_subdirectory(managerpart)
 
-include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${KDE4_INCLUDES} ${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
+
+add_subdirectory(managerpart)
 
 
 set(bookmanager_SRCS   
     main.cpp
     shell.cpp
     readerpage.cpp
- )
+)
 
 kde4_add_kcfg_files(bookmanager_SRCS bookmanagerconfig.kcfgc)
 kde4_add_executable(bookmanager ${bookmanager_SRCS})
 
-target_link_libraries(bookmanager ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNEWSTUFF3_LIBS} ${QT_QTSQL_LIBRARIES})
+target_link_libraries(bookmanager
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KPARTS_LIBS}
+    ${KDE4_KNEWSTUFF3_LIBS}
+    ${QT_QTSQL_LIBRARIES}
+)
 
 
 ########### add cpack support to creat packages ##########
@@ -46,7 +51,7 @@ SET(CPACK_RPM_PACKAGE_LICENSE "GPL Version 2")
 INCLUDE(CPack)
 
 ########### install files ###############
-install(TARGETS bookmanager ${INSTALL_TARGETS_DEFAULT_ARGS} )
-install( FILES bookmanager.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
-install( FILES bookmanagerui.rc  DESTINATION  ${DATA_INSTALL_DIR}/bookmanager )
-install( FILES bookmanagerconfig.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+install(TARGETS bookmanager ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES bookmanager.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES bookmanagerui.rc DESTINATION ${DATA_INSTALL_DIR}/bookmanager)
+install(FILES bookmanagerconfig.kcfg DESTINATION ${KCFG_INSTALL_DIR})
