@@ -11,6 +11,7 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
 
 Comment=BookManager Ebook management part
+Comment[da]=E-bogshåndterings-part til BookManager
 Comment[es]=Parte de la gestión de libros electrónicos BookManager
 Comment[et]=Raamatuhalduri e-raamatute haldamise komponent
 Comment[fr]=Composant de gestion Ebook pour le gestionnaire de signets
