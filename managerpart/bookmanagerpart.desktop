@@ -30,6 +30,7 @@ Comment[zh_CN]=书籍管理器 Ebook 管理部件
 Name=BookManager Part
 Name[et]=Raamatuhalduri komponent
 Name[ga]=Comhpháirt BookManager
+Name[hu]=BookManager rész
 Name[nl]=Boekenbeheer-onderdeel
 Name[pt]=Componente do BookManager
 Name[pt_BR]=Componente do BookManager
