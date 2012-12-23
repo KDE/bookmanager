@@ -22,6 +22,7 @@ Icon=bookmanager
 Type=Application
 X-DocPath=bookmanager/index.html
 GenericName=Book Management application
+GenericName[da]=Program til håndtering af bøger
 GenericName[et]=Raamatuhaldur
 GenericName[hu]=Könyv kezelő alkalmazás
 GenericName[nl]=Toepassing voor boekenbeheer

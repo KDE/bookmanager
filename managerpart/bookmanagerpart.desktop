@@ -28,6 +28,7 @@ Comment[uk]=Модуль керування електронними книжк�
 Comment[x-test]=xxBookManager Ebook management partxx
 Comment[zh_CN]=书籍管理器 Ebook 管理部件
 Name=BookManager Part
+Name[da]=BookManager-Part
 Name[et]=Raamatuhalduri komponent
 Name[ga]=Comhpháirt BookManager
 Name[hu]=BookManager rész
