@@ -23,6 +23,7 @@ Type=Application
 X-DocPath=bookmanager/index.html
 GenericName=Book Management application
 GenericName[da]=Program til håndtering af bøger
+GenericName[es]=Aplicación de gestión de libros
 GenericName[et]=Raamatuhaldur
 GenericName[hu]=Könyv kezelő alkalmazás
 GenericName[nl]=Toepassing voor boekenbeheer
