@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
                          "https://projects.kde.org/projects/playground/graphics/bookmanager"
                         );
     aboutData.addAuthor(ki18n("Brian Korbein"), ki18n("Creator & Developer"), "bri.kor.21@gmail.com");
-    aboutData.addAuthor(ki18n("Riccardo Bellini"), ki18n("Developer"), "ricky88ykcir@gmail.com");
+    aboutData.addAuthor(ki18n("Riccardo Bellini"), ki18n("Developer"), "riccardo.bellini1988@gmail.com");
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
 

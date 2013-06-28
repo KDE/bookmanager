@@ -1,6 +1,6 @@
 /*
     Copyright (C) <2011>  Brian Korbein <bri.kor.21@gmail.com>
-    Copyright (C) 2011-2012  Riccardo Bellini <ricky88ykcir@gmail.com>
+    Copyright (C) 2011-2012  Riccardo Bellini <riccardo.bellini1988@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
