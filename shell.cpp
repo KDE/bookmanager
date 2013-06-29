@@ -31,6 +31,7 @@
 #include <KMimeTypeTrader>
 #include <kmimetype.h>
 #include <kfiledialog.h>
+#include <kinputdialog.h>
 #include <QDBusConnection>
 #include <QDBusInterface>
 
@@ -38,6 +39,7 @@
 #include <qdbusconnection.h>
 #include "bookmanagerconfig.h"
 #include <kparts/browserextension.h>
+#include <kstandarddirs.h>
 
 //PUBLIC
 Shell::Shell(QWidget *parent)
@@ -222,6 +224,8 @@ void Shell::readerTab(const KUrl *url)
     thisPart = curPage->getPart();
     if (thisPart != 0) {
         m_manager->addPart(thisPart);
+        // add the reader page to the list of open pages
+        openPagesList.append(curPage);
         QString filename = url->fileName();
         int index = mainView->addTab(curPage, filename);
 
@@ -279,6 +283,8 @@ void Shell::slotOpenFile()
                         mainView->removeTab(index);
                         mainView->insertTab(index, newPage, tempUrl.fileName());
                         m_manager->replacePart(curpart, newPage->getPart());
+                        // remove the old reader page from the open list and add the new page
+                        openPagesList.replace(openPagesList.indexOf(curPage), newPage);
                         delete(curPage);
                     }
                 }
@@ -390,7 +396,36 @@ void Shell::slotSaveConfig()
 
 void Shell::slotSaveSession()
 {
-    // TODO
+    if (openPagesList.isEmpty()) {
+        KMessageBox::information(this, i18n("No open documents to save in a new session"), i18n("Book Manager"));
+        return;
+    }
+    bool ok;
+    QString sessionFile = KInputDialog::getText(i18n("Enter session name"), i18n("Enter the session name:"), QString(), &ok);
+    if ((sessionFile.isNull() || sessionFile.isEmpty()) && ok) {
+        KMessageBox::error(this, i18n("Invalid session name specified"));
+        return;
+    }
+    // remove whitespaces from both ends of the session name
+    sessionFile = sessionFile.trimmed();
+    
+    QString sessionRelativePath = "sessions/" + sessionFile;
+    QString sessionFullPath = KStandardDirs::locateLocal("appdata", sessionRelativePath, true);
+    QFile file(sessionFullPath);
+    if (file.exists()) {
+        KMessageBox::error(this, i18n("A session file named %1 already exists").arg(sessionFile), i18n("File already exists"));
+        return;
+    }
+    if (!file.open(QIODevice::WriteOnly | QFile::Text)) {
+        KMessageBox::error(this, i18n("Unable to open file %1").arg(sessionFile), i18n("Error"));
+        return;
+    }
+    QTextStream out(&file);
+    foreach(ReaderPage *page, openPagesList) {
+        KUrl url = page->getPart()->url();
+        out << url.toLocalFile() << "\n";
+    }
+    file.close();
 }
 
 void Shell::slotOpenSession()
