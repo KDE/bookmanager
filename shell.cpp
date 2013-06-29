@@ -240,6 +240,8 @@ void Shell::readerTab(const KUrl *url)
 
 void Shell::slotRemoveTab(int index)
 {
+    // FIXME delete also the reader pages and parts from the manager, it seems that removeTab
+    // does not delete the widget
     mainView->removeTab(index);
     //uncheck the collection toggle if we just hid the collection
     if (index == 0 && showCollection->isChecked()) {
@@ -430,5 +432,49 @@ void Shell::slotSaveSession()
 
 void Shell::slotOpenSession()
 {
-    // TODO
+//     KMessageBox::information(this, i18n("bububu"), i18n("bababa"));
+    QDir sessionDir = QDir(KStandardDirs::locateLocal("appdata", "sessions/"));
+    QStringList sessionFiles = sessionDir.entryList(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    if (sessionFiles.isEmpty()) {
+        KMessageBox::information(this, i18n("There are no saved sessions to open"), i18n("Book Manager"));
+        return;
+    }
+    int result = KMessageBox::questionYesNo(this, i18n("Opening a saved session will close all your documents currently opened.\n"
+    "Are you sure you wish to continue?"), i18n("Book Manager"), KStandardGuiItem::yes(),
+                                                       KStandardGuiItem::no(), i18n("Do not ask again"));
+    if (result == KMessageBox::Yes) {
+        bool ok;
+        QString sessionToOpen = KInputDialog::getItem(i18n("Select session"), i18n("Select the session you wish to open"),
+                                                                                   sessionFiles, 0, false, &ok);
+        if (!ok) {
+            // the user cancelled, return
+            return;
+        }
+        QFile file(KStandardDirs::locateLocal("appdata", "sessions/" + sessionToOpen));
+        if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
+            KMessageBox::error(this, i18n("Unable to open file %1").arg(file.fileName()), i18n("Error"));
+            return;
+        }
+        // first, remove all the tab except the collection (if it's shown)
+        int indexes = mainView->count();
+        // start removing from 1
+        for (int i = 1; i < indexes; ++i) {
+            slotRemoveTab(i);
+        }
+        if (!showCollection->isChecked()) {
+            // remove also the index 0
+            slotRemoveTab(0);
+        }
+        // flush the list of open pages
+        openPagesList.clear();
+        // proceed and open the session
+        KUrl::List filesUrlList;
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            filesUrlList.append(KUrl(in.readLine()));
+        }
+        foreach (KUrl url, filesUrlList) {
+            readerTab(&url);
+        }
+    }
 }
