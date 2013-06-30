@@ -195,6 +195,18 @@ void Shell::setupActions()
     actionCollection()->addAction("showCollection", showCollection);
     connect(showCollection, SIGNAL(triggered()),
             this, SLOT(slotToggleCollection()));
+    
+    saveSession = new KAction(this);
+    saveSession->setText(i18n("Save current session"));
+    saveSession->setIcon(KIcon("document-save.png"));
+    actionCollection()->addAction("saveSession", saveSession);
+    connect(saveSession, SIGNAL(triggered()), SLOT(slotSaveSession()));
+    
+    openSession = new KAction(this);
+    openSession->setText(i18n("Open session"));
+    openSession->setIcon(KIcon("document-open.png"));
+    actionCollection()->addAction("openSession", openSession);
+    connect(openSession, SIGNAL(triggered()), SLOT(slotOpenSession()));
 
     setupGUI();
 }
@@ -376,10 +388,12 @@ void Shell::slotSaveConfig()
     BookManagerConfig::self()->writeConfig();
 }
 
+void Shell::slotSaveSession()
+{
+    // TODO
+}
 
-
-
-
-
-
-
+void Shell::slotOpenSession()
+{
+    // TODO
+}

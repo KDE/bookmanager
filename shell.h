@@ -49,6 +49,8 @@ private slots:
     void slotRemoveTab(int index);
     void slotReaderTab(KUrl *url);
     void slotUpdateMenu(int index);
+    void slotSaveSession();
+    void slotOpenSession();
 
     void slotToggleCollection();
     void slotSaveConfig();
@@ -73,6 +75,8 @@ private:
     KAction *import;
     KAction *remove;
     KAction *print;
+    KAction *saveSession;
+    KAction *openSession;
 
 
     KToggleAction *showCollection;

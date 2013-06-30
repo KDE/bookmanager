@@ -19,8 +19,11 @@
     <Separator />
     <Merge />
   </Menu>
-  
-  <Merge />
+  <Menu name="Sessions">
+    <text>&amp;Sessions</text>
+    <Action name="saveSession" />
+    <Action name="openSession" />
+</Menu>
 </MenuBar>
 <ToolBar name="toolbar">
   <text>Main Toolbar</text>
