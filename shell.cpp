@@ -465,13 +465,16 @@ void Shell::slotOpenSession()
         }
         // first, remove all the tab except the collection (if it's shown)
         int indexes = mainView->count();
-        // start removing from 1
-        for (int i = 1; i < indexes; ++i) {
-            slotRemoveTab(i);
+        int collectionIndex = mainView->indexOf(m_collection->widget());
+        // start removing, skip if collection widget is found
+        for (int i = indexes - 1; i >= 0; --i) {
+            if (i != collectionIndex) {
+                slotRemoveTab(i);
+            }
         }
         if (!showCollection->isChecked()) {
             // remove also the index 0
-            slotRemoveTab(0);
+            slotRemoveTab(collectionIndex);
         }
         // flush the list of open pages
         openPagesList.clear();
