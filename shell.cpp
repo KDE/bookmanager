@@ -48,6 +48,9 @@ Shell::Shell(QWidget *parent)
     //need set up the initial tab before the main window
     mainView = new KTabWidget(this);
     setCentralWidget(mainView);
+    
+    // set up the path of session files
+    m_sessionDirPath = KStandardDirs::locateLocal("appdata", "sessions/");
 
     setupActions();
 
@@ -209,6 +212,12 @@ void Shell::setupActions()
     openSession->setIcon(KIcon("document-open.png"));
     actionCollection()->addAction("openSession", openSession);
     connect(openSession, SIGNAL(triggered()), SLOT(slotOpenSession()));
+    
+    removeSession = new KAction(this);
+    removeSession->setText(i18n("Remove session"));
+    removeSession->setIcon(KIcon("list-remove.png"));
+    actionCollection()->addAction("removeSession", removeSession);
+    connect(removeSession, SIGNAL(triggered()), SLOT(slotRemoveSession()));
 
     setupGUI();
 }
@@ -432,8 +441,7 @@ void Shell::slotSaveSession()
 
 void Shell::slotOpenSession()
 {
-//     KMessageBox::information(this, i18n("bububu"), i18n("bababa"));
-    QDir sessionDir = QDir(KStandardDirs::locateLocal("appdata", "sessions/"));
+    QDir sessionDir = QDir(m_sessionDirPath);
     QStringList sessionFiles = sessionDir.entryList(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     if (sessionFiles.isEmpty()) {
         KMessageBox::information(this, i18n("There are no saved sessions to open"), i18n("Book Manager"));
@@ -476,5 +484,38 @@ void Shell::slotOpenSession()
         foreach (KUrl url, filesUrlList) {
             readerTab(&url);
         }
+    }
+}
+
+void Shell::slotRemoveSession()
+{
+    QDir sessionDir = QDir(m_sessionDirPath);
+    QStringList sessionFiles = sessionDir.entryList(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    if (sessionFiles.isEmpty()) {
+        KMessageBox::information(this, i18n("There are no saved sessions to open"), i18n("Book Manager"));
+        return;
+    }
+    bool ok;
+    QString sessionToRemove = KInputDialog::getItem(i18n("Select session"), i18n("Select the session you wish to remove"),
+                                                    sessionFiles, 0, false, &ok);
+    if (!ok) {
+        // the user cancelled, return
+        return;
+    }
+    int result = KMessageBox::questionYesNo(this, i18n("Are you sure you want to remove session %1").arg(sessionToRemove), i18n("Book Manager"));
+    if (result == KMessageBox::No) {
+        return;
+    }
+    QFile file(KStandardDirs::locateLocal("appdata", "sessions/" + sessionToRemove));
+    // further check if file exists
+    if (!file.exists()) {
+        KMessageBox::error(this, i18n("File does not exist!"), i18n("Error"));
+        return;
+    }
+    // remove the file
+    bool removeResult = sessionDir.remove(sessionToRemove);
+    if (!removeResult) {
+        KMessageBox::error(this, i18n("Error while removing session file %1").arg(sessionToRemove), i18n("Error"));
+        return;
     }
 }

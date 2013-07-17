@@ -23,6 +23,7 @@
     <text>&amp;Sessions</text>
     <Action name="saveSession" />
     <Action name="openSession" />
+    <Action name="removeSession" />
 </Menu>
 </MenuBar>
 <ToolBar name="toolbar">

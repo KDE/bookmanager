@@ -53,6 +53,7 @@ private slots:
     void slotUpdateMenu(int index);
     void slotSaveSession();
     void slotOpenSession();
+    void slotRemoveSession();
 
     void slotToggleCollection();
     void slotSaveConfig();
@@ -66,6 +67,8 @@ private:
     void loadCollection();
     KParts::Part *m_collection;
     KParts::ReadOnlyPart *curPart;
+    
+    QString m_sessionDirPath;
 
     KTabWidget *mainView;
     KParts::PartManager *m_manager;
@@ -81,7 +84,7 @@ private:
     KAction *print;
     KAction *saveSession;
     KAction *openSession;
-
+    KAction *removeSession;
 
     KToggleAction *showCollection;
 };
