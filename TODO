@@ -6,5 +6,7 @@ This is a list of Features that would be nice to have, but may never actually be
 - Drag-able tabs (like firefox/chrome)
 - session manager
 - auto-import via isbn
-- export collection
+- export/import collection:
+  * dump database (light export)
+  * backup library feature
 - nepomuk?
