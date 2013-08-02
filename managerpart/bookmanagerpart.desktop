@@ -11,6 +11,7 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
 
 Comment=BookManager Ebook management part
+Comment[bs]=BookManager dio za upravljanje Ebook
 Comment[da]=E-bogshåndterings-part til BookManager
 Comment[de]=BookManager-Part zur Verwaltung von E-Books
 Comment[es]=Parte de la gestión de libros electrónicos BookManager
@@ -31,6 +32,7 @@ Comment[uk]=Модуль керування електронними книжк�
 Comment[x-test]=xxBookManager Ebook management partxx
 Comment[zh_CN]=书籍管理器 Ebook 管理部件
 Name=BookManager Part
+Name[bs]=BookManager Part
 Name[da]=BookManager-Part
 Name[de]=BookManager-Part
 Name[es]=Parte de BookManager

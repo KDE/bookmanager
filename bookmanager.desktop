@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=bookmanager
+Name[bs]=bookmanager
 Name[da]=bookmanager
 Name[de]=BookManager
 Name[es]=gestor de libros
@@ -26,6 +27,7 @@ Icon=bookmanager
 Type=Application
 X-DocPath=bookmanager/index.html
 GenericName=Book Management application
+GenericName[bs]=Program za upravljanje knjigama
 GenericName[da]=Program til håndtering af bøger
 GenericName[de]=Programm zur Verwaltung von Büchern
 GenericName[es]=Aplicación de gestión de libros
