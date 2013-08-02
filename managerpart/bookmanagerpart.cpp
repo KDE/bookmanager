@@ -27,6 +27,7 @@
 #include "bookmanagerpartadaptor.h"
 
 #include <KAction>
+#include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kdemacros.h>
 #include <kparts/genericfactory.h>
@@ -99,6 +100,28 @@ void BookManagerPart::setupActions()
     m_contextMenu->addAction(remove);
     connect(remove, SIGNAL(triggered()),
             m_searchpage, SLOT(remBook()));
+    
+    exportActionMenu = new KActionMenu(this);
+    exportActionMenu->setText(i18n("Export..."));
+    KAction *dumpDatabase = new KAction(this);
+    dumpDatabase->setText(i18n("Dump database"));
+    exportActionMenu->addAction(dumpDatabase);
+    KAction *backupLibrary = new KAction(this);
+    backupLibrary->setText(i18n("Backup library"));
+    exportActionMenu->addAction(backupLibrary);
+    actionCollection()->addAction("exportBackup", exportActionMenu);
+    // TODO connections
+    
+    importActionMenu = new KActionMenu(this);
+    importActionMenu->setText(i18n("Import..."));
+    KAction *importDump = new KAction(this);
+    importDump->setText(i18n("From dump"));
+    importActionMenu->addAction(importDump);
+    KAction *restoreLibrary = new KAction(this);
+    restoreLibrary->setText(i18n("Restore backup"));
+    importActionMenu->addAction(restoreLibrary);
+    actionCollection()->addAction("importBackup", importActionMenu);
+    // TODO connections
 
     search = new KAction(this);
     search->setText(i18n("Start a New &Search"));
@@ -175,5 +198,24 @@ void BookManagerPart::ShowContextMenu(const QPoint& pos)
     }
 }
 
+void BookManagerPart::dumpDatabase()
+{
+    // TODO
+}
+
+void BookManagerPart::backupLibrary()
+{
+    // TODO
+}
+
+void BookManagerPart::importDatabase()
+{
+    // TODO
+}
+
+void BookManagerPart::restoreLibrary()
+{
+    // TODO
+}
 
 

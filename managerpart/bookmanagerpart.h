@@ -26,6 +26,7 @@ class ImportDialog;
 class SearchPage;
 class QMenu;
 class KAction;
+class KActionMenu;
 
 /*
  * This Kpart will hold the book database, and eventually perhaps a dbus based interface to
@@ -47,6 +48,12 @@ signals:
 private slots:
     void slotImport();
     void ShowContextMenu(const QPoint &pos);
+    
+    void dumpDatabase();
+    void backupLibrary();
+    
+    void importDatabase();
+    void restoreLibrary();
 private:
     void setupActions();
 
@@ -55,6 +62,8 @@ private:
     KAction *edit;
     KAction *import;
     KAction *remove;
+    KActionMenu *exportActionMenu;
+    KActionMenu *importActionMenu;
     KAction *openSelected;
     KAction *search;
     QMenu *m_contextMenu;

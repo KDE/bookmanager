@@ -1,10 +1,14 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="bookmanagerpart" version="3">
+<kpartgui name="bookmanagerpart" version="4">
     <MenuBar>
         <Menu name="Collection"><text>Collection</text>
           <Action name="import"/>
           <Action name="remove"/>
 		  <Action name="search"/>
+      <Separator />
+      <Action name="exportBackup" />
+      <Action name="importBackup" />
+      <Separator />
         </Menu>
     </MenuBar>
 <ToolBar name="toolbar">
