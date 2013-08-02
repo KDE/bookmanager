@@ -29,12 +29,14 @@
 #include <KAction>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
+#include <kfiledialog.h>
 #include <kdemacros.h>
 #include <kparts/genericfactory.h>
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <QMenu>
 #include <QPointer>
+#include <kmessagebox.h>
 
 //Thank you kontact plugin writing instructions for this next part :)
 K_PLUGIN_FACTORY(BookManagerPartFactory, registerPlugin<BookManagerPart>();)
@@ -110,7 +112,8 @@ void BookManagerPart::setupActions()
     backupLibrary->setText(i18n("Backup library"));
     exportActionMenu->addAction(backupLibrary);
     actionCollection()->addAction("exportBackup", exportActionMenu);
-    // TODO connections
+    connect(dumpDatabase, SIGNAL(triggered()), SLOT(dumpDatabase()));
+    connect(backupLibrary, SIGNAL(triggered()), SLOT(backupLibrary()));
     
     importActionMenu = new KActionMenu(this);
     importActionMenu->setText(i18n("Import..."));
@@ -121,8 +124,9 @@ void BookManagerPart::setupActions()
     restoreLibrary->setText(i18n("Restore backup"));
     importActionMenu->addAction(restoreLibrary);
     actionCollection()->addAction("importBackup", importActionMenu);
-    // TODO connections
-
+    connect(importDump, SIGNAL(triggered()), SLOT(importDatabase()));
+    connect(restoreLibrary, SIGNAL(triggered()), SLOT(restoreLibrary()));
+    
     search = new KAction(this);
     search->setText(i18n("Start a New &Search"));
     actionCollection()->addAction("search", search);
@@ -200,6 +204,8 @@ void BookManagerPart::ShowContextMenu(const QPoint& pos)
 
 void BookManagerPart::dumpDatabase()
 {
+    // get the file name of the dump to be saved
+    QString fileName = KFileDialog::getSaveFileName(KUrl(QDir::homePath()), QString("*.csv"), this->widget());
     // TODO
 }
 
