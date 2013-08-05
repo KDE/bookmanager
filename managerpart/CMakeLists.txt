@@ -1,4 +1,7 @@
+add_subdirectory(utils)
+
 include_directories(${POPPLER_QT4_INCLUDE_DIR})
+include_directories(utils)
 
 set(bookmanager_manager_PART_SRCS
     searchpage.cpp
@@ -28,6 +31,7 @@ target_link_libraries(bookmanagerpart
     ${KDE4_THREADWEAVER_LIBRARIES}
     ${QT_QTSQL_LIBRARIES}
     ${POPPLER_QT4_LIBRARIES}
+    csvLibrary
 )
 
 install(TARGETS bookmanagerpart DESTINATION ${PLUGIN_INSTALL_DIR})

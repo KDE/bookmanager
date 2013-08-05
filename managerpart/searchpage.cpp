@@ -296,6 +296,12 @@ QModelIndex SearchPage::indexAt(const QPoint& pos)
     return resultTree->indexAt(mapToViewport(pos));
 }
 
+CollectionDB * SearchPage::getCollectionDB() const
+{
+    return m_db;
+}
+
+
 //map the position to the viewport from from the Translates the widget
 //coordinate pos to the coordinate system of the viewport
 const QPoint SearchPage::mapToViewport(const QPoint& pos)

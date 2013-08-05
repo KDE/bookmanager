@@ -66,6 +66,8 @@ public:
     virtual ~SearchPage();
 
     QModelIndex indexAt(const QPoint& pos);
+    
+    CollectionDB * getCollectionDB() const;
 
 public slots:
     void createBook(dbusBook book);

@@ -18,6 +18,7 @@
 
 */
 #include "collectiondb.h"
+#include "csvlibrary.h"
 
 //KDE includes
 #include <kmessagebox.h>
@@ -255,5 +256,59 @@ bool CollectionDB::checkdupe(dbusBook* book, int &id)
         return true;
     }
     query.finish();
+    return false;
+}
+
+bool CollectionDB::dumpDatabase(const QString &fileName) const
+{
+    // dump content of database to csv file
+    CSVLibrary csvLib(fileName, QIODevice::WriteOnly);
+    
+    // try to open the file
+    if (!csvLib.open()) {
+        return false;
+    }
+    
+    // write header to file
+    QStringList header;
+    header << "title" << "summary" << "author" << "release" << "releaseDate" <<
+        "genre" << "series" << "volume" << "url";
+    csvLib.writeValues(header);
+    
+    // write all data in the table, except the id
+    QSqlQuery query;
+    query.setForwardOnly(true);
+    query.exec("SELECT title, summary, author, release, releaseDate, genre, series, volume, url FROM collection");
+    if (query.isActive()) {
+        while (query.next()) {
+            QString title = query.value(0).toString();
+            QString summary = query.value(1).toString();
+            QString author = query.value(2).toString();
+            QString release = query.value(3).toString();
+            QString releaseDate = query.value(4).toString();
+            QString genre = query.value(5).toString();
+            QString series = query.value(6).toString();
+            QString volume = query.value(7).toString();
+            QString url = query.value(8).toString();
+                                    
+            // create list of values
+            QStringList values;
+            values.append(title);
+            values.append(summary);
+            values.append(author);
+            values.append(release);
+            values.append(releaseDate);
+            values.append(genre);
+            values.append(series);
+            values.append(volume);
+            values.append(url);
+            
+            // write values to file
+            csvLib.writeValues(values);
+        }
+        
+        return true;
+    }
+    
     return false;
 }

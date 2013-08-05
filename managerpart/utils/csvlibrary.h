@@ -1,5 +1,5 @@
 /*
-    Copyright (C) <2010>  Brian Korbein <bri.kor.21@gmail.com>
+    Copyright (C) 2013  Riccardo Bellini <riccardo.bellini1988@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,44 +14,39 @@
     You should have received a copy of the GNU General Public License along
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
 */
 
 
-#ifndef COLLECTIONDB_H
-#define COLLECTIONDB_H
+#ifndef CSVLIBRARY_H
+#define CSVLIBRARY_H
 
-#include "bookstruct.h"
-//KDE includes
-#include <KUrl>
+#include <qiodevice.h>
+#include <qfile.h>
+#include <qstringlist.h>
+#include <qtextstream.h>
 
-//QT includes
-#include <QSqlDatabase>
-#include <QSqlTableModel>
-#include <QString>
-#include <QWidget>
 
-class KUrl;
-
-class CollectionDB : public QWidget
+class CSVLibrary
 {
-    Q_OBJECT
 public:
-    CollectionDB();
-    ~CollectionDB();
+    explicit CSVLibrary(const QString &fileName, QIODevice::OpenMode mode);
     
-    // dump database to csv file
-    bool dumpDatabase(const QString & fileName) const;
-
-public slots:
-    void addBook(dbusBook book);
-signals:
-    void isDirty();
-
+    bool open();
+    
+    bool writeValues(const QStringList &values);
+    
+    QStringList readValues();
+    
+    virtual ~CSVLibrary();
+    
 private:
-    bool initDB();
-    bool checkdupe(dbusBook* book, int& id);
-    QSqlDatabase m_db; enum Duplicate {cancel, dupe, overwrite};
+    QString m_encodeValue(const QString & value) const;
+    QString m_decodeValue(const QString & value) const;
+    
+    QFile m_file;
+    QIODevice::OpenMode m_mode;
+    QTextStream m_stream;
+    QString m_fileName;
 };
 
-#endif // COLLECTIONDB_H
+#endif // CSVLIBRARY_H
