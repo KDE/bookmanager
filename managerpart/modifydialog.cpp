@@ -134,6 +134,8 @@ void ModifyDialog::updateButtons()
 
 void ModifyDialog::accept()
 {
+    // update current book here, otherwise it will not be modified
+    updateBooklist();
     updateAndSubmit();
     KDialog::accept();
 }
