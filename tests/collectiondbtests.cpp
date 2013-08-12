@@ -20,9 +20,11 @@
 
 #include "collectiondbtests.h"
 #include "../managerpart/collectiondb.h"
+#include "../managerpart/bookstruct.h"
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <qsqlrecord.h>
 #include <qtest_kde.h>
 
 QTEST_KDEMAIN(CollectiondbTests, GUI);
@@ -64,17 +66,31 @@ void CollectiondbTests::Construction()
 
 void CollectiondbTests::addbook()
 {
-
-}
-
-void CollectiondbTests::isDirty()
-{
-
+    //we'll create a test book with a hopefully unique title 
+    //(I mashed the keyboard) and then verify it with a db query
+    //this should also cover the isDirty signal.
+    dbusBook testBook;
+    testBook.title = "asfgkasg;kjashg;kaonvwewtvttwqp9";
+    QSignalSpy spy(m_db, SIGNAL(isDirty()));
+    m_db->addBook(testBook);
+    //Verify the signal got emitted, once
+    QCOMPARE(spy.count(), 1);
+    //now build a nice sql query to make sure we created out book
+    QSqlQuery query;
+    query.prepare("SELECT title FROM collection WHERE title = 'asfgkasg;kjashg;kaonvwewtvttwqp9'");
+    query.exec();
+    //Verify that we have a result, and get ready to verify it
+    QCOMPARE(query.first(), true);
+    //and finally verify that it's the title we added
+    QCOMPARE(query.value(0).toString(),
+             QString("asfgkasg;kjashg;kaonvwewtvttwqp9"));
+    
 }
 
 void CollectiondbTests::checkDupe()
 {
-
+    //need to modify the code so this isn't popup before testing...
+    //TODO
 }
 
 #include "collectiondbtests.moc"

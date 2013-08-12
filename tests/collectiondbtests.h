@@ -35,7 +35,6 @@ private slots:
 
     void Construction();
     void addbook();
-    void isDirty();
     void checkDupe();
     
 private:
