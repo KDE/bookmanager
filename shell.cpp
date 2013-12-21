@@ -505,7 +505,7 @@ void Shell::slotRemoveSession()
         // the user cancelled, return
         return;
     }
-    int result = KMessageBox::questionYesNo(this, i18n("Are you sure you want to remove session %1").arg(sessionToRemove), i18n("Book Manager"));
+    int result = KMessageBox::questionYesNo(this, i18n("Are you sure you want to remove session %1?").arg(sessionToRemove), i18n("Book Manager"));
     if (result == KMessageBox::No) {
         return;
     }
