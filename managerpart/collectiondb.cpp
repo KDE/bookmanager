@@ -312,3 +312,9 @@ bool CollectionDB::dumpDatabase(const QString &fileName) const
     
     return false;
 }
+
+bool CollectionDB::importDatabase(const QString & fileName)
+{
+    // TODO
+    return true;
+}

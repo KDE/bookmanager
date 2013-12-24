@@ -43,6 +43,9 @@ public:
     // dump database to csv file
     bool dumpDatabase(const QString & fileName) const;
 
+    // import database from csv file
+    bool importDatabase(const QString & fileName);
+
 public slots:
     void addBook(dbusBook book);
 signals:
