@@ -4,7 +4,6 @@ This is a list of Features that would be nice to have, but may never actually be
 - "Search in all opened files/entire collection" feature (is it possible?).
 - Split view (like kdevelop)
 - Drag-able tabs (like firefox/chrome)
-- session manager
 - auto-import via isbn
 - export/import collection:
   * dump database (light export)
