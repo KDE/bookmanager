@@ -109,5 +109,36 @@ QString CSVLibrary::m_encodeValue(const QString& value) const
 
 QString CSVLibrary::m_decodeValue(const QString& value) const
 {
-    // TODO
+    QString decodedValue = value;
+    // does it start and end with double quotes?
+    QRegExp startsEndsDoubleQuotes("^\".+\"$", Qt::CaseInsensitive);
+    if (value.contains(startsEndsDoubleQuotes)) {
+	// strip the first and last double quotes
+	decodedValue = value.mid(1, value.length() - 2);
+    }
+    // does it contain other double quotes (in pairs)?
+    QRegExp doubleQuotePairs("\"\"", Qt::CaseInsensitive);
+    if (decodedValue.contains(doubleQuotePairs)) {
+	int startFrom = 0;
+	int occurrence = doubleQuotePairs.indexIn(decodedValue, startFrom);
+	do {
+	    decodedValue.remove(occurrence, 1);
+	    // skip other double quotes
+	    startFrom = occurrence + 1;
+	    occurrence = doubleQuotePairs.indexIn(decodedValue, startFrom);
+	} while (occurrence != -1);
+    }
+    // does it contain commas or newlines?
+    QRegExp commasRegExp(",", Qt::CaseInsensitive);
+    QRegExp newlineRegExp("\n", Qt::CaseInsensitive);
+    if (decodedValue.contains(commasRegExp) || decodedValue.contains(newlineRegExp)) {
+	// this should never happen, since surrounding double quotes should have been
+	// removed before
+	if (decodedValue.startsWith("\"") && decodedValue.endsWith("\"")) {
+	    int length = decodedValue.length();
+	    decodedValue.mid(1, length - 2);
+	}
+    }
+
+    return decodedValue;
 }
