@@ -3,7 +3,7 @@ project(bookmanager)
 find_package(KDE4 REQUIRED)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
-set(CMAKE_CXX_FLAGS "-fPIC")
+set(CMAKE_CXX_FLAGS "-fPIC -std=c++0x")
 
 find_package(PopplerQt4 REQUIRED)
 include(KDE4Defaults)

@@ -229,7 +229,21 @@ void BookManagerPart::backupLibrary()
 
 void BookManagerPart::importDatabase()
 {
-    // TODO
+    // get the file name of the dump to be imported
+    QString fileName = KFileDialog::getOpenFileName(KUrl(QDir::homePath()), QString("*.csv"), this->widget());
+    if (fileName.isEmpty()) {
+	return;
+    }
+    CollectionDB *db = m_searchpage->getCollectionDB();
+    if (!db) {
+        KMessageBox::error(this->widget(), i18n("Collection database non existing"), i18n("Error"));
+	return;
+    }
+    bool result = db->importDatabase(fileName);
+    if (!result) {
+        KMessageBox::error(this->widget(), i18n("Error during export"), i18n("Error"));
+        return;
+    }
 }
 
 void BookManagerPart::restoreLibrary()

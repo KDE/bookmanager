@@ -84,6 +84,7 @@ CollectionDB::CollectionDB()
                                    "summary TEXT, "
                                    "author TEXT, "
                                    "release TEXT, "
+                                   "release TEXT, "
                                    "releaseDate TEXT, "
                                    "genre TEXT, "
                                    "url TEXT)");
@@ -261,7 +262,6 @@ bool CollectionDB::checkdupe(dbusBook* book, int &id)
 
 bool CollectionDB::dumpDatabase(const QString &fileName) const
 {
-    // dump content of database to csv file
     CSVLibrary csvLib(fileName, QIODevice::WriteOnly);
     
     // try to open the file
@@ -315,6 +315,30 @@ bool CollectionDB::dumpDatabase(const QString &fileName) const
 
 bool CollectionDB::importDatabase(const QString & fileName)
 {
-    // TODO
+    CSVLibrary csvLib(fileName, QIODevice::ReadOnly);
+    if (!csvLib.open()) {
+	return false;
+    }
+
+    // discard first line (it's the header)
+    csvLib.readValues();
+
+    // read all data in the file
+    while (!csvLib.endOfFile()) {
+	QStringList elements = csvLib.readValues();
+	
+	dbusBook newBook;
+	newBook.title = elements.at(0);
+	newBook.summary = elements.at(1);
+	newBook.author = elements.at(2);
+	newBook.release = elements.at(3);
+	newBook.releaseDate = elements.at(4);
+	newBook.genre = elements.at(5);
+	newBook.series = elements.at(6);
+	newBook.volume = elements.at(7);
+	newBook.url = elements.at(8);
+	kDebug() << "Adding book " << newBook.title;
+	addBook(newBook);
+    }
     return true;
 }

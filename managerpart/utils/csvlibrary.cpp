@@ -19,6 +19,9 @@
 
 #include "csvlibrary.h"
 
+// KDE includes
+#include <kdebug.h>
+
 
 CSVLibrary::CSVLibrary(const QString& fileName, QIODevice::OpenMode mode)
 {
@@ -45,6 +48,11 @@ bool CSVLibrary::open()
 }
 
 
+void CSVLibrary::close()
+{
+    m_file.close();
+}
+
 bool CSVLibrary::writeValues(const QStringList& values)
 {
     QStringListIterator valueIt(values);
@@ -67,7 +75,22 @@ bool CSVLibrary::writeValues(const QStringList& values)
 
 QStringList CSVLibrary::readValues()
 {
-    // TODO
+    QStringList result;
+    // read the file line by line
+    QString currentLine = m_stream.readLine();
+    QStringList elements = currentLine.split(",");
+    // decode the elements one by one
+    for (QString currentElement : elements) {
+	QString decodedElement = m_decodeValue(currentElement);
+	result.append(decodedElement);
+    }
+    return result;
+}
+
+
+bool CSVLibrary::endOfFile() const
+{
+    return m_stream.atEnd();
 }
 
 

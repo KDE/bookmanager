@@ -32,10 +32,13 @@ public:
     explicit CSVLibrary(const QString &fileName, QIODevice::OpenMode mode);
     
     bool open();
+    void close();
     
     bool writeValues(const QStringList &values);
     
     QStringList readValues();
+
+    bool endOfFile() const;
     
     virtual ~CSVLibrary();
     
