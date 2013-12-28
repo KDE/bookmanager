@@ -7,6 +7,6 @@ This is a list of Features that would be nice to have, but may never actually be
 - session manager
 - auto-import via isbn
 - export/import collection:
-  * dump database (light export)
+  * dump database (light export) ----> to be tested
   * backup library feature
 - nepomuk?
