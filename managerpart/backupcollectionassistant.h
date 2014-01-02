@@ -22,8 +22,13 @@
 // KDE includes
 #include <kassistantdialog.h>
 
+// Uis includes
+#include "ui_introductionpage.h"
+
 // Forward declarations
 class IntroductionPage;
+class QLabel;
+class KPageWidgetItem;
 
 
 class BackupCollectionAssistant : public KAssistantDialog {
@@ -33,17 +38,18 @@ public:
 
 private:
     IntroductionPage * m_introductionPage;
+
+    KPageWidgetItem * m_introductionPageItem;
 };
 
 
 // Widget class for introductory page
-class IntroductionPage : public QWidget {
+class IntroductionPage : public QWidget, private Ui::IntroductionPage {
 public:
     IntroductionPage (QWidget * parent = 0, Qt::WindowFlags flags = 0);
     virtual ~IntroductionPage ();
 
 private:
-    /* data */
 };
 
 #endif // BACKUP_COLLECTION_ASSISTANT_H

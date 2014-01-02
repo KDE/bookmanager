@@ -18,6 +18,7 @@
 
 
 #include "bookmanagerpart.h"
+#include "backupcollectionassistant.h"
 
 #include "bookstruct.h"
 #include "searchpage.h"
@@ -224,7 +225,8 @@ void BookManagerPart::dumpDatabase()
 
 void BookManagerPart::backupLibrary()
 {
-    // TODO
+    BackupCollectionAssistant backupCollectionAssistant;
+    backupCollectionAssistant.exec();
 }
 
 void BookManagerPart::importDatabase()

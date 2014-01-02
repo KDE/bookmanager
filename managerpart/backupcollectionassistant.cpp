@@ -18,12 +18,18 @@
 
 #include "backupcollectionassistant.h"
 
+// KDE includes
+#include <klocalizedstring.h>
+
 
 BackupCollectionAssistant::BackupCollectionAssistant (QWidget * parent,
         Qt::WindowFlags flags)
     : KAssistantDialog (parent, flags)
 {
-
+    setCaption (i18n("Backup collection assistant"));
+    m_introductionPage = new IntroductionPage;
+    
+    m_introductionPageItem = addPage (m_introductionPage, i18n("Introduction"));
 }
 
 
@@ -36,7 +42,7 @@ BackupCollectionAssistant::~BackupCollectionAssistant ()
 IntroductionPage::IntroductionPage (QWidget * parent, Qt::WindowFlags flags)
     : QWidget (parent, flags)
 {
-
+    setupUi (this);
 }
 
 
