@@ -1,4 +1,5 @@
 add_subdirectory(utils)
+add_subdirectory(tools)
 
 include_directories(${POPPLER_QT4_INCLUDE_DIR})
 include_directories(utils)
