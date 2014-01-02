@@ -19,11 +19,16 @@ set(bookmanager_manager_PART_SRCS
     booktreeview.cpp
     bookdetailswidget.cpp
     backupcollectionassistant.cpp
+    collectionorganizerwidget.cpp
 )
 qt4_add_dbus_adaptor(bookmanager_manager_PART_SRCS org.bookmanager.BookManagerPart.xml
                     bookmanagerpart.h BookManagerPart)
 
-kde4_add_ui_files(bookmanager_manager_PART_SRCS importwidget.ui uis/introductionpage.ui)
+kde4_add_ui_files(bookmanager_manager_PART_SRCS
+    importwidget.ui
+    uis/introductionpage.ui
+    uis/collectionorganizerwidget.ui
+)
 
 kde4_add_plugin(bookmanagerpart ${bookmanager_manager_PART_SRCS})
 
