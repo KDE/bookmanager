@@ -27,6 +27,7 @@
 #include "ui_introductionpage.h"
 
 // Forward declarations
+class CollectionDB;
 class IntroductionPage;
 class OrganizeCollectionPage;
 class CollectionOrganizerWidget;
@@ -38,8 +39,11 @@ class KPageWidgetItem;
 
 class BackupCollectionAssistant : public KAssistantDialog {
 public:
-    BackupCollectionAssistant (QWidget * parent = 0, Qt::WindowFlags flags = 0);
-    virtual ~BackupCollectionAssistant ();
+    BackupCollectionAssistant(
+            CollectionDB * collection,
+            QWidget * parent = 0,
+            Qt::WindowFlags flags = 0);
+    virtual ~BackupCollectionAssistant();
 
 private:
     IntroductionPage * m_introductionPage;
@@ -47,14 +51,16 @@ private:
 
     KPageWidgetItem * m_introductionPageItem;
     KPageWidgetItem * m_backupCollectionPageItem;
+
+    CollectionDB * m_collection;
 };
 
 
 // Widget class for introductory page
 class IntroductionPage : public QWidget, private Ui::IntroductionPage {
 public:
-    IntroductionPage (QWidget * parent = 0, Qt::WindowFlags flags = 0);
-    virtual ~IntroductionPage ();
+    IntroductionPage(QWidget * parent = 0, Qt::WindowFlags flags = 0);
+    virtual ~IntroductionPage();
 
 private:
 };
@@ -64,8 +70,11 @@ private:
 class OrganizeCollectionPage : public QWidget {
     Q_OBJECT
 public:
-    OrganizeCollectionPage (QWidget * parent = 0, Qt::WindowFlags flags = 0);
-    virtual ~OrganizeCollectionPage ();
+    OrganizeCollectionPage(
+            CollectionDB * collection,
+            QWidget * parent = 0, 
+            Qt::WindowFlags flags = 0);
+    virtual ~OrganizeCollectionPage();
     
 private slots:
     void collectionOrganizedClicked(bool checked);
@@ -76,6 +85,8 @@ private:
     QLabel * m_introductionLabel;
     QCheckBox * m_organizedCheckBox;
     QPushButton * m_organizeCollectionPushButton;
+
+    CollectionDB * m_collection;
 };
 
 #endif // BACKUP_COLLECTION_ASSISTANT_H

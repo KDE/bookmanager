@@ -16,17 +16,21 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+// Book Manager includes
 #include "collectionorganizerwidget.h"
+#include "collectiondb.h"
 
 
-CollectionOrganizerWidget::CollectionOrganizerWidget (QWidget * parent, Qt::WindowFlags flags)
-    : QWidget (parent, flags)
+CollectionOrganizerWidget::CollectionOrganizerWidget(CollectionDB * collection,
+        QWidget * parent,
+        Qt::WindowFlags flags)
+    : QWidget(parent, flags), m_collection(collection)
 {
-    setupUi (this);
+    setupUi(this);
 }
 
 
-CollectionOrganizerWidget::~CollectionOrganizerWidget ()
+CollectionOrganizerWidget::~CollectionOrganizerWidget()
 {
 
 }

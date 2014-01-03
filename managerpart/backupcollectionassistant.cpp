@@ -19,6 +19,7 @@
 // Book Manager includes
 #include "backupcollectionassistant.h"
 #include "collectionorganizerwidget.h"
+#include "collectiondb.h"
 
 // Qt includes
 #include <qcheckbox.h>
@@ -27,16 +28,17 @@
 #include <klocalizedstring.h>
 
 
-BackupCollectionAssistant::BackupCollectionAssistant(QWidget * parent,
+BackupCollectionAssistant::BackupCollectionAssistant(CollectionDB * collection,
+        QWidget * parent,
         Qt::WindowFlags flags)
-    : KAssistantDialog(parent, flags)
+    : KAssistantDialog(parent, flags), m_collection(collection)
 {
     setCaption (i18n("Backup collection assistant"));
     m_introductionPage = new IntroductionPage;
     m_introductionPageItem = addPage (m_introductionPage,
             i18n("Introduction"));
 
-    m_organizeCollectionPage = new OrganizeCollectionPage;
+    m_organizeCollectionPage = new OrganizeCollectionPage(m_collection);
     m_backupCollectionPageItem = addPage (m_organizeCollectionPage,
             i18n("Backup collection"));
 }
@@ -62,8 +64,10 @@ IntroductionPage::~IntroductionPage()
 
 
 // BackupCollectionPage methods
-OrganizeCollectionPage::OrganizeCollectionPage(QWidget * parent, Qt::WindowFlags flags)
-    : QWidget(parent, flags)
+OrganizeCollectionPage::OrganizeCollectionPage(CollectionDB * collection,
+        QWidget * parent,
+        Qt::WindowFlags flags)
+    : QWidget(parent, flags), m_collection(collection)
 {
     QVBoxLayout * mainLayout = new QVBoxLayout();
     
@@ -74,7 +78,7 @@ OrganizeCollectionPage::OrganizeCollectionPage(QWidget * parent, Qt::WindowFlags
     
     mainLayout->addWidget(m_introductionLabel);
     
-    m_collectionOrganizerWidget = new CollectionOrganizerWidget(this);
+    m_collectionOrganizerWidget = new CollectionOrganizerWidget(m_collection, this);
 
     mainLayout->addWidget(m_collectionOrganizerWidget);
 

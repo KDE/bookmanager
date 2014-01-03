@@ -225,7 +225,8 @@ void BookManagerPart::dumpDatabase()
 
 void BookManagerPart::backupLibrary()
 {
-    BackupCollectionAssistant backupCollectionAssistant;
+    CollectionDB * collection = m_searchpage->getCollectionDB();
+    BackupCollectionAssistant backupCollectionAssistant(collection);
     backupCollectionAssistant.exec();
 }
 

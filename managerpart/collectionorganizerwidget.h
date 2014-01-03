@@ -25,14 +25,19 @@
 // Uis includes
 #include "ui_collectionorganizerwidget.h"
 
+// Forward declarations
+class CollectionDB;
 
 class CollectionOrganizerWidget : public QWidget, private Ui::CollectionOrganizerWidget {
 public:
-    CollectionOrganizerWidget (QWidget * parent = 0, Qt::WindowFlags flags = 0);
+    CollectionOrganizerWidget (
+            CollectionDB * collection,
+            QWidget * parent = 0,
+            Qt::WindowFlags flags = 0);
     virtual ~CollectionOrganizerWidget ();
 
 private:
-    /* data */
+    CollectionDB * m_collection;
 };
 
 #endif // COLLECTION_ORGANIZER_H
