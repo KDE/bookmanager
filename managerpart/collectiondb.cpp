@@ -342,3 +342,22 @@ bool CollectionDB::importDatabase(const QString & fileName)
     }
     return true;
 }
+
+
+KUrl::List CollectionDB::getBookUrlsList() const
+{
+    KUrl::List result;
+    QSqlQuery getUrlsQuery;
+    getUrlsQuery.setForwardOnly(true);
+    getUrlsQuery.exec("SELECT url FROM collection");
+    if (getUrlsQuery.isActive()) {
+        while (getUrlsQuery.next()) {
+        KUrl currentUrl(getUrlsQuery.value(0).toString());
+            if (currentUrl.isValid()) {
+                result.append(currentUrl);
+            }
+        }
+    }
+
+    return result;
+}

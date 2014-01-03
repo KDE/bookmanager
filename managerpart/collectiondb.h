@@ -33,6 +33,7 @@
 
 class KUrl;
 
+
 class CollectionDB : public QWidget
 {
     Q_OBJECT
@@ -45,6 +46,8 @@ public:
 
     // import database from csv file
     bool importDatabase(const QString & fileName);
+
+    KUrl::List getBookUrlsList() const;
 
 public slots:
     void addBook(dbusBook book);
