@@ -16,37 +16,99 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+// Book Manager includes
 #include "backupcollectionassistant.h"
+#include "collectionorganizerwidget.h"
+
+// Qt includes
+#include <qcheckbox.h>
 
 // KDE includes
 #include <klocalizedstring.h>
 
 
-BackupCollectionAssistant::BackupCollectionAssistant (QWidget * parent,
+BackupCollectionAssistant::BackupCollectionAssistant(QWidget * parent,
         Qt::WindowFlags flags)
-    : KAssistantDialog (parent, flags)
+    : KAssistantDialog(parent, flags)
 {
     setCaption (i18n("Backup collection assistant"));
     m_introductionPage = new IntroductionPage;
-    
-    m_introductionPageItem = addPage (m_introductionPage, i18n("Introduction"));
+    m_introductionPageItem = addPage (m_introductionPage,
+            i18n("Introduction"));
+
+    m_organizeCollectionPage = new OrganizeCollectionPage;
+    m_backupCollectionPageItem = addPage (m_organizeCollectionPage,
+            i18n("Backup collection"));
 }
 
 
-BackupCollectionAssistant::~BackupCollectionAssistant ()
+BackupCollectionAssistant::~BackupCollectionAssistant()
 {
 
 }
 
 // IntroductionPage methods
-IntroductionPage::IntroductionPage (QWidget * parent, Qt::WindowFlags flags)
-    : QWidget (parent, flags)
+IntroductionPage::IntroductionPage(QWidget * parent, Qt::WindowFlags flags)
+    : QWidget(parent, flags)
 {
-    setupUi (this);
+    setupUi(this);
 }
 
 
-IntroductionPage::~IntroductionPage ()
+IntroductionPage::~IntroductionPage()
 {
 
 }
+
+
+// BackupCollectionPage methods
+OrganizeCollectionPage::OrganizeCollectionPage(QWidget * parent, Qt::WindowFlags flags)
+    : QWidget(parent, flags)
+{
+    QVBoxLayout * mainLayout = new QVBoxLayout();
+    
+    m_introductionLabel = new QLabel;
+    m_introductionLabel->setText(i18n("Configure the output folder and the structure for the organization of your collection. "
+        "After the configuration click \"Organize collection\" to begin the copy of your books."));
+    m_introductionLabel->setWordWrap(true);
+    
+    mainLayout->addWidget(m_introductionLabel);
+    
+    m_collectionOrganizerWidget = new CollectionOrganizerWidget(this);
+
+    mainLayout->addWidget(m_collectionOrganizerWidget);
+
+    m_organizedCheckBox = new QCheckBox();
+    m_organizedCheckBox->setText(i18n("Collection already organized"));
+    m_organizedCheckBox->setChecked(false);
+    connect(m_organizedCheckBox, SIGNAL(clicked(bool)), SLOT(collectionOrganizedClicked(bool)));
+
+    mainLayout->addWidget(m_organizedCheckBox);
+    
+    QHBoxLayout * organizeCollectionLayout = new QHBoxLayout;
+    organizeCollectionLayout->addStretch();
+    
+    m_organizeCollectionPushButton = new QPushButton;
+    m_organizeCollectionPushButton->setText(i18n("Organize collection"));
+    
+    organizeCollectionLayout->addWidget(m_organizeCollectionPushButton);
+    organizeCollectionLayout->addStretch();
+    mainLayout->addLayout(organizeCollectionLayout);
+
+    setLayout(mainLayout);
+}
+
+
+OrganizeCollectionPage::~OrganizeCollectionPage()
+{
+
+}
+
+
+// private slots
+void OrganizeCollectionPage::collectionOrganizedClicked(bool checked)
+{
+    m_collectionOrganizerWidget->setEnabled(!checked);
+    m_organizeCollectionPushButton->setEnabled(!checked);
+}
+

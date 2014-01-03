@@ -19,6 +19,7 @@
 #ifndef BACKUP_COLLECTION_ASSISTANT_H
 #define BACKUP_COLLECTION_ASSISTANT_H
 
+
 // KDE includes
 #include <kassistantdialog.h>
 
@@ -27,7 +28,11 @@
 
 // Forward declarations
 class IntroductionPage;
+class OrganizeCollectionPage;
+class CollectionOrganizerWidget;
 class QLabel;
+class QCheckBox;
+class QPushButton;
 class KPageWidgetItem;
 
 
@@ -38,8 +43,10 @@ public:
 
 private:
     IntroductionPage * m_introductionPage;
+    OrganizeCollectionPage * m_organizeCollectionPage;
 
     KPageWidgetItem * m_introductionPageItem;
+    KPageWidgetItem * m_backupCollectionPageItem;
 };
 
 
@@ -50,6 +57,25 @@ public:
     virtual ~IntroductionPage ();
 
 private:
+};
+
+
+// Widget class for collection backup
+class OrganizeCollectionPage : public QWidget {
+    Q_OBJECT
+public:
+    OrganizeCollectionPage (QWidget * parent = 0, Qt::WindowFlags flags = 0);
+    virtual ~OrganizeCollectionPage ();
+    
+private slots:
+    void collectionOrganizedClicked(bool checked);
+
+private:
+    CollectionOrganizerWidget * m_collectionOrganizerWidget;
+    
+    QLabel * m_introductionLabel;
+    QCheckBox * m_organizedCheckBox;
+    QPushButton * m_organizeCollectionPushButton;
 };
 
 #endif // BACKUP_COLLECTION_ASSISTANT_H
