@@ -20,6 +20,9 @@
 #include "collectionorganizerwidget.h"
 #include "collectiondb.h"
 
+// KDE includes
+#include <kurl.h>
+
 
 CollectionOrganizerWidget::CollectionOrganizerWidget(CollectionDB * collection,
         QWidget * parent,
@@ -33,4 +36,20 @@ CollectionOrganizerWidget::CollectionOrganizerWidget(CollectionDB * collection,
 CollectionOrganizerWidget::~CollectionOrganizerWidget()
 {
 
+}
+
+
+// private methods
+void CollectionOrganizerWidget::m_computeDiskSpace()
+{
+    // check if collection is valid
+    if (!m_collection) {
+        return;
+    }
+    KUrl::List urlsList = m_collection->getBookUrlsList();
+
+    // TODO
+    // FIXME move computation of required disk space in a separate thread,
+    // since with a lot of books it may slow down significantly the user
+    // interface when showing this widget
 }

@@ -37,6 +37,7 @@ public:
     virtual ~CollectionOrganizerWidget ();
 
 private:
+    void m_computeDiskSpace();
     CollectionDB * m_collection;
 };
 
