@@ -18,6 +18,7 @@
 
 // Book Manager includes
 #include "collectionorganizerwidget.h"
+#include "collectionsizecalculator.h"
 #include "collectiondb.h"
 
 // KDE includes
@@ -30,6 +31,7 @@ CollectionOrganizerWidget::CollectionOrganizerWidget(CollectionDB * collection,
     : QWidget(parent, flags), m_collection(collection)
 {
     setupUi(this);
+    m_computeDiskSpace();
 }
 
 
@@ -39,17 +41,25 @@ CollectionOrganizerWidget::~CollectionOrganizerWidget()
 }
 
 
+// private slots
+void CollectionOrganizerWidget::sizeComputed(quint64 size)
+{
+    m_requiredSpace = size;
+    // TODO make "human readable" all sizes (KB, MB, GB)
+    requiredValueLabel->setText(QString::number(m_requiredSpace) + " B");
+}
+
+
 // private methods
 void CollectionOrganizerWidget::m_computeDiskSpace()
 {
-    // check if collection is valid
-    if (!m_collection) {
-        return;
-    }
-    KUrl::List urlsList = m_collection->getBookUrlsList();
+    utils::CollectionSizeCalculator * sizeCalculator = new utils::CollectionSizeCalculator(this);
 
-    // TODO
-    // FIXME move computation of required disk space in a separate thread,
-    // since with a lot of books it may slow down significantly the user
-    // interface when showing this widget
+    connect(sizeCalculator, SIGNAL(sizeComputed(quint64)),
+            SLOT(sizeComputed(quint64)));
+    
+    // FIXME potential memory leak because we don't know when
+    // CollectionOrganizerWidget is destroyed
+
+    sizeCalculator->calculateSize();
 }

@@ -29,6 +29,7 @@
 class CollectionDB;
 
 class CollectionOrganizerWidget : public QWidget, private Ui::CollectionOrganizerWidget {
+    Q_OBJECT
 public:
     CollectionOrganizerWidget (
             CollectionDB * collection,
@@ -36,9 +37,16 @@ public:
             Qt::WindowFlags flags = 0);
     virtual ~CollectionOrganizerWidget ();
 
+private slots:
+    void sizeComputed(quint64);
+
 private:
     void m_computeDiskSpace();
     CollectionDB * m_collection;
+
+    quint64 m_requiredSpace;
+    quint64 m_availableSpace;
+    quint64 m_remainingSpace;
 };
 
 #endif // COLLECTION_ORGANIZER_H

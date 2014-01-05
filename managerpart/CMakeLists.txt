@@ -20,6 +20,7 @@ set(bookmanager_manager_PART_SRCS
     bookdetailswidget.cpp
     backupcollectionassistant.cpp
     collectionorganizerwidget.cpp
+    collectionsizecalculator.cpp
 )
 qt4_add_dbus_adaptor(bookmanager_manager_PART_SRCS org.bookmanager.BookManagerPart.xml
                     bookmanagerpart.h BookManagerPart)
