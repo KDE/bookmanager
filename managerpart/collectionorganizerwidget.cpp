@@ -23,6 +23,10 @@
 
 // KDE includes
 #include <kurl.h>
+#include <kdiskfreespaceinfo.h>
+
+// Qt includes
+#include <qdir.h>
 
 
 CollectionOrganizerWidget::CollectionOrganizerWidget(CollectionDB * collection,
@@ -47,6 +51,11 @@ void CollectionOrganizerWidget::sizeComputed(quint64 size)
     m_requiredSpace = size;
     // TODO make "human readable" all sizes (KB, MB, GB)
     requiredValueLabel->setText(QString::number(m_requiredSpace) + " B");
+    // WARNING possible race condition between the computation of
+    // available space and required space might display an incorrect value for
+    // remaining space
+    m_remainingSpace = m_availableSpace - m_requiredSpace;
+    afterProcessValueLabel->setText(QString::number(m_remainingSpace) + " B");
 }
 
 
@@ -62,4 +71,13 @@ void CollectionOrganizerWidget::m_computeDiskSpace()
     // CollectionOrganizerWidget is destroyed
 
     sizeCalculator->calculateSize();
+
+    // compute available disk space
+    // FIXME temporary return available space in the /home partition (which might be separated)
+    KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(QDir::homePath());
+    if (info.isValid()) {
+        // display the available space
+        m_availableSpace = info.available();
+        availableValueLabel->setText(QString::number(m_availableSpace) + " B");
+    }
 }
