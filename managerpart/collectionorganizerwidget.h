@@ -31,6 +31,17 @@ class CollectionDB;
 class CollectionOrganizerWidget : public QWidget, private Ui::CollectionOrganizerWidget {
     Q_OBJECT
 public:
+    enum SizeUnit {
+        B = 0,
+        KB,
+        MB,
+        GB
+    };
+
+    struct Size {
+        qreal value;
+        SizeUnit unit;
+    };
     CollectionOrganizerWidget (
             CollectionDB * collection,
             QWidget * parent = 0,
@@ -42,6 +53,7 @@ private slots:
 
 private:
     void m_computeDiskSpace();
+    Size m_humanReadableSize(quint64) const;
     CollectionDB * m_collection;
 
     quint64 m_requiredSpace;

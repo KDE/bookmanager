@@ -81,3 +81,13 @@ void CollectionOrganizerWidget::m_computeDiskSpace()
         availableValueLabel->setText(QString::number(m_availableSpace) + " B");
     }
 }
+
+
+CollectionOrganizerWidget::Size CollectionOrganizerWidget::m_humanReadableSize(quint64 size) const
+{
+    Size result;
+
+    // TODO implement method
+
+    return result;
+}
