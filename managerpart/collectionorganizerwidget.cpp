@@ -49,13 +49,15 @@ CollectionOrganizerWidget::~CollectionOrganizerWidget()
 void CollectionOrganizerWidget::sizeComputed(quint64 size)
 {
     m_requiredSpace = size;
-    // TODO make "human readable" all sizes (KB, MB, GB)
-    requiredValueLabel->setText(QString::number(m_requiredSpace) + " B");
+    KLocale * locale = KGlobal::locale();
+    QString sizeStr = locale->formatByteSize(m_requiredSpace);
+    requiredValueLabel->setText(sizeStr);
     // WARNING possible race condition between the computation of
     // available space and required space might display an incorrect value for
     // remaining space
     m_remainingSpace = m_availableSpace - m_requiredSpace;
-    afterProcessValueLabel->setText(QString::number(m_remainingSpace) + " B");
+    QString remainingSpaceStr = locale->formatByteSize(m_remainingSpace);
+    afterProcessValueLabel->setText(remainingSpaceStr);
 }
 
 
@@ -78,16 +80,9 @@ void CollectionOrganizerWidget::m_computeDiskSpace()
     if (info.isValid()) {
         // display the available space
         m_availableSpace = info.available();
-        availableValueLabel->setText(QString::number(m_availableSpace) + " B");
+        KLocale * locale = KGlobal::locale();
+        QString availableSpaceStr = locale->formatByteSize(m_availableSpace);
+        availableValueLabel->setText(availableSpaceStr);
     }
 }
 
-
-CollectionOrganizerWidget::Size CollectionOrganizerWidget::m_humanReadableSize(quint64 size) const
-{
-    Size result;
-
-    // TODO implement method
-
-    return result;
-}
