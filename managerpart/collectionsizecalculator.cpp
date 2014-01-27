@@ -62,7 +62,7 @@ utils::CollectionSizeCalculator::CollectionSizeCalculator(QObject * parent)
 void utils::CollectionSizeCalculator::calculateSize()
 {
     // we are in the public method called from outside.
-    // create the internal size calculato and the worker thread,
+    // create the internal size calculator and the worker thread,
     // schedule it for running.
     // Also, propagate signals from internal engine
     CollectionSizeCalculatorInternal * internalEngine = new CollectionSizeCalculatorInternal(this);
