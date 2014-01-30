@@ -18,10 +18,12 @@
 
 // Book Manager includes
 #include "collectionorganizer.h"
+#include "collectiondb.h"
 
 
-CollectionOrganizer::CollectionOrganizer (QObject * parent)
-    : QObject (parent)
+CollectionOrganizer::CollectionOrganizer (CollectionDB * collectionDb,
+        QObject * parent)
+    : QObject (parent), m_collection(collectionDb)
 {
 
 }

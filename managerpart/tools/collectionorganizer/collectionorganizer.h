@@ -26,9 +26,11 @@
 #include <qobject.h>
 
 
+class CollectionDB;
+
 class CollectionOrganizer : public QObject {
 public:
-    CollectionOrganizer (QObject * parent = 0);
+    CollectionOrganizer (CollectionDB * collectionDb, QObject * parent = 0);
     virtual ~CollectionOrganizer ();
 
     // getters
@@ -40,6 +42,7 @@ public:
     void setCollectionStructure(const QString & structure);
 
 private:
+    CollectionDB * m_collection;
     KUrl m_rootFolderUrl;
     QString m_collectionStructure;
 };
