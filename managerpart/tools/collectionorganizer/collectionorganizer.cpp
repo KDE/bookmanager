@@ -35,6 +35,12 @@ CollectionOrganizer::~CollectionOrganizer ()
 }
 
 
+void CollectionOrganizer::organizeCollection()
+{
+    // TODO
+}
+
+
 // getters
 KUrl CollectionOrganizer::getRootFolderUrl() const
 {

@@ -41,6 +41,7 @@ target_link_libraries(bookmanagerpart
     ${QT_QTSQL_LIBRARIES}
     ${POPPLER_QT4_LIBRARIES}
     csvLibrary
+    collectionorganizer
 )
 
 install(TARGETS bookmanagerpart DESTINATION ${PLUGIN_INSTALL_DIR})

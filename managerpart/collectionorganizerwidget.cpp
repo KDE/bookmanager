@@ -54,12 +54,16 @@ void CollectionOrganizerWidget::organizeCollection()
     if (rootFolderUrl.path().isEmpty()) {
         KMessageBox::error(this, i18n("Root folder must be a valid path"),
                 i18n("Invalid root folder"));
+        return;
     }
     if (!rootFolderUrl.isLocalFile()) {
         KMessageBox::error(this, i18n("Root folder of the collection must be a "
                     "local file"), i18n("Invalid root folder"));
+        return;
     }
-    // TODO
+    // initialize CollectionOrganizer object
+    CollectionOrganizer organizer(m_collection, this);
+    organizer.organizeCollection();
 }
 
 // private slots

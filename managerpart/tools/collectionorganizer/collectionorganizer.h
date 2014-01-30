@@ -30,8 +30,10 @@ class CollectionDB;
 
 class CollectionOrganizer : public QObject {
 public:
-    CollectionOrganizer (CollectionDB * collectionDb, QObject * parent = 0);
+    CollectionOrganizer (CollectionDB * collectionDb = 0, QObject * parent = 0);
     virtual ~CollectionOrganizer ();
+
+    void organizeCollection();
 
     // getters
     KUrl getRootFolderUrl() const;
