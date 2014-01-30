@@ -19,6 +19,10 @@
 #ifndef COLLECTION_ORGANIZER_H
 #define COLLECTION_ORGANIZER_H
 
+// KDE includes
+#include <kurl.h>
+
+// Qt includes
 #include <qobject.h>
 
 
@@ -27,8 +31,17 @@ public:
     CollectionOrganizer (QObject * parent = 0);
     virtual ~CollectionOrganizer ();
 
+    // getters
+    KUrl getRootFolderUrl() const;
+    QString getCollectionStructure() const;
+
+    // setters
+    void setRootFolderUrl(const KUrl & url);
+    void setCollectionStructure(const QString & structure);
+
 private:
-    /* data */
+    KUrl m_rootFolderUrl;
+    QString m_collectionStructure;
 };
 
 #endif // COLLECTION_ORGANIZER_H

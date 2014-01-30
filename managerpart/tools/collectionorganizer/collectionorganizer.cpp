@@ -16,6 +16,7 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+// Book Manager includes
 #include "collectionorganizer.h"
 
 
@@ -29,4 +30,30 @@ CollectionOrganizer::CollectionOrganizer (QObject * parent)
 CollectionOrganizer::~CollectionOrganizer ()
 {
 
+}
+
+
+// getters
+KUrl CollectionOrganizer::getRootFolderUrl() const
+{
+    return m_rootFolderUrl;
+}
+
+
+QString CollectionOrganizer::getCollectionStructure() const
+{
+    return m_collectionStructure;
+}
+
+
+// setters
+void CollectionOrganizer::setRootFolderUrl(const KUrl & url)
+{
+    m_rootFolderUrl = url;
+}
+
+
+void CollectionOrganizer::setCollectionStructure(const QString & structure)
+{
+    m_collectionStructure = structure;
 }
