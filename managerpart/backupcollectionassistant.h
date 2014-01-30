@@ -78,6 +78,7 @@ public:
     
 private slots:
     void collectionOrganizedClicked(bool checked);
+    void organizeCollectionClicked();
 
 private:
     CollectionOrganizerWidget * m_collectionOrganizerWidget;

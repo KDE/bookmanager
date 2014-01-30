@@ -20,10 +20,12 @@
 #include "collectionorganizerwidget.h"
 #include "collectionsizecalculator.h"
 #include "collectiondb.h"
+#include "collectionorganizer.h"
 
 // KDE includes
 #include <kurl.h>
 #include <kdiskfreespaceinfo.h>
+#include <kmessagebox.h>
 
 // Qt includes
 #include <qdir.h>
@@ -44,6 +46,21 @@ CollectionOrganizerWidget::~CollectionOrganizerWidget()
 
 }
 
+
+void CollectionOrganizerWidget::organizeCollection()
+{
+    // check for validity of fields
+    KUrl rootFolderUrl = rootFolderUrlRequester->url();
+    if (rootFolderUrl.path().isEmpty()) {
+        KMessageBox::error(this, i18n("Root folder must be a valid path"),
+                i18n("Invalid root folder"));
+    }
+    if (!rootFolderUrl.isLocalFile()) {
+        KMessageBox::error(this, i18n("Root folder of the collection must be a "
+                    "local file"), i18n("Invalid root folder"));
+    }
+    // TODO
+}
 
 // private slots
 void CollectionOrganizerWidget::sizeComputed(quint64 size)

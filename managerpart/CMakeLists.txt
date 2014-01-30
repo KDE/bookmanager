@@ -3,6 +3,7 @@ add_subdirectory(tools)
 
 include_directories(${POPPLER_QT4_INCLUDE_DIR})
 include_directories(utils)
+include_directories(tools/collectionorganizer)
 
 set(bookmanager_manager_PART_SRCS
     searchpage.cpp

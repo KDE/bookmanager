@@ -37,6 +37,8 @@ public:
             Qt::WindowFlags flags = 0);
     virtual ~CollectionOrganizerWidget ();
 
+    void organizeCollection();
+
 private slots:
     void sizeComputed(quint64);
 

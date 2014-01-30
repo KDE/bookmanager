@@ -94,6 +94,7 @@ OrganizeCollectionPage::OrganizeCollectionPage(CollectionDB * collection,
     
     m_organizeCollectionPushButton = new QPushButton;
     m_organizeCollectionPushButton->setText(i18n("Organize collection"));
+    connect(m_organizeCollectionPushButton, SIGNAL(clicked()), SLOT(organizeCollectionClicked()));
     
     organizeCollectionLayout->addWidget(m_organizeCollectionPushButton);
     organizeCollectionLayout->addStretch();
@@ -116,3 +117,9 @@ void OrganizeCollectionPage::collectionOrganizedClicked(bool checked)
     m_organizeCollectionPushButton->setEnabled(!checked);
 }
 
+
+void OrganizeCollectionPage::organizeCollectionClicked()
+{
+    // call the collection organizer
+    m_collectionOrganizerWidget->organizeCollection();
+}
