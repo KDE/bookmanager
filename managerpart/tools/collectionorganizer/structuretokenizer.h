@@ -61,7 +61,7 @@ namespace tokenizer
             TokenList_t getLastTokenList() const;
 
         private:
-            TokenList_t lastTokenList;
+            TokenList_t m_lastTokenList;
     };
 }
 
