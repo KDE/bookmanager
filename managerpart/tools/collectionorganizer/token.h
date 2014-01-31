@@ -56,7 +56,7 @@ namespace tokenizer
         Type type; /// type of the token
         int startIdx; /// start index of token in the string
         int endIdx; /// end index of token in the string
-    }
+    };
 }
 
 
