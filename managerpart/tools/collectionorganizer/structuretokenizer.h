@@ -24,6 +24,7 @@
 
 // Qt includes
 #include <qobject.h>
+#include <qhash.h>
 
 
 namespace tokenizer
@@ -61,7 +62,11 @@ namespace tokenizer
             TokenList_t getLastTokenList() const;
 
         private:
+            void m_addRegexForType(Type tokenType, const QString & pattern);
+            Type m_guessTokenFromString(const QString & tokenStr) const;
             TokenList_t m_lastTokenList;
+
+            QHash<Type, QRegExp> m_regexForType;
     };
 }
 

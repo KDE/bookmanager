@@ -19,13 +19,23 @@
 // Book Manager includes
 #include "structuretokenizer.h"
 
+// Qt includes
+#include <qregexp.h>
+
 
 namespace tokenizer
 {
     StructureTokenizer::StructureTokenizer(QObject * parent)
         : QObject(parent)
     {
-
+        m_addRegexForType(Title, "%title%");
+        m_addRegexForType(Author, "%author%");
+        m_addRegexForType(AuthorInitial, "%Author%");
+        m_addRegexForType(Genre, "%genre%");
+        m_addRegexForType(Series, "%series%");
+        m_addRegexForType(Volume, "%volume%");
+        m_addRegexForType(Separator, "/");
+        m_addRegexForType(Other, ".+");
     }
 
 
@@ -33,7 +43,13 @@ namespace tokenizer
     {
         TokenList_t result;
 
+        // first, split the structure using the directory separator,
+        // to find the path list
+        QList<int> separatorIdxList;
+        QRegExp separatorRegExp("/");
         // TODO
+        QRegExp tokenRegExp("%(\\w)%");
+        QRegExp tokenListRegExp("(.*)(%(\\w)%(.*))*");
         
         return result;
     }
@@ -42,5 +58,14 @@ namespace tokenizer
     TokenList_t StructureTokenizer::getLastTokenList() const
     {
         return m_lastTokenList;
+    }
+
+
+    // private methods
+    void StructureTokenizer::m_addRegexForType(Type tokenType, const QString & pattern)
+    {
+        QRegExp regex(pattern);
+        regex.setPatternSyntax(QRegExp::RegExp2);
+        m_regexForType.insert(tokenType, regex);
     }
 }
