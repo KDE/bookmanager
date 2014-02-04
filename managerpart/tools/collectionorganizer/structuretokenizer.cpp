@@ -46,7 +46,18 @@ namespace tokenizer
         // first, split the structure using the directory separator,
         // to find the path list
         QList<int> separatorIdxList;
+        // insert first base index at the begininng of the string
+        separatorIdxList.insert(0);
+        // replace two occurrences of separator with just one separator
+        QString structureStr = structure.replace("//", "/");
         QRegExp separatorRegExp("/");
+        int pos = 0;
+        while ((pos = separatorRegExp.indexIn(structureStr, pos)) != -1) {
+            separatorIdxList.insert(pos);
+            pos += separatorRegExp.matchedLength();
+        }
+        // split the structure according to directory separators
+        QStringList separatedStructure = structure.split(separatorRegExp, QString::SkipEmptyParts);
         // TODO
         QRegExp tokenRegExp("%(\\w)%");
         QRegExp tokenListRegExp("(.*)(%(\\w)%(.*))*");
