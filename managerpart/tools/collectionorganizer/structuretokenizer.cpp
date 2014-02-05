@@ -21,6 +21,7 @@
 
 // Qt includes
 #include <qregexp.h>
+#include <qstringlist.h>
 
 
 namespace tokenizer
@@ -47,20 +48,21 @@ namespace tokenizer
         // to find the path list
         QList<int> separatorIdxList;
         // insert first base index at the begininng of the string
-        separatorIdxList.insert(0);
-        // replace two occurrences of separator with just one separator
-        QString structureStr = structure.replace("//", "/");
+        separatorIdxList.append(0);
         QRegExp separatorRegExp("/");
         int pos = 0;
-        while ((pos = separatorRegExp.indexIn(structureStr, pos)) != -1) {
-            separatorIdxList.insert(pos);
+        while ((pos = separatorRegExp.indexIn(structure, pos)) != -1) {
+            separatorIdxList.append(pos);
             pos += separatorRegExp.matchedLength();
         }
         // split the structure according to directory separators
-        QStringList separatedStructure = structure.split(separatorRegExp, QString::SkipEmptyParts);
-        // TODO
+        QStringList separatedStructure = structure.split(separatorRegExp, QString::KeepEmptyParts);
+        QStringListIterator separatedStructureIt(separatedStructure);
         QRegExp tokenRegExp("%(\\w)%");
         QRegExp tokenListRegExp("(.*)(%(\\w)%(.*))*");
+        foreach (const QString & currentStr, separatedStructure) {
+            // TODO
+        }
         
         return result;
     }
