@@ -120,4 +120,19 @@ namespace tokenizer
         regex.setPatternSyntax(QRegExp::RegExp2);
         m_regexForType.insert(tokenType, regex);
     }
+
+    Type StructureTokenizer::m_guessTokenFromString(const QString & tokenStr) const
+    {
+        QHashIterator<Type, QRegExp> typeIt(m_regexForType);
+        while (typeIt.hasNext()) {
+            typeIt.next();
+            Type type = typeIt.key();
+            const QRegExp & regex = typeIt.value();
+            if (regex.indexIn(tokenStr) > -1) {
+                return type;
+            }
+        }
+
+        return Other;
+    }
 }
