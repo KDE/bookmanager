@@ -42,6 +42,7 @@ namespace tokenizer
 
     TokenList_t StructureTokenizer::tokenize(const QString & structure)
     {
+        // FIXME extensive testing of this method
         TokenList_t result;
 
         // first, split the structure using the directory separator,
@@ -57,11 +58,49 @@ namespace tokenizer
         }
         // split the structure according to directory separators
         QStringList separatedStructure = structure.split(separatorRegExp, QString::KeepEmptyParts);
+        // print error message if this condition is not verified
+        Q_ASSERT(separatedStructure.size() == separatorIdxList.size());
+        QRegExp tokenRegExp("%\\w%");
+        // QRegExp tokenListRegExp("(.*)(%(\\w)%(.*))*");
+        QListIterator<int> separatorIdxIt(separatorIdxList);
         QStringListIterator separatedStructureIt(separatedStructure);
-        QRegExp tokenRegExp("%(\\w)%");
-        QRegExp tokenListRegExp("(.*)(%(\\w)%(.*))*");
-        foreach (const QString & currentStr, separatedStructure) {
-            // TODO
+        while (separatedStructureIt.hasNext() && separatorIdxIt.hasNext()) {
+            QString currentStr = separatedStructureIt.next();
+            int currentOffset = separatorIdxIt.next();
+            // try to find if there are predefined tokens
+            int tokenPos = 0, tokenCount = 0, previousTokenEnd = 0;
+            while ((tokenPos = tokenRegExp.indexIn(currentStr, tokenPos)) != -1) {
+                ++tokenCount;
+                int matchingLength = tokenRegExp.matchedLength();
+                // check if there is a string before the match of the token
+                if (tokenPos != previousTokenEnd) {
+                    // a string is present before the matched token
+                    // create a token with type Other and insert it
+                    Token otherToken;
+                    otherToken.type = Other;
+                    otherToken.startIdx = currentOffset + previousTokenEnd;
+                    otherToken.endIdx = currentOffset + tokenPos - 1; // because a new token starts at tokenPos
+                    // insert the token in the list
+                    result.append(otherToken);
+                }
+
+                // create a new token with type depending on the matched string
+                Token newToken;
+                QString matchingToken = currentStr.mid(tokenPos, matchingLength);
+                newToken.type = m_guessTokenFromString(matchingToken);
+                newToken.startIdx = currentOffset + tokenPos;
+                newToken.endIdx = newToken.startIdx + matchingLength;
+                previousTokenEnd = newToken.endIdx;
+                result.append(newToken);
+            }
+            // insert the separator in the token list, if there
+            // is another element in the list of separated
+            if (separatedStructureIt.hasNext()) {
+                Token separator;
+                separator.startIdx = currentOffset + currentStr.length();
+                separator.endIdx = separator.startIdx;
+                result.append(separator);
+            }
         }
         
         return result;
