@@ -37,6 +37,7 @@ CollectionOrganizerWidget::CollectionOrganizerWidget(CollectionDB * collection,
     : QWidget(parent, flags), m_collection(collection)
 {
     setupUi(this);
+    rootFolderUrlRequester->setMode(KFile::Directory | KFile::LocalOnly);
     m_computeDiskSpace();
 }
 
