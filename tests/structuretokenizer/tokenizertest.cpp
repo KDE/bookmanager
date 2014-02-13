@@ -19,11 +19,15 @@
 // Book Manager test includes
 #include "tokenizertest.h"
 
+// Book Manager includes
+#include "structuretokenizer.h"
+
 
 void TokenizerTest::testTokenize()
 {
-    // TODO test various strings
-    QVERIFY(true);
+    tokenizer::StructureTokenizer st;
+    TokenList_t result = st.tokenize("prova%title%token");
+    QVERIFY(result.size() == 3);
 }
 
 
