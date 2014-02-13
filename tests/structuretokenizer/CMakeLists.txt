@@ -1,5 +1,3 @@
-project(structuretokenizertest)
-
 find_package(KDE4 REQUIRED)
 find_package(Qt4 REQUIRED)
 
@@ -13,7 +11,6 @@ set(structuretokenizer_SRCS
 enable_testing()
 
 kde4_add_unit_test(structuretokenizertest
-    TESTNAME ksubmodule-structuretokenizertest
     ${structuretokenizer_SRCS}
 )
 

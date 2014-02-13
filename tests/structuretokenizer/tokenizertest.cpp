@@ -22,7 +22,8 @@
 
 void TokenizerTest::testTokenize()
 {
-    Q_VERIFY(true);
+    // TODO test various strings
+    QVERIFY(true);
 }
 
 
