@@ -17,6 +17,9 @@
 */
 
 
+#ifndef TOKENIZER_TEST_H
+#define TOKENIZER_TEST_H
+
 // Qt includes
 #include <QtTest>
 #include <QtCore>
@@ -27,3 +30,5 @@ class TokenizerTest : public QObject {
     private slots:
         void testTokenize();
 };
+
+#endif // TOKENIZER_TEST_H
