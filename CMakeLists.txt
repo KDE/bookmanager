@@ -13,6 +13,7 @@ add_subdirectory(doc)
 include_directories(${KDE4_INCLUDES} ${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(managerpart)
+add_subdirectory(tests)
 
 
 set(bookmanager_SRCS   
