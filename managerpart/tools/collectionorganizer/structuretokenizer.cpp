@@ -42,7 +42,6 @@ namespace tokenizer
 
     TokenList_t StructureTokenizer::tokenize(const QString & structure)
     {
-        // FIXME extensive testing of this method
         TokenList_t result;
 
         // first, split the structure using the directory separator,
@@ -53,14 +52,19 @@ namespace tokenizer
         QRegExp separatorRegExp("/");
         int pos = 0;
         while ((pos = separatorRegExp.indexIn(structure, pos)) != -1) {
-            separatorIdxList.append(pos);
+            // add 1 to the separator position, to go to the character following
+            // the separator
+            separatorIdxList.append(pos + 1);
             pos += separatorRegExp.matchedLength();
         }
         // split the structure according to directory separators
         QStringList separatedStructure = structure.split(separatorRegExp, QString::KeepEmptyParts);
         // print error message if this condition is not verified
         Q_ASSERT(separatedStructure.size() == separatorIdxList.size());
-        QRegExp tokenRegExp("%\\w%");
+        QRegExp tokenRegExp("(\%.+\%)");
+        // set minimal matching behaviour of the regexp, with default matching behaviour
+        // subsequent pairs of tokens
+        tokenRegExp.setMinimal(true);
         // QRegExp tokenListRegExp("(.*)(%(\\w)%(.*))*");
         QListIterator<int> separatorIdxIt(separatorIdxList);
         QStringListIterator separatedStructureIt(separatedStructure);
@@ -68,17 +72,17 @@ namespace tokenizer
             QString currentStr = separatedStructureIt.next();
             int currentOffset = separatorIdxIt.next();
             // try to find if there are predefined tokens
-            int tokenPos = 0, tokenCount = 0, previousTokenEnd = 0;
+            int tokenPos = 0, tokenCount = 0, previousTokenEnd = -1;
             while ((tokenPos = tokenRegExp.indexIn(currentStr, tokenPos)) != -1) {
                 ++tokenCount;
                 int matchingLength = tokenRegExp.matchedLength();
                 // check if there is a string before the match of the token
-                if (tokenPos != previousTokenEnd) {
+                if (tokenPos != previousTokenEnd + 1) {
                     // a string is present before the matched token
                     // create a token with type Other and insert it
                     Token otherToken;
                     otherToken.type = Other;
-                    otherToken.startIdx = currentOffset + previousTokenEnd;
+                    otherToken.startIdx = currentOffset + previousTokenEnd + 1;
                     otherToken.endIdx = currentOffset + tokenPos - 1; // because a new token starts at tokenPos
                     // insert the token in the list
                     result.append(otherToken);
@@ -89,14 +93,35 @@ namespace tokenizer
                 QString matchingToken = currentStr.mid(tokenPos, matchingLength);
                 newToken.type = m_guessTokenFromString(matchingToken);
                 newToken.startIdx = currentOffset + tokenPos;
-                newToken.endIdx = newToken.startIdx + matchingLength;
-                previousTokenEnd = newToken.endIdx;
+                newToken.endIdx = newToken.startIdx + matchingLength - 1;
                 result.append(newToken);
+
+                // move previousTokenEnd and tokenPos forward
+                previousTokenEnd = tokenPos + matchingLength - 1;
+                tokenPos += matchingLength;
+            }
+            // check if there is some text after the token
+            if (tokenCount > 0 && previousTokenEnd != currentStr.length() - 1) {
+                // create a new token with type Other
+                Token otherToken;
+                otherToken.type = Other;
+                otherToken.startIdx = currentOffset + previousTokenEnd + 1;
+                otherToken.endIdx = currentOffset + currentStr.length() - 1;
+                result.append(otherToken);
+            }
+            // if no predefined token was found, simply add a token with type Other
+            if (tokenCount == 0) {
+                Token otherToken;
+                otherToken.type = Other;
+                otherToken.startIdx = currentOffset;
+                otherToken.endIdx = currentOffset + currentStr.length() - 1;
+                result.append(otherToken);
             }
             // insert the separator in the token list, if there
             // is another element in the list of separated
             if (separatedStructureIt.hasNext()) {
                 Token separator;
+                separator.type = Separator;
                 separator.startIdx = currentOffset + currentStr.length();
                 separator.endIdx = separator.startIdx;
                 result.append(separator);
