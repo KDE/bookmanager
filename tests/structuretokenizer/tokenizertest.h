@@ -20,6 +20,9 @@
 #ifndef TOKENIZER_TEST_H
 #define TOKENIZER_TEST_H
 
+// Book Manager includes
+#include "structuretokenizer.h"
+
 // Qt includes
 #include <QtTest>
 #include <QtCore>
@@ -28,7 +31,13 @@
 class TokenizerTest : public QObject {
     Q_OBJECT
     private slots:
-        void testTokenize();
+        void testOtherTokens();
+        void testSeparators();
+        void testMixed();
+        void testMixedWithSeparators();
+
+    private:
+        tokenizer::StructureTokenizer st;
 };
 
 #endif // TOKENIZER_TEST_H

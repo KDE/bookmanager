@@ -19,17 +19,61 @@
 // Book Manager test includes
 #include "tokenizertest.h"
 
-// Book Manager includes
-#include "structuretokenizer.h"
 
-
-void TokenizerTest::testTokenize()
+void TokenizerTest::testOtherTokens()
 {
-    tokenizer::StructureTokenizer st;
-    TokenList_t result = st.tokenize("prova%title%token");
-    QVERIFY(result.size() == 3);
+    TokenList_t result = st.tokenize("other");
+    QVERIFY(result.size() == 1);
+
 }
 
+void TokenizerTest::testSeparators()
+{
+    TokenList_t result = st.tokenize("test/with/separators");
+    QVERIFY(result.size() == 5);
+    QVERIFY(result.at(0).type == tokenizer::Other);
+    QVERIFY(result.at(1).type == tokenizer::Separator);
+    QVERIFY(result.at(2).type == tokenizer::Other);
+    QVERIFY(result.at(3).type == tokenizer::Separator);
+    QVERIFY(result.at(4).type == tokenizer::Other);
+}
+
+void TokenizerTest::testMixed()
+{
+    TokenList_t result = st.tokenize("mixing%title%tokens_and_other");
+    QVERIFY(result.size() == 3);
+    QVERIFY(result.at(0).type == tokenizer::Other);
+    QVERIFY(result.at(1).type == tokenizer::Title);
+    QVERIFY(result.at(2).type == tokenizer::Other);
+    
+    result = st.tokenize("%Author%%author%%genre%");
+    QVERIFY(result.size() == 3);
+    QVERIFY(result.at(0).type == tokenizer::AuthorInitial);
+    QVERIFY(result.at(1).type == tokenizer::Author);
+    QVERIFY(result.at(2).type == tokenizer::Genre);
+
+    result = st.tokenize("othertext%title%%author%");
+    QVERIFY(result.size() == 3);
+    QVERIFY(result.at(0).type == tokenizer::Other);
+    QVERIFY(result.at(1).type == tokenizer::Title);
+    QVERIFY(result.at(2).type == tokenizer::Author);
+}
+
+void TokenizerTest::testMixedWithSeparators()
+{
+    TokenList_t result = st.tokenize("test/mixed/%title%with/separators/%author%");
+    QVERIFY(result.size() == 10);
+    QVERIFY(result.at(0).type == tokenizer::Other);
+    QVERIFY(result.at(1).type == tokenizer::Separator);
+    QVERIFY(result.at(2).type == tokenizer::Other);
+    QVERIFY(result.at(3).type == tokenizer::Separator);
+    QVERIFY(result.at(4).type == tokenizer::Title);
+    QVERIFY(result.at(5).type == tokenizer::Other);
+    QVERIFY(result.at(6).type == tokenizer::Separator);
+    QVERIFY(result.at(7).type == tokenizer::Other);
+    QVERIFY(result.at(8).type == tokenizer::Separator);
+    QVERIFY(result.at(9).type == tokenizer::Author);
+}
 
 QTEST_MAIN(TokenizerTest)
 #include "tokenizertest.moc"
