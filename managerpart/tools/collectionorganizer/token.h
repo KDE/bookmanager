@@ -21,6 +21,7 @@
 
 // Qt includes
 #include <qlist.h>
+#include <qstring.h>
 
 
 /**
@@ -54,6 +55,7 @@ namespace tokenizer
      */
     struct Token {
         Type type; /// type of the token
+        QString tkString; /// string of the token
         int startIdx; /// start index of token in the string
         int endIdx; /// end index of token in the string
     };

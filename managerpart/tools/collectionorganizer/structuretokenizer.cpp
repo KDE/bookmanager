@@ -84,6 +84,8 @@ namespace tokenizer
                     otherToken.type = Other;
                     otherToken.startIdx = currentOffset + previousTokenEnd + 1;
                     otherToken.endIdx = currentOffset + tokenPos - 1; // because a new token starts at tokenPos
+                    otherToken.tkString = structure.mid(otherToken.startIdx,
+                            otherToken.endIdx - otherToken.startIdx + 1);
                     // insert the token in the list
                     result.append(otherToken);
                 }
@@ -94,6 +96,8 @@ namespace tokenizer
                 newToken.type = m_guessTokenFromString(matchingToken);
                 newToken.startIdx = currentOffset + tokenPos;
                 newToken.endIdx = newToken.startIdx + matchingLength - 1;
+                newToken.tkString = structure.mid(newToken.startIdx,
+                        newToken.endIdx - newToken.startIdx + 1);
                 result.append(newToken);
 
                 // move previousTokenEnd and tokenPos forward
@@ -107,6 +111,8 @@ namespace tokenizer
                 otherToken.type = Other;
                 otherToken.startIdx = currentOffset + previousTokenEnd + 1;
                 otherToken.endIdx = currentOffset + currentStr.length() - 1;
+                otherToken.tkString = structure.mid(otherToken.startIdx,
+                        otherToken.endIdx - otherToken.startIdx + 1);
                 result.append(otherToken);
             }
             // if no predefined token was found, simply add a token with type Other
@@ -115,6 +121,8 @@ namespace tokenizer
                 otherToken.type = Other;
                 otherToken.startIdx = currentOffset;
                 otherToken.endIdx = currentOffset + currentStr.length() - 1;
+                otherToken.tkString = structure.mid(otherToken.startIdx,
+                        otherToken.endIdx - otherToken.startIdx + 1);
                 result.append(otherToken);
             }
             // insert the separator in the token list, if there
@@ -124,6 +132,8 @@ namespace tokenizer
                 separator.type = Separator;
                 separator.startIdx = currentOffset + currentStr.length();
                 separator.endIdx = separator.startIdx;
+                separator.tkString = structure.mid(separator.startIdx,
+                        separator.endIdx - separator.startIdx + 1);
                 result.append(separator);
             }
         }
