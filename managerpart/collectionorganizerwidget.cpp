@@ -29,6 +29,7 @@
 
 // Qt includes
 #include <qdir.h>
+#include <QRegExpValidator>
 
 
 CollectionOrganizerWidget::CollectionOrganizerWidget(CollectionDB * collection,
@@ -38,6 +39,15 @@ CollectionOrganizerWidget::CollectionOrganizerWidget(CollectionDB * collection,
 {
     setupUi(this);
     rootFolderUrlRequester->setMode(KFile::Directory | KFile::LocalOnly);
+    
+    // set regular expression validator for structure line edit
+    //QRegExp structureRegExp;
+    //QString structurePattern = "(.+|.*(\%.+\%.*)+)(/(.+|.*(\%.+\%.*)+))";
+    //structureRegExp.setPattern(structurePattern);
+    //structureRegExp.setMinimal(true);
+    //QRegExpValidator * structureValidator = new QRegExpValidator(structureRegExp, this);
+    //structureLineEdit->setValidator(structureValidator);
+
     m_computeDiskSpace();
 }
 
@@ -64,6 +74,9 @@ void CollectionOrganizerWidget::organizeCollection()
     }
     // initialize CollectionOrganizer object
     CollectionOrganizer organizer(m_collection, this);
+    // set root folder and collection structure
+    organizer.setRootFolderUrl(rootFolderUrl);
+    organizer.setCollectionStructure(structureLineEdit->text());
     organizer.organizeCollection();
 }
 

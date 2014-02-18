@@ -19,6 +19,7 @@
 // Book Manager includes
 #include "collectionorganizer.h"
 #include "collectiondb.h"
+#include "structuretokenizer.h"
 
 
 CollectionOrganizer::CollectionOrganizer (CollectionDB * collectionDb,
@@ -37,6 +38,14 @@ CollectionOrganizer::~CollectionOrganizer ()
 
 void CollectionOrganizer::organizeCollection()
 {
+    // create structure tokenizer
+    tokenizer::StructureTokenizer st;
+    // tokenize the structure string
+    TokenList_t tokenList = st.tokenize(m_collectionStructure);
+    tokenizer::Token separatorTemplateToken;
+    separatorTemplateToken.type == tokenizer::Separator;
+    // level of depth of filename inside the folder structure
+    int nestingLevel = tokenList.count(separatorTemplateToken);
     // TODO
 }
 
