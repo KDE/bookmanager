@@ -3,6 +3,8 @@ set(collectionorganizer_SRCS
     collectionorganizer.cpp
     structuretokenizer.h
     structuretokenizer.cpp
+    token.h
+    token.cpp
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/managerpart)

@@ -58,6 +58,15 @@ namespace tokenizer
         QString tkString; /// string of the token
         int startIdx; /// start index of token in the string
         int endIdx; /// end index of token in the string
+        
+        /**
+         * @brief Overloading of == operator
+         *
+         * @param other Token to be compared
+         *
+         * @return True if \p other token has the same type
+         */
+        bool operator==(const Token & other) const;
     };
 }
 
