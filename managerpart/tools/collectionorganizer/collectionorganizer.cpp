@@ -19,7 +19,12 @@
 // Book Manager includes
 #include "collectionorganizer.h"
 #include "collectiondb.h"
+#include "copycollectionworker.h"
 #include "structuretokenizer.h"
+
+// Qt includes
+#include <qthread.h>
+#include <qtimer.h>
 
 
 CollectionOrganizer::CollectionOrganizer (CollectionDB * collectionDb,
@@ -42,11 +47,19 @@ void CollectionOrganizer::organizeCollection()
     tokenizer::StructureTokenizer st;
     // tokenize the structure string
     TokenList_t tokenList = st.tokenize(m_collectionStructure);
-    tokenizer::Token separatorTemplateToken;
-    separatorTemplateToken.type == tokenizer::Separator;
-    // level of depth of filename inside the folder structure
-    int nestingLevel = tokenList.count(separatorTemplateToken);
-    // TODO
+    // TODO check if collection is a valid collection
+    CopyCollectionWorker * copyCollectionWorker = new CopyCollectionWorker(m_collection, this);
+    copyCollectionWorker->setStructureStr(m_collectionStructure);
+    copyCollectionWorker->setRootFolderUrl(m_rootFolderUrl);
+    copyCollectionWorker->setTokenList(tokenList);
+    // TODO connect signals and slot to update the view through a progress bar
+    // create a new thread and move the worker to that thread
+    QThread * copyCollectionThread = new QThread(this);
+    copyCollectionWorker->moveToThread(copyCollectionThread);
+    // start thread
+    copyCollectionThread->start();
+    // start copy method with a single shot timer
+    QTimer::singleShot(0, copyCollectionWorker, SLOT(copyCollection()));
 }
 
 
