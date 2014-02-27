@@ -27,6 +27,8 @@
 
 
 class CollectionDB;
+class QThread;
+class CopyCollectionWorker;
 
 class CollectionOrganizer : public QObject {
 public:
@@ -43,10 +45,17 @@ public:
     void setRootFolderUrl(const KUrl & url);
     void setCollectionStructure(const QString & structure);
 
+private slots:
+    void bookCompleted(const QString & title);
+    void copyFinished();
+
 private:
     CollectionDB * m_collection;
     KUrl m_rootFolderUrl;
     QString m_collectionStructure;
+
+    QThread * m_copyCollectionThread;
+    CopyCollectionWorker * m_copyCollectionWorker;
 };
 
 #endif // COLLECTION_ORGANIZER_H
