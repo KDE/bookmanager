@@ -58,10 +58,12 @@ void CollectionOrganizer::organizeCollection()
     // create a new thread and move the worker to that thread
     m_copyCollectionThread = new QThread;
     m_copyCollectionWorker->moveToThread(m_copyCollectionThread);
-    connect(m_copyCollectionWorker, SIGNAL(bookCopied(QString)),
-            this, SLOT(bookCompleted(QString)), Qt::QueuedConnection);
+    connect(m_copyCollectionWorker, SIGNAL(bookCopied(const QString &, int)),
+            this, SIGNAL(bookCopied(const QString &, int)), Qt::QueuedConnection);
     connect(m_copyCollectionThread, SIGNAL(finished()),
             this, SLOT(copyFinished()));
+    connect(m_copyCollectionWorker, SIGNAL(copyFinished()),
+            this, SIGNAL(organizationCompleted()));
     connect(m_copyCollectionWorker, SIGNAL(copyFinished()), m_copyCollectionThread, SLOT(quit()));
     connect(m_copyCollectionThread, SIGNAL(started()),
             m_copyCollectionWorker, SLOT(copyCollection()));
@@ -97,12 +99,6 @@ void CollectionOrganizer::setCollectionStructure(const QString & structure)
 
 
 // private slots
-void CollectionOrganizer::bookCompleted(QString bookTitle)
-{
-    // TODO update progress bar
-}
-
-
 void CollectionOrganizer::copyFinished()
 {
     // TODO update progress bar

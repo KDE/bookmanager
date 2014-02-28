@@ -99,7 +99,7 @@ class CopyCollectionWorker : public QObject {
         void setCollectionDB(CollectionDB * collectionDB);
 
     signals:
-        void bookCopied(QString);
+        void bookCopied(const QString &, int);
         void copyFinished();
 
     public slots:

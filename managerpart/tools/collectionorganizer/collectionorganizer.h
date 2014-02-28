@@ -47,10 +47,10 @@ public:
     void setCollectionStructure(const QString & structure);
     
 signals:
+    void bookCopied(const QString &, int);
     void organizationCompleted();
 
 public slots:
-    void bookCompleted(QString);
     void copyFinished();
 
 private:

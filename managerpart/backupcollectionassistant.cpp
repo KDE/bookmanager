@@ -23,6 +23,7 @@
 
 // Qt includes
 #include <qcheckbox.h>
+#include <qprogressbar.h>
 
 // KDE includes
 #include <klocalizedstring.h>
@@ -79,6 +80,10 @@ OrganizeCollectionPage::OrganizeCollectionPage(CollectionDB * collection,
     mainLayout->addWidget(m_introductionLabel);
     
     m_collectionOrganizerWidget = new CollectionOrganizerWidget(m_collection, this);
+    connect(m_collectionOrganizerWidget, SIGNAL(bookCopied(const QString &, int)),
+            this, SLOT(updateGUI(const QString &, int)));
+    connect(m_collectionOrganizerWidget, SIGNAL(collectionOrganizationCompleted()),
+            this, SLOT(organizationCompleted()));
 
     mainLayout->addWidget(m_collectionOrganizerWidget);
 
@@ -97,8 +102,21 @@ OrganizeCollectionPage::OrganizeCollectionPage(CollectionDB * collection,
     connect(m_organizeCollectionPushButton, SIGNAL(clicked()), SLOT(organizeCollectionClicked()));
     
     organizeCollectionLayout->addWidget(m_organizeCollectionPushButton);
+
+    m_progressContainerWidget = new QWidget;
+    QVBoxLayout * progressContainerLayout = new QVBoxLayout;
+    m_organizationProgressBar = new QProgressBar;
+    m_currentBookLabel = new QLabel;
+    m_organizationProgressBar->setValue(0);
+    progressContainerLayout->addWidget(m_currentBookLabel);
+    progressContainerLayout->addWidget(m_organizationProgressBar);
+    m_progressContainerWidget->setLayout(progressContainerLayout);
+    // hide the progress container widget
+    m_progressContainerWidget->hide();
+
     organizeCollectionLayout->addStretch();
     mainLayout->addLayout(organizeCollectionLayout);
+    mainLayout->addWidget(m_progressContainerWidget);
 
     setLayout(mainLayout);
 }
@@ -118,8 +136,24 @@ void OrganizeCollectionPage::collectionOrganizedClicked(bool checked)
 }
 
 
+void OrganizeCollectionPage::updateGUI(const QString & book, int percentage)
+{
+    m_organizationProgressBar->setValue(percentage);
+    m_currentBookLabel->setText(book);
+}
+
+
+void OrganizeCollectionPage::organizationCompleted()
+{
+    // ensure the progress bar is full
+    m_organizationProgressBar->setValue(100);
+}
+
+
 void OrganizeCollectionPage::organizeCollectionClicked()
 {
+    // show the progress widget
+    m_progressContainerWidget->show();
     // call the collection organizer
     m_collectionOrganizerWidget->organizeCollection();
 }

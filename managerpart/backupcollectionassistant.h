@@ -33,6 +33,7 @@ class OrganizeCollectionPage;
 class CollectionOrganizerWidget;
 class QLabel;
 class QCheckBox;
+class QProgressBar;
 class QPushButton;
 class KPageWidgetItem;
 
@@ -78,6 +79,8 @@ public:
     
 private slots:
     void collectionOrganizedClicked(bool checked);
+    void updateGUI(const QString & book, int percentage);
+    void organizationCompleted();
     void organizeCollectionClicked();
 
 private:
@@ -86,6 +89,9 @@ private:
     QLabel * m_introductionLabel;
     QCheckBox * m_organizedCheckBox;
     QPushButton * m_organizeCollectionPushButton;
+    QProgressBar * m_organizationProgressBar;
+    QLabel * m_currentBookLabel;
+    QWidget * m_progressContainerWidget;
 
     CollectionDB * m_collection;
 };

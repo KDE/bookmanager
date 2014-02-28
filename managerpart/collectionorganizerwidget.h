@@ -40,9 +40,12 @@ public:
 
     void organizeCollection();
 
+signals:
+    void bookCopied(const QString &, int);
+    void collectionOrganizationCompleted();
+
 private slots:
     void sizeComputed(quint64);
-    void collectionOrganizationCompleted();
 
 private:
     void m_computeDiskSpace();

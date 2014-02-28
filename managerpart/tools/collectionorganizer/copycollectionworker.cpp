@@ -91,7 +91,8 @@ void CopyCollectionWorker::copyCollection()
     };
     for (int i = 0; i < 7; ++i) {
         usleep(500000);
-        emit bookCopied(titles[i]);
+        float percentage = (i + 1) / 7.0 * 100;
+        emit bookCopied(titles[i], percentage);
     }
     emit copyFinished();
 }

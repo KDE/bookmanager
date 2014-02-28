@@ -77,7 +77,9 @@ void CollectionOrganizerWidget::organizeCollection()
     if (!m_collectionOrganizer) {
         m_collectionOrganizer = new CollectionOrganizer(m_collection, this);
         connect(m_collectionOrganizer, SIGNAL(organizationCompleted()),
-                this, SLOT(collectionOrganizationCompleted()));
+                this, SIGNAL(collectionOrganizationCompleted()));
+        connect(m_collectionOrganizer, SIGNAL(bookCopied(const QString &, int)),
+                this, SIGNAL(bookCopied(const QString &, int)));
     }
     // set root folder and collection structure
     m_collectionOrganizer->setRootFolderUrl(rootFolderUrl);
@@ -99,12 +101,6 @@ void CollectionOrganizerWidget::sizeComputed(quint64 size)
     m_remainingSpace = m_availableSpace - m_requiredSpace;
     QString remainingSpaceStr = locale->formatByteSize(m_remainingSpace);
     afterProcessValueLabel->setText(remainingSpaceStr);
-}
-
-
-void CollectionOrganizerWidget::collectionOrganizationCompleted()
-{
-    KMessageBox::information(0, i18n("The collection has been organized correctly."));
 }
 
 
