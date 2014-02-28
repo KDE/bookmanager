@@ -19,6 +19,7 @@
 // Book Manager includes
 #include "copycollectionworker.h"
 
+#include <unistd.h>
 
 CopyCollectionWorker::CopyCollectionWorker(CollectionDB * collectionDB,
         QObject * parent)
@@ -78,6 +79,20 @@ void CopyCollectionWorker::setCollectionDB(CollectionDB * collectionDB)
 
 void CopyCollectionWorker::copyCollection()
 {
-    // TODO
+    // dummy method, sleep and emit some signals
+    QString titles[7] = {
+        "Book1",
+        "Book2",
+        "Book3",
+        "Book4",
+        "Book5",
+        "Book6",
+        "Book7"
+    };
+    for (int i = 0; i < 7; ++i) {
+        usleep(500000);
+        emit bookCopied(titles[i]);
+    }
+    emit copyFinished();
 }
 

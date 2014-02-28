@@ -31,6 +31,7 @@ class QThread;
 class CopyCollectionWorker;
 
 class CollectionOrganizer : public QObject {
+    Q_OBJECT
 public:
     CollectionOrganizer (CollectionDB * collectionDb = 0, QObject * parent = 0);
     virtual ~CollectionOrganizer ();
@@ -44,9 +45,12 @@ public:
     // setters
     void setRootFolderUrl(const KUrl & url);
     void setCollectionStructure(const QString & structure);
+    
+signals:
+    void organizationCompleted();
 
-private slots:
-    void bookCompleted(const QString & title);
+public slots:
+    void bookCompleted(QString);
     void copyFinished();
 
 private:

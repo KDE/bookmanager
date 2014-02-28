@@ -27,6 +27,7 @@
 
 // Forward declarations
 class CollectionDB;
+class CollectionOrganizer;
 
 class CollectionOrganizerWidget : public QWidget, private Ui::CollectionOrganizerWidget {
     Q_OBJECT
@@ -41,10 +42,13 @@ public:
 
 private slots:
     void sizeComputed(quint64);
+    void collectionOrganizationCompleted();
 
 private:
     void m_computeDiskSpace();
     CollectionDB * m_collection;
+    
+    CollectionOrganizer * m_collectionOrganizer;
 
     quint64 m_requiredSpace;
     quint64 m_availableSpace;

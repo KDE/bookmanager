@@ -35,7 +35,7 @@
 CollectionOrganizerWidget::CollectionOrganizerWidget(CollectionDB * collection,
         QWidget * parent,
         Qt::WindowFlags flags)
-    : QWidget(parent, flags), m_collection(collection)
+    : QWidget(parent, flags), m_collection(collection), m_collectionOrganizer(0)
 {
     setupUi(this);
     rootFolderUrlRequester->setMode(KFile::Directory | KFile::LocalOnly);
@@ -54,7 +54,8 @@ CollectionOrganizerWidget::CollectionOrganizerWidget(CollectionDB * collection,
 
 CollectionOrganizerWidget::~CollectionOrganizerWidget()
 {
-
+    // WARNING move deletion into the slot collectionOrganizationCompleted()?
+    delete m_collectionOrganizer;
 }
 
 
@@ -72,13 +73,18 @@ void CollectionOrganizerWidget::organizeCollection()
                     "local file"), i18n("Invalid root folder"));
         return;
     }
-    // initialize CollectionOrganizer object
-    CollectionOrganizer organizer(m_collection, this);
+    // initialize CollectionOrganizer object if necessary
+    if (!m_collectionOrganizer) {
+        m_collectionOrganizer = new CollectionOrganizer(m_collection, this);
+        connect(m_collectionOrganizer, SIGNAL(organizationCompleted()),
+                this, SLOT(collectionOrganizationCompleted()));
+    }
     // set root folder and collection structure
-    organizer.setRootFolderUrl(rootFolderUrl);
-    organizer.setCollectionStructure(structureLineEdit->text());
-    organizer.organizeCollection();
+    m_collectionOrganizer->setRootFolderUrl(rootFolderUrl);
+    m_collectionOrganizer->setCollectionStructure(structureLineEdit->text());
+    m_collectionOrganizer->organizeCollection();
 }
+
 
 // private slots
 void CollectionOrganizerWidget::sizeComputed(quint64 size)
@@ -93,6 +99,12 @@ void CollectionOrganizerWidget::sizeComputed(quint64 size)
     m_remainingSpace = m_availableSpace - m_requiredSpace;
     QString remainingSpaceStr = locale->formatByteSize(m_remainingSpace);
     afterProcessValueLabel->setText(remainingSpaceStr);
+}
+
+
+void CollectionOrganizerWidget::collectionOrganizationCompleted()
+{
+    KMessageBox::information(0, i18n("The collection has been organized correctly."));
 }
 
 

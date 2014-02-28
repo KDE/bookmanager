@@ -91,9 +91,22 @@ class CopyCollectionWorker : public QObject {
          * @param rootFolderUrl The root url of the new collection
          */
         void setRootFolderUrl(const KUrl & rootFolderUrl);
+        /**
+         * @brief This method sets the pointer to the collection
+         *
+         * @param collectionDB The pointer to the collection object
+         */
         void setCollectionDB(CollectionDB * collectionDB);
 
+    signals:
+        void bookCopied(QString);
+        void copyFinished();
+
     public slots:
+        /**
+         * @brief This slot handles the copying of the collection to the
+         * new location
+         */
         void copyCollection();
 
     private:

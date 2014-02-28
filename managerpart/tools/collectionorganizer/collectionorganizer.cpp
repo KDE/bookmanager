@@ -24,7 +24,6 @@
 
 // Qt includes
 #include <qthread.h>
-#include <qtimer.h>
 
 
 CollectionOrganizer::CollectionOrganizer (CollectionDB * collectionDb,
@@ -50,18 +49,24 @@ void CollectionOrganizer::organizeCollection()
     // TODO check if collection is a valid collection
     // copyCollectionWorker is without a parent, because objects with parent can't be moved to
     // another thread
+    // Despite being without a parent, the worker and the thread that manages it are deleted
+    // when the organization is finished
     m_copyCollectionWorker = new CopyCollectionWorker(m_collection);
     m_copyCollectionWorker->setStructureStr(m_collectionStructure);
     m_copyCollectionWorker->setRootFolderUrl(m_rootFolderUrl);
     m_copyCollectionWorker->setTokenList(tokenList);
-    // TODO connect signals and slot to update the view through a progress bar
     // create a new thread and move the worker to that thread
     m_copyCollectionThread = new QThread;
     m_copyCollectionWorker->moveToThread(m_copyCollectionThread);
+    connect(m_copyCollectionWorker, SIGNAL(bookCopied(QString)),
+            this, SLOT(bookCompleted(QString)), Qt::QueuedConnection);
+    connect(m_copyCollectionThread, SIGNAL(finished()),
+            this, SLOT(copyFinished()));
+    connect(m_copyCollectionWorker, SIGNAL(copyFinished()), m_copyCollectionThread, SLOT(quit()));
+    connect(m_copyCollectionThread, SIGNAL(started()),
+            m_copyCollectionWorker, SLOT(copyCollection()));
     // start thread
     m_copyCollectionThread->start();
-    // start copy method with a single shot timer
-    QTimer::singleShot(0, m_copyCollectionWorker, SLOT(copyCollection()));
 }
 
 
@@ -92,7 +97,7 @@ void CollectionOrganizer::setCollectionStructure(const QString & structure)
 
 
 // private slots
-void CollectionOrganizer::bookCompleted(const QString & title)
+void CollectionOrganizer::bookCompleted(QString bookTitle)
 {
     // TODO update progress bar
 }
@@ -103,4 +108,6 @@ void CollectionOrganizer::copyFinished()
     // TODO update progress bar
     m_copyCollectionWorker->deleteLater();
     m_copyCollectionThread->deleteLater();
+    // signal the widget that the collection has been organized
+    emit organizationCompleted();
 }
