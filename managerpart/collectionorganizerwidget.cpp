@@ -80,6 +80,8 @@ void CollectionOrganizerWidget::organizeCollection()
                 this, SIGNAL(collectionOrganizationCompleted()));
         connect(m_collectionOrganizer, SIGNAL(bookCopied(const QString &, int)),
                 this, SIGNAL(bookCopied(const QString &, int)));
+        connect(m_collectionOrganizer, SIGNAL(organizationError(const QString &)),
+                this, SLOT(collectionOrganizationError(const QString &)));
     }
     // set root folder and collection structure
     m_collectionOrganizer->setRootFolderUrl(rootFolderUrl);
@@ -101,6 +103,12 @@ void CollectionOrganizerWidget::sizeComputed(quint64 size)
     m_remainingSpace = m_availableSpace - m_requiredSpace;
     QString remainingSpaceStr = locale->formatByteSize(m_remainingSpace);
     afterProcessValueLabel->setText(remainingSpaceStr);
+}
+
+
+void CollectionOrganizerWidget::collectionOrganizationError(const QString & error)
+{
+    KMessageBox::error(0, error, i18n("Error while copying"));
 }
 
 

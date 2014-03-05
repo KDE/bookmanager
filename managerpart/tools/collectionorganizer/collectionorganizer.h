@@ -49,6 +49,7 @@ public:
 signals:
     void bookCopied(const QString &, int);
     void organizationCompleted();
+    void organizationError(const QString &);
 
 public slots:
     void copyFinished();

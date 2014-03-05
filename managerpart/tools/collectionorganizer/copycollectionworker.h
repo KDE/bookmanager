@@ -83,6 +83,7 @@ class CopyCollectionWorker : public QObject {
         void setRootFolderUrl(const KUrl & rootFolderUrl);
     signals:
         void bookCopied(const QString &, int);
+        void copyError(const QString &);
         void copyFinished();
 
     public slots:
