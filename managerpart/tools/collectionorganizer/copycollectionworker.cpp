@@ -21,9 +21,8 @@
 
 #include <unistd.h>
 
-CopyCollectionWorker::CopyCollectionWorker(CollectionDB * collectionDB,
-        QObject * parent)
-    : QObject(parent), m_collectionDB(collectionDB)
+CopyCollectionWorker::CopyCollectionWorker(QObject * parent)
+    : QObject(parent)
 {
 
 }
@@ -47,12 +46,6 @@ KUrl CopyCollectionWorker::getRootFolderUrl() const
 }
 
 
-CollectionDB * CopyCollectionWorker::getCollectionDB() const
-{
-    return m_collectionDB;
-}
-
-
 void CopyCollectionWorker::setTokenList(const TokenList_t & tokenList)
 {
     m_tokenList = tokenList;
@@ -68,12 +61,6 @@ void CopyCollectionWorker::setStructureStr(const QString & structureStr)
 void CopyCollectionWorker::setRootFolderUrl(const KUrl & rootFolderUrl)
 {
     m_rootFolderUrl = rootFolderUrl;
-}
-
-
-void CopyCollectionWorker::setCollectionDB(CollectionDB * collectionDB)
-{
-    m_collectionDB = collectionDB;
 }
 
 

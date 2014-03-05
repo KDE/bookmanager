@@ -29,8 +29,6 @@
 #include <qobject.h>
 
 
-class CollectionDB;
-
 /**
  * @class CopyCollectionWorker
  * @brief This class represents the worker code that copies the
@@ -45,8 +43,7 @@ class CopyCollectionWorker : public QObject {
          * @param collectionDB pointer to the collection database class
          * @param parent the parent of this object
          */
-        explicit CopyCollectionWorker(CollectionDB * collectionDB = 0,
-                QObject * parent = 0);
+        explicit CopyCollectionWorker(QObject * parent = 0);
 
         /**
          * @brief This method returns the list of tokens
@@ -67,13 +64,6 @@ class CopyCollectionWorker : public QObject {
          */
         KUrl getRootFolderUrl() const;
         /**
-         * @brief This method returns the pointer to the collection database
-         *
-         * @return Pointer to the collection database
-         */
-        CollectionDB * getCollectionDB() const;
-
-        /**
          * @brief This method sets the list of tokens
          *
          * @param tokenList The list of token to be set in the object
@@ -91,13 +81,6 @@ class CopyCollectionWorker : public QObject {
          * @param rootFolderUrl The root url of the new collection
          */
         void setRootFolderUrl(const KUrl & rootFolderUrl);
-        /**
-         * @brief This method sets the pointer to the collection
-         *
-         * @param collectionDB The pointer to the collection object
-         */
-        void setCollectionDB(CollectionDB * collectionDB);
-
     signals:
         void bookCopied(const QString &, int);
         void copyFinished();
@@ -113,7 +96,6 @@ class CopyCollectionWorker : public QObject {
         TokenList_t m_tokenList;
         QString m_structureStr;
         KUrl m_rootFolderUrl;
-        CollectionDB * m_collectionDB;
 };
 
 #endif // COPY_COLLECTION_WORKER_H
