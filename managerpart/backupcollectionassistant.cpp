@@ -171,4 +171,10 @@ void OrganizeCollectionPage::organizeCollectionClicked()
 void OrganizeCollectionPage::stopOrganizationProcess()
 {
     m_collectionOrganizerWidget->stopOrganization();
+    // process pending events (signals coming from the worker thread
+    // before disabling and resetting widgets
+    QCoreApplication::processEvents();
+    m_progressContainerWidget->setEnabled(false);
+    // set text of label to an empty string
+    m_currentBookLabel->setText(QString());
 }
