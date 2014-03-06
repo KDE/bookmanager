@@ -37,6 +37,7 @@ public:
     virtual ~CollectionOrganizer ();
 
     void organizeCollection();
+    void stopOrganization();
 
     // getters
     KUrl getRootFolderUrl() const;

@@ -39,6 +39,7 @@ public:
     virtual ~CollectionOrganizerWidget ();
 
     void organizeCollection();
+    void stopOrganization();
 
 signals:
     void bookCopied(const QString &, int);

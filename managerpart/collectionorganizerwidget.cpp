@@ -92,6 +92,14 @@ void CollectionOrganizerWidget::organizeCollection()
 }
 
 
+void CollectionOrganizerWidget::stopOrganization()
+{
+    if (m_collectionOrganizer) {
+        m_collectionOrganizer->stopOrganization();
+    }
+}
+
+
 // private slots
 void CollectionOrganizerWidget::sizeComputed(quint64 size)
 {

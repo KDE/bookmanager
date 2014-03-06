@@ -112,6 +112,9 @@ OrganizeCollectionPage::OrganizeCollectionPage(CollectionDB * collection,
     m_currentBookLabel = new QLabel;
     m_organizationProgressBar->setValue(0);
     m_cancelPushButton->setIcon(KIcon("dialog-cancel.png"));
+
+    connect(m_cancelPushButton, SIGNAL(clicked()),
+            SLOT(stopOrganizationProcess()));
     progressContainerLayout->addWidget(m_currentBookLabel);
     progressBarButtonLayout->addWidget(m_organizationProgressBar);
     progressBarButtonLayout->addWidget(m_cancelPushButton);
@@ -162,4 +165,10 @@ void OrganizeCollectionPage::organizeCollectionClicked()
     m_progressContainerWidget->show();
     // call the collection organizer
     m_collectionOrganizerWidget->organizeCollection();
+}
+
+
+void OrganizeCollectionPage::stopOrganizationProcess()
+{
+    m_collectionOrganizerWidget->stopOrganization();
 }

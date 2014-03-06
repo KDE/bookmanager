@@ -28,7 +28,8 @@
 
 CollectionOrganizer::CollectionOrganizer (CollectionDB * collectionDb,
         QObject * parent)
-    : QObject (parent), m_collection(collectionDb)
+    : QObject (parent), m_collection(collectionDb), m_copyCollectionWorker(0),
+    m_copyCollectionThread(0)
 {
 
 }
@@ -59,11 +60,11 @@ void CollectionOrganizer::organizeCollection()
     m_copyCollectionThread = new QThread;
     m_copyCollectionWorker->moveToThread(m_copyCollectionThread);
     connect(m_copyCollectionWorker, SIGNAL(bookCopied(const QString &, int)),
-            this, SIGNAL(bookCopied(const QString &, int)), Qt::QueuedConnection);
-    connect(m_copyCollectionThread, SIGNAL(finished()),
-            this, SLOT(copyFinished()));
+            SIGNAL(bookCopied(const QString &, int)), Qt::QueuedConnection);
+    connect(m_copyCollectionWorker, SIGNAL(copyFinished()),
+            SLOT(copyFinished()));
     connect(m_copyCollectionWorker, SIGNAL(copyError(const QString &)),
-            this, SIGNAL(organizationError(const QString &)));
+            SIGNAL(organizationError(const QString &)));
     connect(m_copyCollectionWorker, SIGNAL(stopped()),
             m_copyCollectionThread, SLOT(quit()));
     connect(m_copyCollectionWorker, SIGNAL(copyFinished()),
@@ -72,6 +73,14 @@ void CollectionOrganizer::organizeCollection()
             m_copyCollectionWorker, SLOT(copyCollection()));
     // start thread
     m_copyCollectionThread->start();
+}
+
+
+void CollectionOrganizer::stopOrganization()
+{
+    if (m_copyCollectionWorker) {
+        m_copyCollectionWorker->stop();
+    }
 }
 
 

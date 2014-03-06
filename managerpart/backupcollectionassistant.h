@@ -82,6 +82,7 @@ private slots:
     void updateGUI(const QString & book, int percentage);
     void organizationCompleted();
     void organizeCollectionClicked();
+    void stopOrganizationProcess();
 
 private:
     CollectionOrganizerWidget * m_collectionOrganizerWidget;
