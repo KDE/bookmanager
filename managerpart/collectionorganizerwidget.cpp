@@ -78,6 +78,8 @@ void CollectionOrganizerWidget::organizeCollection()
         m_collectionOrganizer = new CollectionOrganizer(m_collection, this);
         connect(m_collectionOrganizer, SIGNAL(organizationCompleted()),
                 this, SIGNAL(collectionOrganizationCompleted()));
+        connect(m_collectionOrganizer, SIGNAL(organizationCompleted()),
+                this, SLOT(organizationCompleted()));
         connect(m_collectionOrganizer, SIGNAL(bookCopied(const QString &, int)),
                 this, SIGNAL(bookCopied(const QString &, int)));
         connect(m_collectionOrganizer, SIGNAL(organizationError(const QString &)),
@@ -109,6 +111,12 @@ void CollectionOrganizerWidget::sizeComputed(quint64 size)
 void CollectionOrganizerWidget::collectionOrganizationError(const QString & error)
 {
     KMessageBox::error(0, error, i18n("Error while copying"));
+}
+
+
+void CollectionOrganizerWidget::organizationCompleted()
+{
+    KMessageBox::information(0, i18n("Organization of the collection completed successfully"));
 }
 
 

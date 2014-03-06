@@ -51,7 +51,7 @@ void CollectionOrganizer::organizeCollection()
     // another thread
     // Despite being without a parent, the worker and the thread that manages it are deleted
     // when the organization is finished
-    m_copyCollectionWorker = new CopyCollectionWorker(m_collection);
+    m_copyCollectionWorker = new CopyCollectionWorker;
     m_copyCollectionWorker->setStructureStr(m_collectionStructure);
     m_copyCollectionWorker->setRootFolderUrl(m_rootFolderUrl);
     m_copyCollectionWorker->setTokenList(tokenList);
@@ -62,11 +62,12 @@ void CollectionOrganizer::organizeCollection()
             this, SIGNAL(bookCopied(const QString &, int)), Qt::QueuedConnection);
     connect(m_copyCollectionThread, SIGNAL(finished()),
             this, SLOT(copyFinished()));
-    connect(m_copyCollectionWorker, SIGNAL(copyFinished()),
-            this, SIGNAL(organizationCompleted()));
     connect(m_copyCollectionWorker, SIGNAL(copyError(const QString &)),
             this, SIGNAL(organizationError(const QString &)));
-    connect(m_copyCollectionWorker, SIGNAL(copyFinished()), m_copyCollectionThread, SLOT(quit()));
+    connect(m_copyCollectionWorker, SIGNAL(stopped()),
+            m_copyCollectionThread, SLOT(quit()));
+    connect(m_copyCollectionWorker, SIGNAL(copyFinished()),
+            m_copyCollectionThread, SLOT(quit()));
     connect(m_copyCollectionThread, SIGNAL(started()),
             m_copyCollectionWorker, SLOT(copyCollection()));
     // start thread
@@ -103,7 +104,6 @@ void CollectionOrganizer::setCollectionStructure(const QString & structure)
 // private slots
 void CollectionOrganizer::copyFinished()
 {
-    // TODO update progress bar
     m_copyCollectionWorker->deleteLater();
     m_copyCollectionThread->deleteLater();
     // signal the widget that the collection has been organized

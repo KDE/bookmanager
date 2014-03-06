@@ -23,6 +23,7 @@
 
 // Qt includes
 #include <qcheckbox.h>
+#include <QHBoxLayout>
 #include <qprogressbar.h>
 
 // KDE includes
@@ -105,11 +106,16 @@ OrganizeCollectionPage::OrganizeCollectionPage(CollectionDB * collection,
 
     m_progressContainerWidget = new QWidget;
     QVBoxLayout * progressContainerLayout = new QVBoxLayout;
+    QHBoxLayout * progressBarButtonLayout = new QHBoxLayout;
     m_organizationProgressBar = new QProgressBar;
+    m_cancelPushButton = new QPushButton;
     m_currentBookLabel = new QLabel;
     m_organizationProgressBar->setValue(0);
+    m_cancelPushButton->setIcon(KIcon("dialog-cancel.png"));
     progressContainerLayout->addWidget(m_currentBookLabel);
-    progressContainerLayout->addWidget(m_organizationProgressBar);
+    progressBarButtonLayout->addWidget(m_organizationProgressBar);
+    progressBarButtonLayout->addWidget(m_cancelPushButton);
+    progressContainerLayout->addLayout(progressBarButtonLayout);
     m_progressContainerWidget->setLayout(progressContainerLayout);
     // hide the progress container widget
     m_progressContainerWidget->hide();

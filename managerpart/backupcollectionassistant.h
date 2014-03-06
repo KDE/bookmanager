@@ -90,6 +90,7 @@ private:
     QCheckBox * m_organizedCheckBox;
     QPushButton * m_organizeCollectionPushButton;
     QProgressBar * m_organizationProgressBar;
+    QPushButton * m_cancelPushButton;
     QLabel * m_currentBookLabel;
     QWidget * m_progressContainerWidget;
 

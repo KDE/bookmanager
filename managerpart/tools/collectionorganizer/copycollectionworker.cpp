@@ -19,10 +19,17 @@
 // Book Manager includes
 #include "copycollectionworker.h"
 
+// KDE includes
+#include <kstandarddirs.h>
+
+// Qt includes
+#include <qsqldatabase.h>
+#include <qthread.h>
+
 #include <unistd.h>
 
 CopyCollectionWorker::CopyCollectionWorker(QObject * parent)
-    : QObject(parent)
+    : QObject(parent), m_stopped(false)
 {
 
 }
@@ -66,6 +73,19 @@ void CopyCollectionWorker::setRootFolderUrl(const KUrl & rootFolderUrl)
 
 void CopyCollectionWorker::copyCollection()
 {
+    QString dbPath = KStandardDirs::locateLocal("data", "bookmanager/collection.db");
+    const QString type = "QSQLITE";
+
+    QSqlDatabase database = QSqlDatabase::addDatabase(type, "organize_connection");
+    database.setDatabaseName(dbPath);
+    bool ok = database.open();
+    if (!ok) {
+        QString errorString = "Unable to open database to copy collection";
+        emit copyError(errorString);
+        // exit the thread with error
+        this->thread()->exit(1);
+        return;
+    }
     // dummy method, sleep and emit some signals
     QString titles[7] = {
         "Book1",
@@ -76,11 +96,21 @@ void CopyCollectionWorker::copyCollection()
         "Book6",
         "Book7"
     };
-    for (int i = 0; i < 7; ++i) {
+    for (int i = 0; i < 7 && !m_stopped; ++i) {
         usleep(500000);
-        float percentage = (i + 1) / 7.0 * 100;
+        int percentage = i / 7.0 * 100;
         emit bookCopied(titles[i], percentage);
+    }
+    if (m_stopped) {
+        // the user stopped the program, do not emit copyFinished() signal
+        emit stopped();
+        return;
     }
     emit copyFinished();
 }
 
+
+void CopyCollectionWorker::stop()
+{
+    m_stopped = true;
+}

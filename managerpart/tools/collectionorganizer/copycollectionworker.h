@@ -85,6 +85,7 @@ class CopyCollectionWorker : public QObject {
         void bookCopied(const QString &, int);
         void copyError(const QString &);
         void copyFinished();
+        void stopped();
 
     public slots:
         /**
@@ -92,11 +93,17 @@ class CopyCollectionWorker : public QObject {
          * new location
          */
         void copyCollection();
+        /**
+         * @brief This slow is invoked when the user cancels the organization process
+         */
+        void stop();
 
     private:
         TokenList_t m_tokenList;
         QString m_structureStr;
         KUrl m_rootFolderUrl;
+
+        volatile bool m_stopped;
 };
 
 #endif // COPY_COLLECTION_WORKER_H

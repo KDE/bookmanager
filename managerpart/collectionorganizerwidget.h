@@ -47,6 +47,7 @@ signals:
 private slots:
     void sizeComputed(quint64);
     void collectionOrganizationError(const QString &);
+    void organizationCompleted();
 
 private:
     void m_computeDiskSpace();
