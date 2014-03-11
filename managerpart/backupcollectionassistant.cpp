@@ -85,6 +85,8 @@ OrganizeCollectionPage::OrganizeCollectionPage(CollectionDB * collection,
             this, SLOT(updateGUI(const QString &, int)));
     connect(m_collectionOrganizerWidget, SIGNAL(collectionOrganizationCompleted()),
             this, SLOT(organizationCompleted()));
+    connect(m_collectionOrganizerWidget, SIGNAL(collectionOrganizationStopped()),
+            SLOT(updateGUIAfterStopping()));
 
     mainLayout->addWidget(m_collectionOrganizerWidget);
 
@@ -171,10 +173,13 @@ void OrganizeCollectionPage::organizeCollectionClicked()
 void OrganizeCollectionPage::stopOrganizationProcess()
 {
     m_collectionOrganizerWidget->stopOrganization();
-    // process pending events (signals coming from the worker thread
-    // before disabling and resetting widgets
-    QCoreApplication::processEvents();
+}
+
+
+void OrganizeCollectionPage::updateGUIAfterStopping()
+{
     m_progressContainerWidget->setEnabled(false);
     // set text of label to an empty string
     m_currentBookLabel->setText(QString());
+    m_organizationProgressBar->setValue(0);
 }

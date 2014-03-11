@@ -84,6 +84,8 @@ void CollectionOrganizerWidget::organizeCollection()
                 this, SIGNAL(bookCopied(const QString &, int)));
         connect(m_collectionOrganizer, SIGNAL(organizationError(const QString &)),
                 this, SLOT(collectionOrganizationError(const QString &)));
+        connect(m_collectionOrganizer, SIGNAL(organizationStopped()),
+                SIGNAL(collectionOrganizationStopped()));
     }
     // set root folder and collection structure
     m_collectionOrganizer->setRootFolderUrl(rootFolderUrl);

@@ -44,6 +44,7 @@ public:
 signals:
     void bookCopied(const QString &, int);
     void collectionOrganizationCompleted();
+    void collectionOrganizationStopped();
 
 private slots:
     void sizeComputed(quint64);

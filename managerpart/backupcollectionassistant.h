@@ -83,6 +83,7 @@ private slots:
     void organizationCompleted();
     void organizeCollectionClicked();
     void stopOrganizationProcess();
+    void updateGUIAfterStopping();
 
 private:
     CollectionOrganizerWidget * m_collectionOrganizerWidget;

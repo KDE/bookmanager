@@ -67,6 +67,8 @@ void CollectionOrganizer::organizeCollection()
             SIGNAL(organizationError(const QString &)));
     connect(m_copyCollectionWorker, SIGNAL(stopped()),
             m_copyCollectionThread, SLOT(quit()));
+    connect(m_copyCollectionWorker, SIGNAL(stopped()),
+            SIGNAL(organizationStopped()));
     connect(m_copyCollectionWorker, SIGNAL(copyFinished()),
             m_copyCollectionThread, SLOT(quit()));
     connect(m_copyCollectionThread, SIGNAL(started()),

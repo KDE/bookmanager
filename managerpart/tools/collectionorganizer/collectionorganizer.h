@@ -51,6 +51,7 @@ signals:
     void bookCopied(const QString &, int);
     void organizationCompleted();
     void organizationError(const QString &);
+    void organizationStopped();
 
 public slots:
     void copyFinished();
