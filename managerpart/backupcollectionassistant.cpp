@@ -122,8 +122,8 @@ OrganizeCollectionPage::OrganizeCollectionPage(CollectionDB * collection,
     progressBarButtonLayout->addWidget(m_cancelPushButton);
     progressContainerLayout->addLayout(progressBarButtonLayout);
     m_progressContainerWidget->setLayout(progressContainerLayout);
-    // hide the progress container widget
-    m_progressContainerWidget->hide();
+    // disable the cancel button
+    m_cancelPushButton->setEnabled(false);
 
     organizeCollectionLayout->addStretch();
     mainLayout->addLayout(organizeCollectionLayout);
@@ -144,6 +144,7 @@ void OrganizeCollectionPage::collectionOrganizedClicked(bool checked)
 {
     m_collectionOrganizerWidget->setEnabled(!checked);
     m_organizeCollectionPushButton->setEnabled(!checked);
+    m_progressContainerWidget->setEnabled(!checked);
 }
 
 
@@ -158,27 +159,35 @@ void OrganizeCollectionPage::organizationCompleted()
 {
     // ensure the progress bar is full
     m_organizationProgressBar->setValue(100);
+    m_organizeCollectionPushButton->setEnabled(true);
 }
 
 
 void OrganizeCollectionPage::organizeCollectionClicked()
 {
-    // show the progress widget
-    m_progressContainerWidget->show();
+    // disable the button
+    m_organizeCollectionPushButton->setEnabled(false);
+    // set to 0 progress bar
+    m_organizationProgressBar->setValue(0);
     // call the collection organizer
     m_collectionOrganizerWidget->organizeCollection();
+    m_cancelPushButton->setEnabled(true);
 }
 
 
 void OrganizeCollectionPage::stopOrganizationProcess()
 {
     m_collectionOrganizerWidget->stopOrganization();
+    // restore state of the button
+    m_organizeCollectionPushButton->setEnabled(true);
 }
 
 
 void OrganizeCollectionPage::updateGUIAfterStopping()
 {
-    m_progressContainerWidget->setEnabled(false);
+    m_cancelPushButton->setEnabled(false);
+    // restore state of the button
+    m_organizeCollectionPushButton->setEnabled(true);
     // set text of label to an empty string
     m_currentBookLabel->setText(QString());
     m_organizationProgressBar->setValue(0);
