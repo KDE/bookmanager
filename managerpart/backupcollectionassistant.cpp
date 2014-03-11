@@ -82,9 +82,9 @@ OrganizeCollectionPage::OrganizeCollectionPage(CollectionDB * collection,
     
     m_collectionOrganizerWidget = new CollectionOrganizerWidget(m_collection, this);
     connect(m_collectionOrganizerWidget, SIGNAL(bookCopied(const QString &, int)),
-            this, SLOT(updateGUI(const QString &, int)));
+            SLOT(updateGUI(const QString &, int)));
     connect(m_collectionOrganizerWidget, SIGNAL(collectionOrganizationCompleted()),
-            this, SLOT(organizationCompleted()));
+            SLOT(organizationCompleted()));
     connect(m_collectionOrganizerWidget, SIGNAL(collectionOrganizationStopped()),
             SLOT(updateGUIAfterStopping()));
 

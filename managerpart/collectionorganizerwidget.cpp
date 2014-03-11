@@ -77,13 +77,13 @@ void CollectionOrganizerWidget::organizeCollection()
     if (!m_collectionOrganizer) {
         m_collectionOrganizer = new CollectionOrganizer(m_collection, this);
         connect(m_collectionOrganizer, SIGNAL(organizationCompleted()),
-                this, SIGNAL(collectionOrganizationCompleted()));
+                SIGNAL(collectionOrganizationCompleted()));
         connect(m_collectionOrganizer, SIGNAL(organizationCompleted()),
-                this, SLOT(organizationCompleted()));
+                SLOT(organizationCompleted()));
         connect(m_collectionOrganizer, SIGNAL(bookCopied(const QString &, int)),
-                this, SIGNAL(bookCopied(const QString &, int)));
+                SIGNAL(bookCopied(const QString &, int)));
         connect(m_collectionOrganizer, SIGNAL(organizationError(const QString &)),
-                this, SLOT(collectionOrganizationError(const QString &)));
+                SLOT(collectionOrganizationError(const QString &)));
         connect(m_collectionOrganizer, SIGNAL(organizationStopped()),
                 SIGNAL(collectionOrganizationStopped()));
     }
