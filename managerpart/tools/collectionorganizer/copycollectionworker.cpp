@@ -25,6 +25,7 @@
 #include <kstandarddirs.h>
 
 // Qt includes
+#include <qdir.h>
 #include <qsqldatabase.h>
 #include <qsqlquery.h>
 #include <qsqlrecord.h>
@@ -116,8 +117,25 @@ void CopyCollectionWorker::copyCollection()
         this->thread()->exit(1);
         return;
     }
-    for (int i = 0; i < rows && !m_stopped && collectionQuery.next(); ++i) {
-        // TODO
+    QDir rootFolderDir(m_rootFolderUrl.path());
+    for (int i = 1; i <= rows && !m_stopped && collectionQuery.next(); ++i) {
+        // construct path of final file
+        int tokenNumber = m_tokenList.size();
+        QSqlRecord currentRecord = collectionQuery.record();
+        QString relativePath;
+        for (int j = 0; j < tokenNumber; ++j) {
+            relativePath += m_getFieldFromRecordAndToken(currentRecord, m_tokenList.at(i));
+            // WARNING extension is not specified, this might cause trouble
+        }
+        QString relativePathWithoutFile = relativePath.left(relativePath.lastIndexOf(QDir::separator()) - 1);
+        // make the directory structure
+        rootFolderDir.mkpath(relativePathWithoutFile);
+        // TODO handle errors
+        // TODO copy book
+        // calculate percentage
+        int percentage = (i / (float)rows) * 100;
+        // notify the GUI about the progress
+        emit bookCopied(currentRecord.value("title").toString(), percentage);
     }
     if (m_stopped) {
         // the user stopped the program, do not emit copyFinished() signal
@@ -172,8 +190,10 @@ QString CopyCollectionWorker::m_getFieldFromRecordAndToken(const QSqlRecord& rec
         case tokenizer::Volume:
             return record.value("volume").toString();
             break;
-        case tokenizer::Other:
         case tokenizer::Separator:
+            return QDir::separator();
+            break;
+        case tokenizer::Other:
             return token.tkString;
             break;
         default:
