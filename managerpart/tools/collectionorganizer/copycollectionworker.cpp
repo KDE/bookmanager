@@ -17,13 +17,17 @@
 */
 
 // Book Manager includes
+#include "collectiondb.h"
 #include "copycollectionworker.h"
 
 // KDE includes
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
 // Qt includes
 #include <qsqldatabase.h>
+#include <qsqlquery.h>
+#include <qsqlrecord.h>
 #include <qthread.h>
 
 #include <unistd.h>
@@ -86,20 +90,34 @@ void CopyCollectionWorker::copyCollection()
         this->thread()->exit(1);
         return;
     }
-    // dummy method, sleep and emit some signals
-    QString titles[7] = {
-        "Book1",
-        "Book2",
-        "Book3",
-        "Book4",
-        "Book5",
-        "Book6",
-        "Book7"
-    };
-    for (int i = 0; i < 7 && !m_stopped; ++i) {
-        usleep(500000);
-        int percentage = i / 7.0 * 100;
-        emit bookCopied(titles[i], percentage);
+    // count nesting level of folders that make up the structure
+    tokenizer::Token separatorToken;
+    separatorToken.type = tokenizer::Separator;
+    int nestingLevel = m_tokenList.count(separatorToken);
+    QSqlQuery query;
+    query.exec("SELECT count(*) FROM collection");
+    if (!query.isActive()) {
+        QString errorString = "Unable to determine number of books";
+        emit copyError(errorString);
+        this->thread()->exit(1);
+        return;
+    }
+    int rows = 0;
+    if (query.next()) {
+        rows = query.value(0).toInt();
+    }
+    QSqlQuery collectionQuery;
+    collectionQuery.prepare("SELECT * FROM collection");
+    collectionQuery.setForwardOnly(true);
+    collectionQuery.exec();
+    if (!collectionQuery.isActive()) {
+        QString errorString = "Unable to fetch book data";
+        emit copyError(errorString);
+        this->thread()->exit(1);
+        return;
+    }
+    for (int i = 0; i < rows && !m_stopped && collectionQuery.next(); ++i) {
+        // TODO
     }
     if (m_stopped) {
         // the user stopped the program, do not emit copyFinished() signal
@@ -113,4 +131,53 @@ void CopyCollectionWorker::copyCollection()
 void CopyCollectionWorker::stop()
 {
     m_stopped = true;
+}
+
+
+// private methods
+QString CopyCollectionWorker::m_getFieldFromRecordAndToken(const QSqlRecord& record,
+                                                           const tokenizer::Token& token) const
+{
+    switch (token.type) {
+        case tokenizer::Author:
+            return record.value("author").toString();
+            break;
+        case tokenizer::AuthorInitial:
+        {
+            QString authorName = record.value("author").toString();
+            // WARNING: organize by surname, take the last word
+            // of the author's full name, if it has more than one word
+            int spaceIdx = authorName.lastIndexOf(" ");
+            if (spaceIdx != -1) {
+                // take the first letter of the last word and uppercase it
+                return authorName.right(spaceIdx + 1).at(0).toUpper();
+            }
+            else {
+                // take the first letter and uppercase it
+                return authorName.at(0).toUpper();
+            }
+            break;
+        }
+        case tokenizer::Genre:
+            // if it's empty, it will be checked and skipped during the copying process
+            return record.value("genre").toString();
+            break;
+        case tokenizer::Series:
+            // if it's empty, it will be checked and skipped during the copying process
+            return record.value("series").toString();
+            break;
+        case tokenizer::Title:
+            return record.value("title").toString();
+            break;
+        case tokenizer::Volume:
+            return record.value("volume").toString();
+            break;
+        case tokenizer::Other:
+        case tokenizer::Separator:
+            return token.tkString;
+            break;
+        default:
+            return token.tkString;
+            break;
+    }
 }

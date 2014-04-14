@@ -29,6 +29,8 @@
 #include <qobject.h>
 
 
+class QSqlRecord;
+
 /**
  * @class CopyCollectionWorker
  * @brief This class represents the worker code that copies the
@@ -104,6 +106,8 @@ class CopyCollectionWorker : public QObject {
         KUrl m_rootFolderUrl;
 
         volatile bool m_stopped;
+        
+        QString m_getFieldFromRecordAndToken(const QSqlRecord & record, const tokenizer::Token & token) const;
 };
 
 #endif // COPY_COLLECTION_WORKER_H
